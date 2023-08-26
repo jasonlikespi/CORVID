@@ -9,7 +9,7 @@ void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOu
 	}
 };
 CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : activeLevelData(0), block_x(32), block_y(32), lastCheckPointLevel(0), name("testo"), time(0) {
-	
+	textures = new std::vector<SDL_Surface*>();
 	levels = new std::vector<CORVID_SCREEN*>();
 	CORVID_SCREEN* level = new CORVID_SCREEN(levels);
 	CORVID_SCREEN* level1 = new CORVID_SCREEN(worldFile, levels);

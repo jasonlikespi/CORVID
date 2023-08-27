@@ -1,4 +1,5 @@
 #include "CORVID_SPRITES.h"
+
 void CORVID_SPRITE::render(CORVID_SCREENOBJECT* object, SDL_Surface* surface) {
 	if (object->texture != NULL) {
 		SDL_Rect offset = { (int)object->box.rectangle.location.x, (int)object->box.rectangle.location.y, 0, 0 };

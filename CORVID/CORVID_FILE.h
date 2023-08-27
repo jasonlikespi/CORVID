@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CORVID_FILE_H
 #define CORVID_FILE_H
 #include <fstream>
@@ -5,6 +6,17 @@
 #include <vector>
 #include <string>
 #include <filesystem>
+#include "CORVID_WORLD.h"
+class CORVID_WORLD;
+class CORVID_FILE {
+	public:
+		std::vector<std::vector<int>*>* objects;
+		CORVID_FILE();
+		CORVID_FILE(std::filesystem::path fileName);
+		void writeToText();
+	};
+#endif
+
 // Notes on Structure of File
 // Object Data File follows the format ( One int for each)
 // 0- Header Int
@@ -26,39 +38,3 @@
  *
  *
  */
-using namespace std::filesystem;
-
-class CORVID_FILE {
-public:
-	std::vector<std::vector<int>*>* objects;
-	CORVID_FILE() {
-		objects = new std::vector<std::vector<int>*>();
-	};
-	CORVID_FILE(path fileName) {
-		std::ifstream* fs = new std::ifstream(fileName, std::ios::binary);
-		int index = 0;
-		int buffer;
-		objects = new std::vector<std::vector<int>*>();
-		while (!fs->eof()) {
-			fs->read(reinterpret_cast<char*>(&buffer), sizeof(buffer));
-			if (index % 8 == 0) {
-				objects->push_back(new std::vector<int>());
-				objects->back()->push_back(buffer);
-			}
-			else {
-				objects->back()->push_back(buffer);
-			}
-			index++;
-		}
-	};
-	void writeToText() {
-		std::ifstream fileStream;
-		//fileStream.open("C:\\Users\\jason\\source\\repos\\CORVID\\CORVID\\testo\\dataDump.txt.txt", std::ios::in | std::ios::out);
-		//for (int i = 0; i < data->size(); i++) {
-		//	fileStream << data->at(i);
-		//	if (i % 8 == 0) { fileStream << "\n"; } else { fileStream << " "; }
-		//}
-		fileStream.close();
-	}
-};
-#endif

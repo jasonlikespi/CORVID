@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CORVID_SPRITES_H
 #define CORVID_SPRITES_H
 #include "CORVID_GEOM.h"

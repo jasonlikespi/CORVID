@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CORVID_EVENT_H
 #define CORVID_EVENT_H
 #include <SDL.h>

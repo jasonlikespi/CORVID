@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "CORVID_FILE.h"
 #include "CORVID_WORLD.h"
 #include "CORVID_EVENT.h"
 #include <fstream>
@@ -71,7 +72,7 @@ void loadObjectMenu() {
 int main() {
 	path worldFile = current_path() / "testo\\testo.bin";
 	path textureFile = current_path() / "testo\\textures.txt";
-	CORVID_WORLD* world = new CORVID_WORLD(worldFile);
+	CORVID_WORLD* world = new CORVID_WORLD(worldFile, textureFile);
 	if (!init()) {
 		printf("Failed to initialize!\n");
 		close();

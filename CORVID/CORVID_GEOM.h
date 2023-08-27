@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CORVID_GEOM_H
 #define CORVID_GEOM_H
 #include <string>

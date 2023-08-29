@@ -1,5 +1,5 @@
 #include "CORVID_SPRITES.h"
-
+using namespace std;
 void CORVID_SPRITE::render(CORVID_SCREENOBJECT* object, SDL_Surface* surface) {
 	if (object->texture != NULL) {
 		SDL_Rect offset = { (int)object->box.rectangle.location.x, (int)object->box.rectangle.location.y, 0, 0 };
@@ -27,3 +27,8 @@ int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 	dataDump[7] = 0;
 	return dataDump;
 };
+//CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT(std::vector<int> data, CORVID_FILE::CORVID_TEXTLIST* textureData) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)) {
+	//std::string fileName = "brick.png";
+	//texture = IMG_Load(fileName.c_str());
+	//texture = textureData->textures->at(data->at(6));
+//};

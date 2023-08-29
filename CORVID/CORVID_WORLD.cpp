@@ -1,13 +1,14 @@
 #include "CORVID_WORLD.h"
 #include <iomanip>
 using namespace std::filesystem;
+using namespace CORVID_FILE;
 
 void CORVID_SCREEN::createDataStructures(path fileName) {
 	staticList = new std::vector<CORVID_SCREENOBJECT*>();
 	dynamicList = new std::vector<CORVID_SCREENOBJECT*>();
 	backgroundList = new std::vector<CORVID_SCREENOBJECT*>();
 	checkPoints = new std::vector<CORVID_SCREENOBJECT*>();
-	dataFile = new CORVID_FILE(fileName);
+	dataFile = new CORVID_OBJFILE(fileName);
 }
 void CORVID_SCREEN::createDataStructures() {
 	staticList = new std::vector<CORVID_SCREENOBJECT*>();
@@ -45,6 +46,7 @@ CORVID_WORLD::CORVID_WORLD() : time(0), activeLevelData(0), lastCheckPointLevel(
 	CORVID_SCREEN* level = new CORVID_SCREEN(levels);
 	CORVID_SCREEN* level1 = new CORVID_SCREEN(levels, 1);
 	textures = new std::vector<SDL_Surface*>();
+	textureData = new CORVID_FILE::CORVID_TEXTLIST(); // Does Nothing
 }
 void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut) { // Move this to ScreenObject
 	int* currentObject = object->dataDump();
@@ -54,6 +56,7 @@ void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOu
 	}
 };
 CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : activeLevelData(0), block_x(32), block_y(32), lastCheckPointLevel(0), name("testo"), time(0) {
+	textureData = new CORVID_TEXTLIST(textureFile);
 	textures = new std::vector<SDL_Surface*>();
 	levels = new std::vector<CORVID_SCREEN*>();
 	CORVID_SCREEN* level = new CORVID_SCREEN(levels);

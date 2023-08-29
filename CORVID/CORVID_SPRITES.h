@@ -4,6 +4,8 @@
 #include "CORVID_GEOM.h"
 #include <SDL_Image.h>
 #include <vector>
+#include "CORVID_FILE.h"
+
 namespace CORVID_SPRITE {
 	class CORVID_SPRITEDATATYPE {
 	public:
@@ -15,15 +17,23 @@ namespace CORVID_SPRITE {
 	public:
 		CORVID_BOUNDBOX box;
 		CORVID_SPRITEDATATYPE id;
+		int textureNumber;
 		SDL_Surface* texture;
-		CORVID_SCREENOBJECT() : box(CORVID_BOUNDBOX()), id(CORVID_SPRITEDATATYPE()), texture(NULL) {};
+		CORVID_SCREENOBJECT() : box(CORVID_BOUNDBOX()), id(CORVID_SPRITEDATATYPE()), texture(NULL) { textureNumber = 0; };
 		CORVID_SCREENOBJECT(int xval, int yval) : box(CORVID_BOUNDBOX(xval, yval)) {
+			textureNumber = 0;
 			std::string fileName = "brick.png";
 			texture = IMG_Load(fileName.c_str());
 		}; // default brick
 		CORVID_SCREENOBJECT(std::vector<int>* data) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)) {
+			textureNumber = 0;
 			std::string fileName = "brick.png";
 			texture = IMG_Load(fileName.c_str());
+		};
+		CORVID_SCREENOBJECT(std::vector<int>* data, CORVID_FILE::CORVID_TEXTLIST* textureData) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)), textureNumber(data->at(6)) {
+			//std::string fileName = "brick.png";
+			//texture = IMG_Load(fileName.c_str());
+			//texture = textureData->textures->at(data->at(6));
 		};
 		int* dataDump(); // This is definitely a memory leak, but considering how broken everything is already, I will fix it later
 		// Also it's not a super bad memory leak considering it only runs whenever the game saves

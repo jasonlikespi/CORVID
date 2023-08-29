@@ -9,12 +9,8 @@
 #include <string>
 #include <stdio.h>
 #include "CORVID_FILE.h"
-#include "CORVID_FILE.h"
-#include "CORVID_FILE.h"
-#include "CORVID_FILE.h"
-#include "CORVID_FILE.h"
 #include <filesystem>
-class CORVID_FILE;
+
 using namespace std::filesystem;
 using namespace CORVID_SPRITE;
 
@@ -30,7 +26,7 @@ public:
 	CORVID_PLAYER* player;
 	CORVID_R2* cameraLocation;
 	CORVID_SCREENOBJECT* activeCheckPoint;
-	CORVID_FILE* dataFile;
+	CORVID_FILE::CORVID_OBJFILE* dataFile;
 	std::vector<CORVID_SCREENOBJECT*>* staticList; // Create automatic sorting of objects added to these lists via overloaded methods
 	std::vector<CORVID_SCREENOBJECT*>* dynamicList;
 	std::vector<CORVID_SCREENOBJECT*>* backgroundList;
@@ -61,6 +57,7 @@ public:
 	int block_x;
 	int block_y;
 	std::vector<SDL_Surface*>* textures;
+	CORVID_FILE::CORVID_TEXTLIST* textureData;
 	inline void setLevel(int newLevel) { activeLevelData = newLevel; };
 	//inline void setLevel(CORVID_SCREEN* newLevel) {} Need to make this eventually
 	inline CORVID_SCREEN* activeLevel() { return levels->at(activeLevelData); };// Needs edge case checking
@@ -80,7 +77,7 @@ public:
 	inline int totalBackgroundObjects() { return (int)activeLevel()->backgroundList->size(); }
 	inline int totalCheckPoints() { return (int)activeLevel()->checkPoints->size(); }
 	inline int totalCount() { return (int)activeLevel()->totalCount(); }
-	CORVID_WORLD();
+	CORVID_WORLD(); // Default Constructor
 	CORVID_WORLD(std::filesystem::path worldFile, std::filesystem::path textureFile);
 	void saveWorld();
 	//void saveLevel();

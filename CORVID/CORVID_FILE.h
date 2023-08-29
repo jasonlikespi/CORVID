@@ -6,15 +6,23 @@
 #include <vector>
 #include <string>
 #include <filesystem>
-#include "CORVID_WORLD.h"
-class CORVID_WORLD;
-class CORVID_FILE {
+
+namespace CORVID_FILE {
+	class CORVID_OBJFILE {
 	public:
 		std::vector<std::vector<int>*>* objects;
-		CORVID_FILE();
-		CORVID_FILE(std::filesystem::path fileName);
-		void writeToText();
+		CORVID_OBJFILE();
+		CORVID_OBJFILE(std::filesystem::path fileName);
 	};
+	class CORVID_TEXTLIST {
+	public:
+		std::vector<std::filesystem::path>* imgfiles;
+		// std::vector<SDL_Surface*>* textures;
+		CORVID_TEXTLIST();
+		CORVID_TEXTLIST(std::filesystem::path masterFile);
+	};
+	void writeToText();
+}
 #endif
 
 // Notes on Structure of File

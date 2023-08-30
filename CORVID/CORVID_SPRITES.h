@@ -6,7 +6,9 @@
 #include <vector>
 #include "CORVID_FILE.h"
 
+
 namespace CORVID_SPRITE {
+	static std::filesystem::path defaultPath = (std::filesystem::current_path() / "testo\\textures.txt.txt");
 	class CORVID_SPRITEDATATYPE {
 	public:
 		int id;
@@ -17,26 +19,33 @@ namespace CORVID_SPRITE {
 	public:
 		CORVID_BOUNDBOX box;
 		CORVID_SPRITEDATATYPE id;
+		CORVID_FILE::CORVID_TEXTLIST* textureSource;
 		int textureNumber;
 		SDL_Surface* texture;
-		CORVID_SCREENOBJECT() : box(CORVID_BOUNDBOX()), id(CORVID_SPRITEDATATYPE()), texture(NULL) { textureNumber = 0; };
+		CORVID_SCREENOBJECT() : box(CORVID_BOUNDBOX()), id(CORVID_SPRITEDATATYPE()), texture(NULL) {
+			textureNumber = 0;
+			textureSource = new CORVID_FILE::CORVID_TEXTLIST(defaultPath);
+		};
 		CORVID_SCREENOBJECT(int xval, int yval) : box(CORVID_BOUNDBOX(xval, yval)) {
+			texture = NULL;
+			textureSource = new CORVID_FILE::CORVID_TEXTLIST(defaultPath);
 			textureNumber = 0;
-			std::string fileName = "brick.png";
-			texture = IMG_Load(fileName.c_str());
-		}; // default brick
+			loadSpriteTexture();
+		};
 		CORVID_SCREENOBJECT(std::vector<int>* data) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)) {
+			texture = NULL;
+			textureSource = new CORVID_FILE::CORVID_TEXTLIST(defaultPath);
 			textureNumber = 0;
-			std::string fileName = "brick.png";
-			texture = IMG_Load(fileName.c_str());
+			loadSpriteTexture();
 		};
 		CORVID_SCREENOBJECT(std::vector<int>* data, CORVID_FILE::CORVID_TEXTLIST* textureData) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)), textureNumber(data->at(6)) {
-			//std::string fileName = "brick.png";
-			//texture = IMG_Load(fileName.c_str());
-			//texture = textureData->textures->at(data->at(6));
+			texture = NULL;
+			textureSource = textureData;
+			loadSpriteTexture();
 		};
 		int* dataDump(); // This is definitely a memory leak, but considering how broken everything is already, I will fix it later
 		// Also it's not a super bad memory leak considering it only runs whenever the game saves
+		void loadSpriteTexture();
 	};
 	class CORVID_PLAYER {
 	public:

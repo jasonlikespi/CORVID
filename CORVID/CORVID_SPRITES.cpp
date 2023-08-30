@@ -27,8 +27,7 @@ int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 	dataDump[7] = 0;
 	return dataDump;
 };
-//CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT(std::vector<int> data, CORVID_FILE::CORVID_TEXTLIST* textureData) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)) {
-	//std::string fileName = "brick.png";
-	//texture = IMG_Load(fileName.c_str());
-	//texture = textureData->textures->at(data->at(6));
-//};
+void CORVID_SPRITE::CORVID_SCREENOBJECT::loadSpriteTexture() {
+	std::filesystem::path texturePath = textureSource->imgfiles->at(textureNumber);
+	texture = IMG_Load((const char*)(texturePath.c_str()));
+};

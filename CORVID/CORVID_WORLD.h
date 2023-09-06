@@ -13,20 +13,21 @@
 
 using namespace std::filesystem;
 using namespace CORVID_SPRITE;
+using namespace CORVID_FILE;
 
 const std::string defaultFile = "titleScreen.png";
 const std::string defaultBackground = "sky.png";
 const int totalNumberLevels = 1;
 
 class CORVID_SCREEN{
-	void createDataStructures(std::filesystem::path fileName);
+	void createDataStructures(path fileName);
 	void createDataStructures();
 public:
 	const char* name;
 	CORVID_PLAYER* player;
-	CORVID_R2* cameraLocation;
+	CORVID_R2<int>* cameraLocation;
 	CORVID_SCREENOBJECT* activeCheckPoint;
-	CORVID_FILE::CORVID_OBJFILE* dataFile;
+	CORVID_OBJFILE* dataFile;
 	std::vector<CORVID_SCREENOBJECT*>* staticList; // Create automatic sorting of objects added to these lists via overloaded methods
 	std::vector<CORVID_SCREENOBJECT*>* dynamicList;
 	std::vector<CORVID_SCREENOBJECT*>* backgroundList;
@@ -35,13 +36,14 @@ public:
 	inline int totalDynamicObjects() { return (int)dynamicList->size(); }
 	inline int totalBackgroundObjects() { return (int)backgroundList->size(); }
 	inline int totalCheckPoints() { return (int)checkPoints->size(); }
+	CORVID_SCREENOBJECT* findByPosition(int x, int y);
 	int totalCount() { return (int)(staticList->size() + dynamicList->size() + backgroundList->size() + checkPoints->size()); };
-	CORVID_SCREEN(std::filesystem::path fileName, std::vector<CORVID_SCREEN*>* world);
+	CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world);
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world); 
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum); 
 	void loadScreen();
 	//void save();
-	void saveLevel(std::filesystem::path dataFile);
+	void saveLevel(path dataFile);
 	void loadObject(char* data);
 	void render(SDL_Surface* surface);
 	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); // Move this to the CORVID_SPRITE file or something
@@ -57,13 +59,13 @@ public:
 	int block_x;
 	int block_y;
 	std::vector<SDL_Surface*>* textures;
-	CORVID_FILE::CORVID_TEXTLIST* textureData;
+	CORVID_TEXTLIST* textureData;
 	inline void setLevel(int newLevel) { activeLevelData = newLevel; };
 	//inline void setLevel(CORVID_SCREEN* newLevel) {} Need to make this eventually
 	inline CORVID_SCREEN* activeLevel() { return levels->at(activeLevelData); };// Needs edge case checking
 	inline CORVID_PLAYER* player() { return activeLevel()->player; };
-	inline CORVID_R2* cameraLocation() { return activeLevel()->cameraLocation; };
-	inline CORVID_SCREENOBJECT* activeCheckPoint() { return activeLevel()->activeCheckPoint; };
+	inline CORVID_R2<int>* cameraLocation() { return activeLevel()->cameraLocation; };
+	inline CORVID_SPRITE::CORVID_SCREENOBJECT* activeCheckPoint() { return activeLevel()->activeCheckPoint; };
 	inline std::vector<CORVID_SCREENOBJECT*>* staticList() { return activeLevel()->staticList; };
 	inline std::vector<CORVID_SCREENOBJECT*>* dynamicList() { return activeLevel()->dynamicList; };
 	inline std::vector<CORVID_SCREENOBJECT*>* backgroundList() { return activeLevel()->backgroundList; };
@@ -77,8 +79,9 @@ public:
 	inline int totalBackgroundObjects() { return (int)activeLevel()->backgroundList->size(); }
 	inline int totalCheckPoints() { return (int)activeLevel()->checkPoints->size(); }
 	inline int totalCount() { return (int)activeLevel()->totalCount(); }
+	inline CORVID_SCREENOBJECT* findByPosition(int x, int y) { return activeLevel()->findByPosition(x, y); };
 	CORVID_WORLD(); // Default Constructor
-	CORVID_WORLD(std::filesystem::path worldFile, std::filesystem::path textureFile);
+	CORVID_WORLD(path worldFile, path textureFile);
 	void saveWorld();
 	//void saveLevel();
 	inline void render(SDL_Surface* surface) { activeLevel()->render(surface); }

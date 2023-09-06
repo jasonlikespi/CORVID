@@ -1,3 +1,8 @@
 Rework CORVID_SCREEN in CORVID_WORLD
 MiniScreen
 Next Step is to load save files
+
+
+Now
+Create and simplify default constructor for CORVID_SCREEN and CORVID_WORLD
+Create methods to allow for selection, deletion, and modification of objects in the ingame UI

@@ -4,36 +4,60 @@
 #include <string>
 #include <math.h>
 #include <vector>
+#include "CORVID_COORDS.h"
 
-class CORVID_R2{
+using namespace CORVID_COORDS;
+template <typename NUMBER>
+class CORVID_RECT {
 public:
-	double x;
-	double y;
-	CORVID_R2() : x(0), y(0) {};
-	CORVID_R2(double x, double y) : x(x), y(y) {};
-	CORVID_R2(int x, int y) : x((double)x), y((double)y) {};
+	CORVID_R2<NUMBER> location; // Upper Left Corner
+	CORVID_R2<NUMBER> size;
+	CORVID_RECT() : location(CORVID_R2<NUMBER>()), size(CORVID_R2<NUMBER>()) {};
+	CORVID_RECT(NUMBER x1, NUMBER y1, NUMBER x2, NUMBER y2) : location(CORVID_R2(x1, y1)), size(CORVID_R2(x2, y2)) {};
+	CORVID_RECT(CORVID_R2<NUMBER> location, CORVID_R2<NUMBER> size) : location(location), size(size) {};
+	CORVID_RECT(CORVID_RECT* rectangle) : location(rectangle->location), size(rectangle->size) {};
+	bool pointIsInside(NUMBER x_val, NUMBER y_val);
+	bool pointIsInside(CORVID_R2<NUMBER> point);
 };
-class CORVID_RECT{
+template <typename NUMBER>
+class CORVID_BOUNDBOX : public CORVID_RECT<NUMBER>{
 public:
-	CORVID_R2 location;
-	CORVID_R2 size;
-	CORVID_RECT() : location(CORVID_R2()), size(CORVID_R2()){};
+	CORVID_R2<NUMBER> velocity;
+	CORVID_BOUNDBOX() : CORVID_RECT<NUMBER>(), velocity(CORVID_R2<NUMBER>()) {};
+	CORVID_BOUNDBOX(CORVID_RECT<NUMBER>* rectangle, CORVID_R2<NUMBER> velocity) : CORVID_RECT<NUMBER>(rectangle), velocity(velocity) {};
+	CORVID_BOUNDBOX(CORVID_RECT<NUMBER>* rectangle) : CORVID_RECT<NUMBER>(rectangle), velocity(CORVID_R2<NUMBER>()) {};
+	CORVID_BOUNDBOX(NUMBER r1, NUMBER r2, NUMBER s1, NUMBER s2, NUMBER v1, NUMBER v2) : CORVID_RECT<NUMBER>(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2<NUMBER>(s1, s2)) {};
+	CORVID_BOUNDBOX(NUMBER xval, NUMBER yval);// : CORVID_RECT<NUMBER>(CORVID_RECT(xval, yval, 16, 16)), velocity(CORVID_R2<NUMBER>()) {};
+};
+
+/*
+using namespace CORVID_COORDS;
+template <typename NUMBER>
+class CORVID_RECT {
+public:
+	CORVID_R2<NUMBER> location; // Upper Left Corner
+	CORVID_R2<NUMBER> size;
+	CORVID_RECT() : location(CORVID_R2()), size(CORVID_R2()) {};
 	CORVID_RECT(double x1, double y1, double x2, double y2) : location(CORVID_R2(x1, y1)), size(CORVID_R2(x2, y2)) {};
 	CORVID_RECT(int x1, int y1, int x2, int y2) : location(CORVID_R2(x1, y1)), size(CORVID_R2(x2, y2)) {};
 	CORVID_RECT(CORVID_R2 location, CORVID_R2 size) : location(location), size(size) {};
+	CORVID_RECT(CORVID_RECT* rectangle) : location(rectangle->location), size(rectangle->size) {};
+	bool pointIsInside(int x_val, int y_val);
+	bool pointIsInside(double x_val, double y_val);
+	bool pointIsInside(CORVID_R2<int> point);
 };
-class CORVID_BOUNDBOX{
+template <typename NUMBER>
+class CORVID_BOUNDBOX : public CORVID_RECT {
 public:
-	CORVID_RECT rectangle;
-	CORVID_R2 velocity;
-	CORVID_BOUNDBOX() : rectangle(CORVID_RECT()), velocity(CORVID_R2()) {};
-	CORVID_BOUNDBOX(CORVID_RECT rectangle, CORVID_R2 velocity) : rectangle(rectangle), velocity(velocity) {};
-	CORVID_BOUNDBOX(CORVID_RECT rectangle) : rectangle(rectangle), velocity(CORVID_R2()) {};
-	CORVID_BOUNDBOX(double r1, double r2, double s1, double s2, double v1, double v2) : rectangle(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2(s1, s2)) {};
-	CORVID_BOUNDBOX(int r1, int r2, int s1, int s2, int v1, int v2) : rectangle(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2(s1, s2)) {};
-	CORVID_BOUNDBOX(int xval, int yval) : rectangle(CORVID_RECT(xval, yval, 16, 16)), velocity(CORVID_R2()) {};
+	CORVID_R2<NUMBER> velocity;
+	CORVID_BOUNDBOX() : CORVID_RECT(), velocity(CORVID_R2()) {};
+	CORVID_BOUNDBOX(CORVID_RECT* rectangle, CORVID_R2 velocity) : CORVID_RECT(rectangle), velocity(velocity) {};
+	CORVID_BOUNDBOX(CORVID_RECT* rectangle) : CORVID_RECT(rectangle), velocity(CORVID_R2()) {};
+	CORVID_BOUNDBOX(double r1, double r2, double s1, double s2, double v1, double v2) : CORVID_RECT(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2(s1, s2)) {};
+	CORVID_BOUNDBOX(int r1, int r2, int s1, int s2, int v1, int v2) : CORVID_RECT(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2(s1, s2)) {};
+	CORVID_BOUNDBOX(int xval, int yval) : CORVID_RECT(CORVID_RECT(xval, yval, 16, 16)), velocity(CORVID_R2()) {};
 };
-
+*/
 /*
 * Uncomment this when I add Bezier Curves Back in
 class CORVID_BEZIER {

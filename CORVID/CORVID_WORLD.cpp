@@ -50,7 +50,7 @@ CORVID_WORLD::CORVID_WORLD() : time(0), activeLevelData(0), lastCheckPointLevel(
 	CORVID_SCREEN* level = new CORVID_SCREEN(levels);
 	CORVID_SCREEN* level1 = new CORVID_SCREEN(levels, 1);
 	textures = new std::vector<SDL_Surface*>();
-	textureData = new CORVID_FILE::CORVID_TEXTLIST(); // Does Nothing
+	textureData = new CORVID_TEXTLIST(); // Does Nothing
 }
 void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut) { // Move this to ScreenObject
 	int* currentObject = object->dataDump();
@@ -69,6 +69,13 @@ CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : activeLevelData(0
 
 	// Add Reference to the File Class in Here
 	// level1->loadScreen(worldFile);
+};
+CORVID_SCREENOBJECT* CORVID_SCREEN::findByPosition(int x, int y) {
+	for (CORVID_SCREENOBJECT* i : *this->dynamicList) {}
+	for (CORVID_SCREENOBJECT* i : *this->staticList) {}
+	for (CORVID_SCREENOBJECT* i : *this->checkPoints) {}
+	for (CORVID_SCREENOBJECT* i : *this->backgroundList) {} 
+	return nullptr;
 };
 void CORVID_SCREEN::loadScreen() {
 	for (int i = 0; i < this->dataFile->objects->size(); i++) {
@@ -94,7 +101,7 @@ void CORVID_SCREEN::loadScreen() {
 	}
 };
 void CORVID_SCREEN::render(SDL_Surface* surface) {
-	for (CORVID_SCREENOBJECT* i : *this->backgroundList) {	CORVID_SPRITE::render(i, surface);}
+	for (CORVID_SCREENOBJECT* i : *this->backgroundList) {	CORVID_SPRITE::render(i, surface);} // I'm pretty sure I should make this into a nonstatic method
 	for (CORVID_SCREENOBJECT* i : *this->checkPoints)    {	CORVID_SPRITE::render(i, surface);}
 	for (CORVID_SCREENOBJECT* i : *this->staticList)     {  CORVID_SPRITE::render(i, surface);}
 	for (CORVID_SCREENOBJECT* i : *this->dynamicList)    {  CORVID_SPRITE::render(i, surface);}

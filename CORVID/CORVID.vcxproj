@@ -136,19 +136,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CORVID_COORDS.cpp" />
     <ClCompile Include="CORVID_EVENT.cpp" />
     <ClCompile Include="CORVID_FILE.cpp" />
     <ClCompile Include="CORVID_GEOM.cpp" />
     <ClCompile Include="CORVID_SPRITES.cpp" />
+    <ClCompile Include="CORVID_TEXTURE_MODE.cpp" />
     <ClCompile Include="CORVID_WINDOW.cpp" />
     <ClCompile Include="CORVID_WORLD.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CORVID_COORDS.h" />
     <ClInclude Include="CORVID_EVENT.h" />
     <ClInclude Include="CORVID_FILE.h" />
     <ClInclude Include="CORVID_GEOM.h" />
     <ClInclude Include="CORVID_SPRITES.h" />
+    <ClInclude Include="CORVID_TEXTURE_MODE.h" />
     <ClInclude Include="CORVID_WINDOW.h" />
     <ClInclude Include="CORVID_WORLD.h" />
   </ItemGroup>

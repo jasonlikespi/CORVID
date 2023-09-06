@@ -5,40 +5,42 @@
 #include <SDL_Image.h>
 #include <vector>
 #include "CORVID_FILE.h"
+#include "CORVID_TEXTURE_MODE.h"
 
+using namespace std::filesystem;
 
 namespace CORVID_SPRITE {
-	static std::filesystem::path defaultPath = (std::filesystem::current_path() / "testo\\textures.txt.txt");
+	static path defaultPath = (current_path() / "testo\\textures.txt.txt");
 	class CORVID_SPRITEDATATYPE {
 	public:
 		int id;
 		CORVID_SPRITEDATATYPE() : id(0) {};
 		CORVID_SPRITEDATATYPE(int id) : id(id) {};
 	};
-	class CORVID_SCREENOBJECT {
+	class CORVID_SCREENOBJECT : public CORVID_BOUNDBOX<int>{
 	public:
-		CORVID_BOUNDBOX box;
 		CORVID_SPRITEDATATYPE id;
 		CORVID_FILE::CORVID_TEXTLIST* textureSource;
 		int textureNumber;
 		SDL_Surface* texture;
-		CORVID_SCREENOBJECT() : box(CORVID_BOUNDBOX()), id(CORVID_SPRITEDATATYPE()), texture(NULL) {
+		bool selected;
+		CORVID_SCREENOBJECT() : CORVID_BOUNDBOX(CORVID_BOUNDBOX()), id(CORVID_SPRITEDATATYPE()), texture(NULL), selected(false) {
 			textureNumber = 0;
 			textureSource = new CORVID_FILE::CORVID_TEXTLIST(defaultPath);
 		};
-		CORVID_SCREENOBJECT(int xval, int yval) : box(CORVID_BOUNDBOX(xval, yval)) {
+		CORVID_SCREENOBJECT(int xval, int yval) : CORVID_BOUNDBOX(CORVID_BOUNDBOX(xval, yval)), selected(false) {
 			texture = NULL;
 			textureSource = new CORVID_FILE::CORVID_TEXTLIST(defaultPath);
 			textureNumber = 0;
 			loadSpriteTexture();
 		};
-		CORVID_SCREENOBJECT(std::vector<int>* data) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)) {
+		CORVID_SCREENOBJECT(std::vector<int>* data) : CORVID_BOUNDBOX(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)), selected(false) {
 			texture = NULL;
 			textureSource = new CORVID_FILE::CORVID_TEXTLIST(defaultPath);
 			textureNumber = 0;
 			loadSpriteTexture();
 		};
-		CORVID_SCREENOBJECT(std::vector<int>* data, CORVID_FILE::CORVID_TEXTLIST* textureData) : box(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)), textureNumber(data->at(6)) {
+		CORVID_SCREENOBJECT(std::vector<int>* data, CORVID_FILE::CORVID_TEXTLIST* textureData) : CORVID_BOUNDBOX(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0), id(data->at(5)), textureNumber(data->at(6)), selected(false) {
 			texture = NULL;
 			textureSource = textureData;
 			loadSpriteTexture();

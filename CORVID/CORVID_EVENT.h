@@ -11,13 +11,7 @@ class CORVID_EVENTHANDLER{
 	int cursor_x;
 	int cursor_y;
 public:
-	CORVID_EVENTHANDLER() {
-		cursor_x = 0;
-		cursor_y = 0;
-		keyPressData = 0;
-		E = new SDL_Event;
-	}
+	CORVID_EVENTHANDLER();
 	int poll(CORVID_WORLD* world);
 };
-
 #endif

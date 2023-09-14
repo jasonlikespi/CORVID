@@ -17,7 +17,6 @@ namespace CORVID_FILE {
 	class CORVID_TEXTLIST {
 	public:
 		std::vector<std::filesystem::path>* imgfiles;
-		// std::vector<SDL_Surface*>* textures;
 		CORVID_TEXTLIST();
 		CORVID_TEXTLIST(std::filesystem::path masterFile);
 	};

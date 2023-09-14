@@ -183,7 +183,6 @@
     <Image Include="titleScreen.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="enterFolder.sh" />
     <None Include="fileAdder.sh" />
     <None Include="folderMaker.sh" />
     <None Include="testo\testo.bin" />

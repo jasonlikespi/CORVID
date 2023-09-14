@@ -149,6 +149,5 @@
     <None Include="testo\testo.bin">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="enterFolder.sh" />
   </ItemGroup>
 </Project>

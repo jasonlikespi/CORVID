@@ -72,10 +72,6 @@ void loadObjectMenu() {
 int main() {
 	path worldFile = current_path() / "testo\\testo.bin";
 	path textureFile = current_path() / "testo\\textures.txt.txt";
-	//path firstPath = current_path() / "brick.png";
-	//std::string stringyNow = firstPath.string();
-	//const char* textTexto = stringyNow.c_str();
-	//SDL_Surface* textTexture = IMG_Load(textTexto);
 	CORVID_WORLD* world = new CORVID_WORLD(worldFile, textureFile);
 	if (!init()) {
 		printf("Failed to initialize!\n");

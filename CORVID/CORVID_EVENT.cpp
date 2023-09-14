@@ -1,4 +1,10 @@
 #include "CORVID_EVENT.h"
+CORVID_EVENTHANDLER::CORVID_EVENTHANDLER() {
+	cursor_x = 0;
+	cursor_y = 0;
+	keyPressData = 0;
+	E = new SDL_Event;
+}
 int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 	SDL_PollEvent(E);
 	if ((*E).type == SDL_QUIT) { return 0; };

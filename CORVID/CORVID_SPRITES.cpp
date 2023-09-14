@@ -1,5 +1,12 @@
 #include "CORVID_SPRITES.h"
 using namespace std;
+CORVID_SPRITE::CORVID_SPRITEDATATYPE::CORVID_SPRITEDATATYPE() : id(0) {};
+CORVID_SPRITE::CORVID_SPRITEDATATYPE::CORVID_SPRITEDATATYPE(int id) : id(id) {};
+CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), id(CORVID_SPRITEDATATYPE()), selected(false) { // This is only remaining because a default constructor is required; it should not be used
+	textureNumber = 0;
+};
+CORVID_SPRITE::CORVID_PLAYER::CORVID_PLAYER() : playerData(CORVID_SCREENOBJECT()), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL) {};
+CORVID_SPRITE::CORVID_BACKGROUND::CORVID_BACKGROUND() : imageData(CORVID_SCREENOBJECT()), stationaryBackground(0) {};
 void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { // The outer ifelse section is only used for error checking
 
 	switch (this->textureType) {

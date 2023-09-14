@@ -29,23 +29,18 @@ CORVID_SCREEN::CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world){
 	world->push_back(this);
 }
 CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world) : activeCheckPoint(NULL), cameraLocation(NULL), player(NULL), name("testo") {
-	
 	createDataStructures();
-	//const std::string fileName = "titleScreen.png";
 	CORVID_TEXTURE* texture = new CORVID_TEXTURE(1, g_textures);
 	CORVID_SCREENOBJECT* background = new CORVID_SCREENOBJECT(0, 0, texture);
-	//background->texture = IMG_Load(fileName.c_str());
 	backgroundList->push_back(background);
 	world->push_back(this);
 }
 CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) : activeCheckPoint(NULL), cameraLocation(NULL), player(NULL), name("testo") {
-	
 	createDataStructures();
 	const std::string fileName = "sky.png";
 	switch (levelNum) {
 	case 1:
 		CORVID_SCREENOBJECT * background = new CORVID_SCREENOBJECT();
-		//background->texture = IMG_Load(fileName.c_str());
 		backgroundList->push_back(background);
 		world->push_back(this);
 		break;
@@ -59,7 +54,6 @@ CORVID_WORLD::CORVID_WORLD() : CORVID_SCREEN("testo"), time(0), activeLevelData(
 	CORVID_SCREEN* level1 = new CORVID_SCREEN(levels, 1);
 	textures = new std::vector<SDL_Surface*>();
 	g_textures = textures;
-	// textureData = new CORVID_TEXTLIST(); // Does Nothing
 }
 void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut) { // Move this to ScreenObject
 	int* currentObject = object->dataDump();
@@ -90,9 +84,7 @@ void CORVID_SCREEN::loadScreen() {
 	
 	for (int i = 0; i < this->dataFile->objects->size(); i++) {
 		if (this->dataFile->objects->at(i)->size() < 8) { return; }
-		//CORVID_TEXTURE* texture = new CORVID_TEXTURE(g_textures->at(this->dataFile->objects->at(i)->at(6)));
 		CORVID_SCREENOBJECT* j = new CORVID_SCREENOBJECT(this->dataFile->objects->at(i), g_textures);
-		
 		switch (this->dataFile->objects->at(i)->at(5)) {
 		case(0):
 			this->staticList->push_back(j);

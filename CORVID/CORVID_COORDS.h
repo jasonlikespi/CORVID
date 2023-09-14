@@ -6,7 +6,7 @@
 // SURFACE and SURFACE_VECTOR has +x for right, -x for left, +y for down, and -y for up
 // DEFAULT is for situations that don't require the values to specify direction
 namespace CORVID_COORDS {
-	enum CORVID_COORDTYPE{ENGINE, SURFACE, ENGINE_VECTOR, SURFACE_VECTOR, DEFAULT};
+	enum CORVID_COORDTYPE { ENGINE, SURFACE, ENGINE_VECTOR, SURFACE_VECTOR, DEFAULT };
 
 	template <typename NUMBER>
 	class CORVID_R2 {
@@ -14,10 +14,11 @@ namespace CORVID_COORDS {
 		NUMBER x;
 		NUMBER y;
 		CORVID_COORDTYPE coordType;
-		CORVID_R2() : x(0), y(0) {};
-		CORVID_R2(NUMBER x, NUMBER y) : x(x), y(y) {};
+		CORVID_R2() : x(0), y(0), coordType(DEFAULT) {};
+		CORVID_R2(NUMBER x, NUMBER y) : x(x), y(y), coordType(DEFAULT) {};
+		CORVID_R2(NUMBER x, NUMBER y, CORVID_COORDTYPE type) : x(x), y(y), coordType(type) {};
 	};
-}
+};
 /*	class CORVID_R2 {
 	public:
 		NUMBER x;

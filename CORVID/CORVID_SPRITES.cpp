@@ -1,12 +1,37 @@
 #include "CORVID_SPRITES.h"
 using namespace std;
-void CORVID_SPRITE::render(CORVID_SCREENOBJECT* object, SDL_Surface* surface) { // TODO Make this not effectively static
-	if (object->texture != NULL) {
-		SDL_Rect offset = { (int)object->location.x, (int)object->location.y, 0, 0 };
-		SDL_BlitSurface(object->texture, NULL, surface, &offset);
-	} else {
-		printf("Error: could not find texture for object with following data:\n");
-		dataDump(object);
+void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { // The outer ifelse section is only used for error checking
+
+	switch (this->textureType) {
+	case(PNG):
+		if (this->textureList->size() > 0 && this->textureList->at(0) != NULL) {
+			SDL_Rect offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
+			SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
+		}
+		else {
+			printf("Error: could not find texture for object with following data:\n");
+			dataDump();
+		}
+		break;
+	case(BRICK):
+		if (this->textureList->size() > 1 && this->textureList->at(0) != NULL && this->textureList->at(1) != NULL) {
+			SDL_Rect offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
+			if (this->selected == true) {
+				SDL_BlitSurface(this->textureList->at(1), NULL, surface, &offset);
+			} else {
+				SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
+			}
+		}
+		else {
+			printf("Error: could not find texture for object with following data:\n");
+			dataDump();
+		}
+		break;
+	case(EMPTY):
+	default:
+		printf("Error: object does not have texture:\n");
+		dataDump();
+		break;
 	}
 };
 void CORVID_SPRITE::dataDump(CORVID_SCREENOBJECT* object) {
@@ -27,10 +52,18 @@ int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 	dataDump[7] = 0;
 	return dataDump;
 };
+/*
 void CORVID_SPRITE::CORVID_SCREENOBJECT::loadSpriteTexture() {
-	std::filesystem::path texturePath = textureSource->imgfiles->at(textureNumber);
+	switch (textureNumber) {
+		case(0):
+			path unselectedPath = textureSource->imgfiles->at(textureNumber);
+			std::string unselectedString = unselectedPath.string();
+			const char* unselectedCString = unselectedString.c_str();
+			this->texture = IMG_Load(textureCString);
+	}
+	path texturePath = textureSource->imgfiles->at(textureNumber);
 	std::string textureString = texturePath.string();
 	const char* textureCString = textureString.c_str();
 	this->texture = IMG_Load(textureCString);
-
 };
+*/

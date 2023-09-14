@@ -18,7 +18,7 @@ using namespace CORVID_FILE;
 const std::string defaultFile = "titleScreen.png";
 const std::string defaultBackground = "sky.png";
 const int totalNumberLevels = 1;
-
+static std::vector<SDL_Surface*>* g_textures;
 class CORVID_SCREEN{
 	void createDataStructures(path fileName);
 	void createDataStructures();
@@ -38,6 +38,8 @@ public:
 	inline int totalCheckPoints() { return (int)checkPoints->size(); }
 	CORVID_SCREENOBJECT* findByPosition(int x, int y);
 	int totalCount() { return (int)(staticList->size() + dynamicList->size() + backgroundList->size() + checkPoints->size()); };
+	CORVID_SCREEN();
+	CORVID_SCREEN(const char* name); // Used as base class for CORVID_WORLD
 	CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world);
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world); 
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum); 
@@ -48,18 +50,16 @@ public:
 	void render(SDL_Surface* surface);
 	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); // Move this to the CORVID_SPRITE file or something
 };
-class CORVID_WORLD{
+class CORVID_WORLD: public CORVID_SCREEN, public CORVID_TEXTLIST{
 	int activeLevelData;
 	void loadTextures();
 public:
-	const char* name;
 	std::vector<CORVID_SCREEN*>* levels;
 	int lastCheckPointLevel;
 	int time;
 	int block_x;
 	int block_y;
 	std::vector<SDL_Surface*>* textures;
-	CORVID_TEXTLIST* textureData;
 	inline void setLevel(int newLevel) { activeLevelData = newLevel; };
 	//inline void setLevel(CORVID_SCREEN* newLevel) {} Need to make this eventually
 	inline CORVID_SCREEN* activeLevel() { return levels->at(activeLevelData); };// Needs edge case checking
@@ -80,7 +80,7 @@ public:
 	inline int totalCheckPoints() { return (int)activeLevel()->checkPoints->size(); }
 	inline int totalCount() { return (int)activeLevel()->totalCount(); }
 	inline CORVID_SCREENOBJECT* findByPosition(int x, int y) { return activeLevel()->findByPosition(x, y); };
-	CORVID_WORLD(); // Default Constructor
+	CORVID_WORLD(); // Default Constructor, should not ever run
 	CORVID_WORLD(path worldFile, path textureFile);
 	void saveWorld();
 	//void saveLevel();

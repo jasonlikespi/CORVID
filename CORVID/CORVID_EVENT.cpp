@@ -30,7 +30,8 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
 			break;
 		case SDLK_r:
-			world->levels->at(1)->staticList->push_back(new CORVID_SCREENOBJECT(world->block_x, world->block_y));
+			CORVID_TEXTURE* texture = new CORVID_TEXTURE(world->textures->at(0));
+			world->levels->at(1)->staticList->push_back(new CORVID_SCREENOBJECT(world->block_x, world->block_y, texture));
 			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
 			break;
 		};

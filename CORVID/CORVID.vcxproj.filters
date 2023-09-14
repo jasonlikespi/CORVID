@@ -39,7 +39,7 @@
     <ClCompile Include="CORVID_COORDS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CORVID_TEXTURE_MODE.cpp">
+    <ClCompile Include="CORVID_TEXTURE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,7 +65,7 @@
     <ClInclude Include="CORVID_COORDS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CORVID_TEXTURE_MODE.h">
+    <ClInclude Include="CORVID_TEXTURE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -23,16 +23,15 @@ namespace CORVID_SPRITE {
 		CORVID_SCREENOBJECT();
 		template <class NUMBER>
 		CORVID_SCREENOBJECT(NUMBER x, NUMBER y, CORVID_TEXTURE* texture) : CORVID_BOUNDBOX<NUMBER>(x, y), CORVID_TEXTURE(*texture) {};
-		CORVID_SCREENOBJECT(std::vector<int>* objectData, std::vector<SDL_Surface*>* textureData) : CORVID_BOUNDBOX(objectData->at(1), objectData->at(2), objectData->at(3), objectData->at(4), 0, 0), id(objectData->at(5)), CORVID_TEXTURE(objectData, textureData), textureNumber(objectData->at(6)), selected(false) {
+		CORVID_SCREENOBJECT(std::vector<int>* objectData) : CORVID_BOUNDBOX(objectData->at(1), objectData->at(2), objectData->at(3), objectData->at(4), 0, 0), id(objectData->at(5)), CORVID_TEXTURE(objectData->at(6)), textureNumber(objectData->at(6)), selected(false) { // Still need to fix constructor
 		};
 		int* dataDump(); // This is definitely a memory leak, but considering how broken everything is already, I will fix it later
 		// Also it's not a super bad memory leak considering it only runs whenever the game saves
 		// void loadSpriteTexture();
 		void render(SDL_Surface* surface);
 	};
-	class CORVID_PLAYER {
+	class CORVID_PLAYER : public CORVID_SCREENOBJECT{
 	public:
-		CORVID_SCREENOBJECT playerData;
 		CORVID_SCREENOBJECT* objectStandingOn;
 		CORVID_SCREENOBJECT* leftObject;
 		CORVID_SCREENOBJECT* rightObject;

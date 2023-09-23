@@ -29,7 +29,7 @@ SDL_Surface* Layer = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0,
 SDL_Surface* Blank = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
 SDL_Surface* GameSurface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
 SDL_Surface* ObjectMenu = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
-
+std::vector<SDL_Surface*>* CORVID_TEXTURE::global_textureList = NULL;
 using namespace std::filesystem;
 
 bool init() {
@@ -63,12 +63,7 @@ void close() {
 	window = NULL;
 	SDL_Quit();
 }
-/*
-void loadObjectMenu() {
-	const std::string text = "LargeBrick.png";
-	SDL_BlitSurface(IMG_Load(text.c_str()), NULL, ObjectMenu, NULL);
-}
-*/
+
 int main() {
 	path worldFile = current_path() / "testo\\testo.bin";
 	path textureFile = current_path() / "testo\\textures.txt.txt";
@@ -81,22 +76,15 @@ int main() {
 
 	CORVID_EVENTHANDLER* E = new CORVID_EVENTHANDLER();
 	while (E->poll(world)) {
-
 		world->render(Stage);
-		//loadObjectMenu();
 		SDL_BlitSurface(Stage, NULL, GameSurface, NULL);
 		SDL_BlitSurface(GameSurface, NULL, EditSurface, &windowHalver);
 		SDL_BlitSurface(ObjectMenu, &menuWindow, EditSurface, NULL);
 		SDL_UpdateWindowSurface(window);
-
 	}
-
 	world->saveWorld();
 	return 0;
 }
-
-
-
 
 //One day a day may come where there is an error in the code, and the only solution is to insert this method back into the program
 //Until that day, it will remain here

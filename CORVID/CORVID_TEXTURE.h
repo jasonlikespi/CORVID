@@ -4,20 +4,25 @@
 #include "SDL.h"
 #include "SDL_Image.h"
 #include <vector>
+#include <filesystem>
+using namespace std::filesystem;
 enum CORVID_TEXTURE_TYPE{EMPTY, PNG, BRICK};
 class CORVID_TEXTURE {
 public:
 	CORVID_TEXTURE_TYPE textureType;
 	// As a default, if there are 2 textures in the texturelist, the first represents the unselected variant, and the second is the selected variant
-	std::vector<SDL_Surface*>* textureList;
+	static std::vector<SDL_Surface*>* global_textureList;
+	std::vector<int>* textureList;
+	int activePNG;
 	CORVID_TEXTURE();
-	CORVID_TEXTURE(SDL_Surface* texture);
-	CORVID_TEXTURE(SDL_Surface* unselected, SDL_Surface* selected);
-	CORVID_TEXTURE(int textureNumber, std::vector<SDL_Surface*>* globalTextureData);
-	CORVID_TEXTURE(std::vector<int>* objectData, std::vector<SDL_Surface*>* globalTextureData);
+	CORVID_TEXTURE(int texture);
+	CORVID_TEXTURE(int unselected, int selected);
+	static void initializeTextures(std::vector<path>* imgfiles);
+	void rendertext(SDL_Surface* surface, SDL_Rect* offset);
 };
 #endif
 
+// Every object shouldn't contain actual texture data, but integers referring to indexes. The static global_textureList contains all of the data
 // Notes on Structure of File
 // Object Data File follows the format ( One int for each)
 // 0- Header Int

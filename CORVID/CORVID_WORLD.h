@@ -18,7 +18,6 @@ using namespace CORVID_FILE;
 const std::string defaultFile = "titleScreen.png";
 const std::string defaultBackground = "sky.png";
 const int totalNumberLevels = 1;
-static std::vector<SDL_Surface*>* g_textures;
 class CORVID_SCREEN{
 	void createDataStructures(path fileName);
 	void createDataStructures();
@@ -30,18 +29,17 @@ public:
 	CORVID_OBJFILE* dataFile;
 	std::vector<CORVID_SCREENOBJECT*>* staticList; // Create automatic sorting of objects added to these lists via overloaded methods
 	std::vector<CORVID_SCREENOBJECT*>* dynamicList;
-	std::vector<CORVID_SCREENOBJECT*>* backgroundList;
 	std::vector<CORVID_SCREENOBJECT*>* checkPoints;
+	CORVID_SCREENOBJECT* background;
 	inline int totalStaticObjects() { return (int)staticList->size(); }
 	inline int totalDynamicObjects() { return (int)dynamicList->size(); }
-	inline int totalBackgroundObjects() { return (int)backgroundList->size(); }
+	//inline int totalBackgroundObjects() { return (int)backgroundList->size(); }
 	inline int totalCheckPoints() { return (int)checkPoints->size(); }
 	CORVID_SCREENOBJECT* findByPosition(int x, int y);
-	int totalCount() { return (int)(staticList->size() + dynamicList->size() + backgroundList->size() + checkPoints->size()); };
+	int totalCount() { return (int)(staticList->size() + dynamicList->size() + checkPoints->size()); };
 	CORVID_SCREEN();
-	CORVID_SCREEN(const char* name); // Used as base class for CORVID_WORLD
+	CORVID_SCREEN(const char* name); // Used as base class for CORVID_WORLD; TODO have it where the base class holds the data for active level to prevent NULL data and perhaps efficiency in some way
 	CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world);
-	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world); 
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum); 
 	void loadScreen();
 	//void save();
@@ -50,7 +48,7 @@ public:
 	void render(SDL_Surface* surface);
 	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); // Move this to the CORVID_SPRITE file or something
 };
-class CORVID_WORLD: public CORVID_SCREEN, public CORVID_TEXTLIST{
+class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title screen
 	int activeLevelData;
 	void loadTextures();
 public:
@@ -68,19 +66,17 @@ public:
 	inline CORVID_SPRITE::CORVID_SCREENOBJECT* activeCheckPoint() { return activeLevel()->activeCheckPoint; };
 	inline std::vector<CORVID_SCREENOBJECT*>* staticList() { return activeLevel()->staticList; };
 	inline std::vector<CORVID_SCREENOBJECT*>* dynamicList() { return activeLevel()->dynamicList; };
-	inline std::vector<CORVID_SCREENOBJECT*>* backgroundList() { return activeLevel()->backgroundList; };
+	inline CORVID_SCREENOBJECT* getbackground() { return activeLevel()->background; };
 	inline std::vector<CORVID_SCREENOBJECT*>* checkPoints() { return activeLevel()->checkPoints; };
 	inline CORVID_SCREENOBJECT* staticList(int index) { return activeLevel()->staticList->at(index); };
 	inline CORVID_SCREENOBJECT* dynamicList(int index) { return activeLevel()->dynamicList->at(index); };
-	inline CORVID_SCREENOBJECT* backgroundList(int index) { return activeLevel()->backgroundList->at(index); };
 	inline CORVID_SCREENOBJECT* checkPoints(int index) { return activeLevel()->checkPoints->at(index); };
 	inline int totalStaticObjects() { return (int)activeLevel()->staticList->size(); }
 	inline int totalDynamicObjects() { return (int)activeLevel()->dynamicList->size(); }
-	inline int totalBackgroundObjects() { return (int)activeLevel()->backgroundList->size(); }
 	inline int totalCheckPoints() { return (int)activeLevel()->checkPoints->size(); }
 	inline int totalCount() { return (int)activeLevel()->totalCount(); }
 	inline CORVID_SCREENOBJECT* findByPosition(int x, int y) { return activeLevel()->findByPosition(x, y); };
-	CORVID_WORLD(); // Default Constructor, should not ever run
+	CORVID_WORLD(); // Default Constructor, should be the main one
 	CORVID_WORLD(path worldFile, path textureFile);
 	void saveWorld();
 	//void saveLevel();

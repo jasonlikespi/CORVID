@@ -6,4 +6,4 @@ Next Step is to load save files
 Now
 Create and simplify default constructor for CORVID_SCREEN and CORVID_WORLD
 Create methods to allow for selection, deletion, and modification of objects in the ingame UI
-What I was doing: Fix the constructor method for the CORVID_SCREENOBJECT class that is used for the screen rendering the title screen to give it a nonempty texture
+What I was doing: Reconfiguring the Texture Class to use a single static texture list

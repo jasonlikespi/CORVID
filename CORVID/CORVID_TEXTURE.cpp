@@ -1,50 +1,33 @@
 #include "CORVID_TEXTURE.h"
 CORVID_TEXTURE::CORVID_TEXTURE() {
-	textureList = new std::vector<SDL_Surface*>();
+	textureList = new std::vector<int>();
 	textureType = EMPTY;
+	activePNG = 0;
 };
-CORVID_TEXTURE::CORVID_TEXTURE(SDL_Surface* texture) {
-	textureList = new std::vector<SDL_Surface*>();
+CORVID_TEXTURE::CORVID_TEXTURE(int texture) {
+	textureList = new std::vector<int>();
 	textureType = PNG;
 	textureList->push_back(texture);
+	activePNG = 0;
 };
-CORVID_TEXTURE::CORVID_TEXTURE(SDL_Surface* unselected, SDL_Surface* selected) {
-	textureList = new std::vector<SDL_Surface*>();
+CORVID_TEXTURE::CORVID_TEXTURE(int unselected, int selected) {
+	textureList = new std::vector<int>();
 	textureType = BRICK;
 	textureList->push_back(unselected);
 	textureList->push_back(selected);
+	activePNG = 0;
 };
-CORVID_TEXTURE::CORVID_TEXTURE(int textureNumber, std::vector<SDL_Surface*>* globalTextureData) {
-	textureList = new std::vector<SDL_Surface*>();
-	if (globalTextureData->size() <= textureNumber) {
-		textureType = EMPTY;
-		return;
+void CORVID_TEXTURE::initializeTextures(std::vector<path>* imgfiles) {
+	if (global_textureList != nullptr) { return; } // TODO this may lead to complicated problems down the line if there are multiple texture files but if that's the case then I will need to rewrite this section anyways
+	global_textureList = new std::vector<SDL_Surface*>();
+	for (path i : *imgfiles) {
+		std::string pathstring = i.string();
+		const char* pathchar = pathstring.c_str();
+		global_textureList->push_back(IMG_Load(pathchar));
 	}
-	textureType = PNG;
-	textureList->push_back(globalTextureData->at(textureNumber));
-}
-CORVID_TEXTURE::CORVID_TEXTURE(std::vector<int>* objectData, std::vector<SDL_Surface*>* globalTextureData) {
-	textureList = new std::vector<SDL_Surface*>();
-	if (globalTextureData->size() < 4) { // This is error checking and should never run
-		textureType = EMPTY;
-		return;
-	}
-	switch (objectData->at(6)) {
-	case 0:
-		textureType = BRICK;
-		textureList->push_back(globalTextureData->at(0));
-		textureList->push_back(globalTextureData->at(3));
-		break;
-	case 1:
-		textureType = PNG;
-		textureList->push_back(globalTextureData->at(1));
-		break;
-	case 2:
-		textureType = PNG;
-		textureList->push_back(globalTextureData->at(2));
-		break;
-	default:
-		textureType = EMPTY;
-		break;
-	}
-}
+
+};
+void CORVID_TEXTURE::rendertext(SDL_Surface* surface, SDL_Rect* offset) {
+	
+	SDL_BlitSurface(global_textureList->at(textureList->at(0)), NULL, surface, offset);
+};

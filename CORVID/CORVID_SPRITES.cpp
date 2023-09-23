@@ -5,31 +5,34 @@ CORVID_SPRITE::CORVID_SPRITEDATATYPE::CORVID_SPRITEDATATYPE(int id) : id(id) {};
 CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), id(CORVID_SPRITEDATATYPE()), selected(false) { // This is only remaining because a default constructor is required; it should not be used
 	textureNumber = 0;
 };
-CORVID_SPRITE::CORVID_PLAYER::CORVID_PLAYER() : playerData(CORVID_SCREENOBJECT()), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL) {};
+CORVID_SPRITE::CORVID_PLAYER::CORVID_PLAYER() : CORVID_SCREENOBJECT(), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL) {};
 CORVID_SPRITE::CORVID_BACKGROUND::CORVID_BACKGROUND() : imageData(CORVID_SCREENOBJECT()), stationaryBackground(0) {};
 void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { // The outer ifelse section is only used for error checking
-
 	switch (this->textureType) {
 	case(PNG):
-		if (this->textureList->size() > 0 && this->textureList->at(0) != NULL) {
+		if (this->textureList->size() > 0) { // TODO Removed error checking for out of index because it incorrectly gave error on texture data 0 but too tedious to add back in
 			SDL_Rect offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
-			SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
+			this->rendertext(surface, &offset);
+			//SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
 		}
 		else {
+
 			printf("Error: could not find texture for object with following data:\n");
 			dataDump();
 		}
 		break;
 	case(BRICK):
-		if (this->textureList->size() > 1 && this->textureList->at(0) != NULL && this->textureList->at(1) != NULL) {
+		if (this->textureList->size() > 1) { // TODO Removed error checking for out of index because it incorrectly gave error on texture data 0 but too tedious to add back in
 			SDL_Rect offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
-			if (this->selected == true) {
-				SDL_BlitSurface(this->textureList->at(1), NULL, surface, &offset);
-			} else {
-				SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
-			}
+			this->rendertext(surface, &offset);
+			//if (this->selected == true) {
+			//	SDL_BlitSurface(this->textureList->at(1), NULL, surface, &offset);
+			//} else {
+			//	SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
+			//}
 		}
 		else {
+
 			printf("Error: could not find texture for object with following data:\n");
 			dataDump();
 		}

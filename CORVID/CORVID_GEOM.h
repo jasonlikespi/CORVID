@@ -5,6 +5,7 @@
 #include <math.h>
 #include <vector>
 #include "CORVID_COORDS.h"
+#include "SDL.h"
 
 using namespace CORVID_COORDS;
 template <typename NUMBER>
@@ -16,6 +17,7 @@ public:
 	CORVID_RECT(NUMBER x1, NUMBER y1, NUMBER x2, NUMBER y2) : location(CORVID_R2(x1, y1)), size(CORVID_R2(x2, y2)) {};
 	CORVID_RECT(CORVID_R2<NUMBER> location, CORVID_R2<NUMBER> size) : location(location), size(size) {};
 	CORVID_RECT(CORVID_RECT* rectangle) : location(rectangle->location), size(rectangle->size) {};
+	//SDL_Rect* toRect(); // TODO may lead to memory leak and also get this working
 	bool pointIsInside(NUMBER x_val, NUMBER y_val);
 	bool pointIsInside(CORVID_R2<NUMBER> point);
 };

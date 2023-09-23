@@ -20,7 +20,6 @@ namespace CORVID_FILE {
 		CORVID_TEXTLIST();
 		CORVID_TEXTLIST(std::filesystem::path masterFile);
 	};
-	void writeToText();
 }
 #endif
 

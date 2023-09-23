@@ -1,54 +1,25 @@
 #include "CORVID_SPRITES.h"
 using namespace std;
-CORVID_SPRITE::CORVID_SPRITEDATATYPE::CORVID_SPRITEDATATYPE() : id(0) {};
-CORVID_SPRITE::CORVID_SPRITEDATATYPE::CORVID_SPRITEDATATYPE(int id) : id(id) {};
-CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), id(CORVID_SPRITEDATATYPE()), selected(false) { // This is only remaining because a default constructor is required; it should not be used
-	textureNumber = 0;
-};
-CORVID_SPRITE::CORVID_PLAYER::CORVID_PLAYER() : CORVID_SCREENOBJECT(), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL) {};
-CORVID_SPRITE::CORVID_BACKGROUND::CORVID_BACKGROUND() : imageData(CORVID_SCREENOBJECT()), stationaryBackground(0) {};
-void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { // The outer ifelse section is only used for error checking
-	switch (this->textureType) {
-	case(PNG):
-		if (this->textureList->size() > 0) { // TODO Removed error checking for out of index because it incorrectly gave error on texture data 0 but too tedious to add back in
-			SDL_Rect offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
-			this->rendertext(surface, &offset);
-			//SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
-		}
-		else {
+// This is only remaining because a default constructor is required; it should not be used
+CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), id(CORVID_SPRITEDATATYPE()), selected(false) {}; 
 
-			printf("Error: could not find texture for object with following data:\n");
-			dataDump();
-		}
+void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { // The outer ifelse section is only used for error checking
+	SDL_Rect offset;
+	switch (this->textureType) { // TODO Removed error checking for out of index because it incorrectly gave error on texture data 0 but too tedious to add back in
+		case(PNG):
+			offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
+			this->rendertext(surface, &offset);
 		break;
 	case(BRICK):
-		if (this->textureList->size() > 1) { // TODO Removed error checking for out of index because it incorrectly gave error on texture data 0 but too tedious to add back in
-			SDL_Rect offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
-			this->rendertext(surface, &offset);
-			//if (this->selected == true) {
-			//	SDL_BlitSurface(this->textureList->at(1), NULL, surface, &offset);
-			//} else {
-			//	SDL_BlitSurface(this->textureList->at(0), NULL, surface, &offset);
-			//}
-		}
-		else {
-
-			printf("Error: could not find texture for object with following data:\n");
-			dataDump();
-		}
+		offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
+		this->rendertext(surface, &offset); // TODO Make sure that the selected option is added to the rendertext method
+			// TODO also rename rendertext method to like render or something, it's not supposed to have anything to do with text, the complier was just confusing it with another method
 		break;
 	case(EMPTY):
 	default:
-		printf("Error: object does not have texture:\n");
-		dataDump();
+		printf("Error: Empty Object\n");
 		break;
 	}
-};
-void CORVID_SPRITE::dataDump(CORVID_SCREENOBJECT* object) {
-	//printf("Location (x, y) at (%f, %f)\n", object->location.x, object->location.y);
-	//printf("Size (width, height) at (%f, %f)\n", object->size.x, object->size.y);
-	//printf("Velocity (x, y) at (%f, %f)\n", object->velocity.x, object->velocity.y);
-	//printf("Object id is %d\n", object->id.id);
 };
 int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 	int* dataDump = new int[8];
@@ -62,6 +33,7 @@ int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 	dataDump[7] = 0;
 	return dataDump;
 };
+
 /*
 void CORVID_SPRITE::CORVID_SCREENOBJECT::loadSpriteTexture() {
 	switch (textureNumber) {

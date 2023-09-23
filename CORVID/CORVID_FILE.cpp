@@ -35,8 +35,3 @@ CORVID_FILE::CORVID_TEXTLIST::CORVID_TEXTLIST(std::filesystem::path masterFile) 
 		imgfiles->push_back((std::filesystem::current_path() / buffer));
 	}
 };
-
-void CORVID_FILE::writeToText() {
-	std::ifstream fileStream;
-	fileStream.close();
-}

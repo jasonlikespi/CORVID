@@ -1,14 +1,14 @@
 #include "CORVID_GEOM.h"
 
 // TODO Write Method
-template <typename NUMBER>
-bool CORVID_RECT<NUMBER>::pointIsInside(NUMBER x_val, NUMBER y_val) {
+template <typename NM>
+bool CORVID_RECT<NM>::pointIsInside(NM x_val, NM y_val) {
 	return 0;
 };
 
 // TODO Write Method
-template <typename NUMBER>
-bool CORVID_RECT<NUMBER>::pointIsInside(CORVID_R2<NUMBER> point) {
+template <typename NM>
+bool CORVID_RECT<NM>::pointIsInside(CORVID_R2<NM> point) {
 	return 0;
 };
 

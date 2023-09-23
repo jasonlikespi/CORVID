@@ -7,15 +7,15 @@
 // DEFAULT is for situations that don't require the values to specify direction
 namespace CORVID_COORDS {
 	enum CORVID_COORDTYPE { ENGINE, SURFACE, ENGINE_VECTOR, SURFACE_VECTOR, DEFAULT };
-	template <typename NUMBER>
+	template <typename NM>
 	class CORVID_R2 {
 	public:
-		NUMBER x;
-		NUMBER y;
+		NM x;
+		NM y;
 		CORVID_COORDTYPE coordType;
 		CORVID_R2() : x(0), y(0), coordType(DEFAULT) {};
-		CORVID_R2(NUMBER x, NUMBER y) : x(x), y(y), coordType(DEFAULT) {};
-		CORVID_R2(NUMBER x, NUMBER y, CORVID_COORDTYPE type) : x(x), y(y), coordType(type) {};
+		CORVID_R2(NM x, NM y) : x(x), y(y), coordType(DEFAULT) {};
+		CORVID_R2(NM x, NM y, CORVID_COORDTYPE type) : x(x), y(y), coordType(type) {};
 	};
 };
 #endif

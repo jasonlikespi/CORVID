@@ -8,28 +8,29 @@
 #include "SDL.h"
 
 using namespace CORVID_COORDS;
-template <typename NUMBER>
+template <typename NM>
 class CORVID_RECT {
 public:
-	CORVID_R2<NUMBER> location; // Upper Left Corner
-	CORVID_R2<NUMBER> size;
-	CORVID_RECT() : location(CORVID_R2<NUMBER>()), size(CORVID_R2<NUMBER>()) {};
-	CORVID_RECT(NUMBER x1, NUMBER y1, NUMBER x2, NUMBER y2) : location(CORVID_R2(x1, y1)), size(CORVID_R2(x2, y2)) {};
-	CORVID_RECT(CORVID_R2<NUMBER> location, CORVID_R2<NUMBER> size) : location(location), size(size) {};
+	CORVID_R2<NM> location; // Upper Left Corner
+	CORVID_R2<NM> size;
+	CORVID_RECT() : location(CORVID_R2<NM>()), size(CORVID_R2<NM>()) {};
+	CORVID_RECT(NM x1, NM y1, NM x2, NM y2) : location(CORVID_R2(x1, y1)), size(CORVID_R2(x2, y2)) {};
+	CORVID_RECT(CORVID_R2<NM> location, CORVID_R2<NM> size) : location(location), size(size) {};
 	CORVID_RECT(CORVID_RECT* rectangle) : location(rectangle->location), size(rectangle->size) {};
 	//SDL_Rect* toRect(); // TODO may lead to memory leak and also get this working
-	bool pointIsInside(NUMBER x_val, NUMBER y_val);
-	bool pointIsInside(CORVID_R2<NUMBER> point);
+	bool pointIsInside(NM x_val, NM y_val);
+	bool pointIsInside(CORVID_R2<NM> point);
 };
-template <typename NUMBER>
-class CORVID_BOUNDBOX : public CORVID_RECT<NUMBER>{
+template <typename NM>
+class CORVID_BOUNDBOX : public CORVID_RECT<NM>{
 public:
-	CORVID_R2<NUMBER> velocity;
-	CORVID_BOUNDBOX() : CORVID_RECT<NUMBER>(), velocity(CORVID_R2<NUMBER>()) {};
-	CORVID_BOUNDBOX(CORVID_RECT<NUMBER>* rectangle, CORVID_R2<NUMBER> velocity) : CORVID_RECT<NUMBER>(rectangle), velocity(velocity) {};
-	CORVID_BOUNDBOX(CORVID_RECT<NUMBER>* rectangle) : CORVID_RECT<NUMBER>(rectangle), velocity(CORVID_R2<NUMBER>()) {};
-	CORVID_BOUNDBOX(NUMBER r1, NUMBER r2, NUMBER s1, NUMBER s2, NUMBER v1, NUMBER v2) : CORVID_RECT<NUMBER>(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2<NUMBER>(s1, s2)) {};
-	CORVID_BOUNDBOX(NUMBER xval, NUMBER yval);
+	CORVID_R2<NM> velocity;
+	CORVID_BOUNDBOX() : CORVID_RECT<NM>(), velocity(CORVID_R2<NM>()) {};
+	CORVID_BOUNDBOX(CORVID_RECT<NM>* rectangle, CORVID_R2<NM> velocity) : CORVID_RECT<NM>(rectangle), velocity(velocity) {};
+	CORVID_BOUNDBOX(CORVID_RECT<NM>* rectangle) : CORVID_RECT<NM>(rectangle), velocity(CORVID_R2<NM>()) {};
+	CORVID_BOUNDBOX(NM r1, NM r2, NM s1, NM s2, NM v1, NM v2) : 
+		CORVID_RECT<NM>(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2<NM>(s1, s2)) {};
+	CORVID_BOUNDBOX(NM xval, NM yval);
 };
 
 /*

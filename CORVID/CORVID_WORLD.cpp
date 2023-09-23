@@ -2,16 +2,19 @@
 #include <iomanip>
 using namespace std::filesystem;
 using namespace CORVID_FILE;
-CORVID_SCREEN::CORVID_SCREEN() { // This should never run and only exists as a default constructor
+// This should never run and only exists as a default constructor
+CORVID_SCREEN::CORVID_SCREEN() { 
 	createDataStructures();
 	CORVID_TEXTURE* backgroundTexture = new CORVID_TEXTURE(2);
 	background = new CORVID_SCREENOBJECT(0.0, 0.0, backgroundTexture);
 }
-CORVID_SCREEN::CORVID_SCREEN(const char* name) { // This is the constructor used for the base class; TODO have it inherit the g_textures so line 14 doesn't return NULL
+// This is the constructor used for the base class
+CORVID_SCREEN::CORVID_SCREEN(const char* name) { 
 	this->name = name;	
 	createDataStructures();
 };
-CORVID_SCREEN::CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world){ // This is the constructor that I am actually using
+// This is the constructor that I am actually using
+CORVID_SCREEN::CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world){
 	createDataStructures(fileName);
 	this->loadScreen();
 	world->push_back(this);
@@ -22,7 +25,10 @@ CORVID_SCREEN::CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world){
 		player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(4));
 	}
 }
-CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) : activeCheckPoint(NULL), cameraLocation(NULL), player(NULL), name("testo") { //TODO fix this constructor, as it is the main one
+// TODO fix this constructor, as it is the main one
+CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) : 
+	activeCheckPoint(NULL), cameraLocation(NULL), player(NULL), name("testo") { 
+
 	createDataStructures();
 	switch (levelNum) {
 		case 0:
@@ -43,7 +49,8 @@ CORVID_WORLD::CORVID_WORLD() : time(0), activeLevelData(0), lastCheckPointLevel(
 	CORVID_SCREEN* level = new CORVID_SCREEN(levels, 0);
 	CORVID_SCREEN* level1 = new CORVID_SCREEN(levels, 1);
 }
-void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut) { // Move this to ScreenObject TODO try to remove fors that are not for eaches to reduce index errors
+// Move this to ScreenObject TODO try to remove fors that are not for eaches to reduce index errors
+void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut) { 
 	int* currentObject = object->dataDump();
 	for (int i = 0; i < 8; i++) {
 		binOut->write(reinterpret_cast<const char*>(&currentObject[i]), sizeof(currentObject[i]));
@@ -59,18 +66,17 @@ CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : CORVID_TEXTLIST(t
 	// Add Reference to the File Class in Here
 	// level1->loadScreen(worldFile);
 };
-void CORVID_SCREEN::createDataStructures(path fileName) {
-	staticList = new std::vector<CORVID_SCREENOBJECT*>();
-	dynamicList = new std::vector<CORVID_SCREENOBJECT*>();
-	checkPoints = new std::vector<CORVID_SCREENOBJECT*>();
-	dataFile = new CORVID_OBJFILE(fileName);
-}
 void CORVID_SCREEN::createDataStructures() {
 	staticList = new std::vector<CORVID_SCREENOBJECT*>();
 	dynamicList = new std::vector<CORVID_SCREENOBJECT*>();
 	checkPoints = new std::vector<CORVID_SCREENOBJECT*>();
 }
-CORVID_SCREENOBJECT* CORVID_SCREEN::findByPosition(int x, int y) { //  TODO I also need to do this for the select function
+void CORVID_SCREEN::createDataStructures(path fileName) {
+	this->createDataStructures();
+	dataFile = new CORVID_OBJFILE(fileName);
+}
+//  TODO I also need to do this for the select function
+CORVID_SCREENOBJECT* CORVID_SCREEN::findByPosition(int x, int y) { 
 	for (CORVID_SCREENOBJECT* i : *this->dynamicList) {}
 	for (CORVID_SCREENOBJECT* i : *this->staticList) {}
 	for (CORVID_SCREENOBJECT* i : *this->checkPoints) {}
@@ -125,9 +131,6 @@ void CORVID_SCREEN::saveLevel(path dataFile) {
 	for (CORVID_SCREENOBJECT* i : *dynamicList) {
 		saveObject(i, binFile);
 	}
-	//for (CORVID_SCREENOBJECT* i : *backgroundList) {
-	//	saveObject(i, binFile);
-	//}
 	for (CORVID_SCREENOBJECT* i : *checkPoints) {
 		saveObject(i,  binFile);
 	}

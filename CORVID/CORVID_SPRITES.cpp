@@ -1,7 +1,9 @@
 #include "CORVID_SPRITES.h"
 using namespace std;
 // This is only remaining because a default constructor is required; it should not be used
-CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), id(CORVID_SPRITEDATATYPE()), selected(false) {}; 
+CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : 
+	CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), id(CORVID_SPRITEDATATYPE()), selected(false) {}; 
+
 // The outer ifelse section is only used for error checking
 // TODO Removed error checking for out of index because it incorrectly gave
 // error on texture data 0 but too tedious to add back in
@@ -14,8 +16,11 @@ void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) {
 		break;
 	case(BRICK):
 		offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
-		this->rendertext(surface, &offset); // TODO Make sure that the selected option is added to the rendertext method
-			// TODO also rename rendertext method to like render or something, it's not supposed to have anything to do with text, the complier was just confusing it with another method
+		// TODO Make sure that the selected option is added to the rendertext method
+		// TODO also rename rendertext method to like render or something, it's not
+		// supposed to have anything to do with text, the complier was just confusing
+		// it with another method
+		this->rendertext(surface, &offset); 
 		break;
 	case(EMPTY):
 	default:

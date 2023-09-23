@@ -28,7 +28,8 @@ public:
 	CORVID_R2<int>* cameraLocation;
 	CORVID_SCREENOBJECT* activeCheckPoint;
 	CORVID_OBJFILE* dataFile;
-	std::vector<CORVID_SCREENOBJECT*>* staticList; // Create automatic sorting of objects added to these lists via overloaded methods
+	// TODO Create automatic sorting of objects added to these lists via overloaded methods
+	std::vector<CORVID_SCREENOBJECT*>* staticList; 
 	std::vector<CORVID_SCREENOBJECT*>* dynamicList;
 	std::vector<CORVID_SCREENOBJECT*>* checkPoints;
 	CORVID_SCREENOBJECT* background;
@@ -39,7 +40,9 @@ public:
 	CORVID_SCREENOBJECT* findByPosition(int x, int y);
 	int totalCount() { return (int)(staticList->size() + dynamicList->size() + checkPoints->size()); };
 	CORVID_SCREEN();
-	CORVID_SCREEN(const char* name); // Used as base class for CORVID_WORLD; TODO have it where the base class holds the data for active level to prevent NULL data and perhaps efficiency in some way
+	// Used as base class for CORVID_WORLD
+	// TODO have it where the base class holds the data for active level to prevent NULL data and perhaps efficiency in some way
+	CORVID_SCREEN(const char* name); 
 	CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world);
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum); 
 	void loadScreen();
@@ -47,7 +50,9 @@ public:
 	void saveLevel(path dataFile);
 	void loadObject(char* data);
 	void render(SDL_Surface* surface);
-	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); // Move this to the CORVID_SPRITE file or something
+	// TODO Move this to the CORVID_SPRITE file or something
+	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); 
+
 };
 
 class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title screen

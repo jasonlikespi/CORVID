@@ -20,10 +20,13 @@ public:
 	void rendertext(SDL_Surface* surface, SDL_Rect* offset);
 };
 #endif
-// As a default, if there are 2 textures in the texturelist, the first represents the unselected variant, and the second is the selected variant
+// As a default, if there are 2 textures in the texturelist, the first
+// represents the unselected variant, and the second is the selected variant.
+// 
+// Every object shouldn't contain actual texture data, but integers referring
+// to indexes. The static global_textureList contains all of the data
 // 
 // 
-// Every object shouldn't contain actual texture data, but integers referring to indexes. The static global_textureList contains all of the data
 // Notes on Structure of File
 // Object Data File follows the format ( One int for each)
 // 0- Header Int
@@ -31,7 +34,8 @@ public:
 // 2- Location Y Value
 // 3- Size X Value
 // 4- Size Y Value
-// 5- Object Type Value (0 is static, 1 is dynamic, 2 is background, 3 is checkpoint)
+// 5- Object Type Value (0 is static, 1 is dynamic, 2 is background,
+//		 3 is checkpoint)
 // 6- Texture Value
 // 7- Movement Behavior Value
 

@@ -2,10 +2,12 @@
 using namespace std;
 // This is only remaining because a default constructor is required; it should not be used
 CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), id(CORVID_SPRITEDATATYPE()), selected(false) {}; 
-
-void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { // The outer ifelse section is only used for error checking
+// The outer ifelse section is only used for error checking
+// TODO Removed error checking for out of index because it incorrectly gave
+// error on texture data 0 but too tedious to add back in
+void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { 
 	SDL_Rect offset;
-	switch (this->textureType) { // TODO Removed error checking for out of index because it incorrectly gave error on texture data 0 but too tedious to add back in
+	switch (this->textureType) { 
 		case(PNG):
 			offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
 			this->rendertext(surface, &offset);

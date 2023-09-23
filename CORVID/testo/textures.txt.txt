@@ -2,3 +2,4 @@ brick.png
 titleScreen.png
 sky.png
 brick-selected.png
+PlayerSprite.png

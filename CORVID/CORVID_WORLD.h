@@ -18,6 +18,7 @@ using namespace CORVID_FILE;
 const std::string defaultFile = "titleScreen.png";
 const std::string defaultBackground = "sky.png";
 const int totalNumberLevels = 1;
+
 class CORVID_SCREEN{
 	void createDataStructures(path fileName);
 	void createDataStructures();
@@ -48,6 +49,7 @@ public:
 	void render(SDL_Surface* surface);
 	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); // Move this to the CORVID_SPRITE file or something
 };
+
 class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title screen
 	int activeLevelData;
 	void loadTextures();
@@ -82,9 +84,11 @@ public:
 	//void saveLevel();
 	inline void render(SDL_Surface* surface) { activeLevel()->render(surface); }
 };
-inline CORVID_SCREENOBJECT** load(const char* fileName) {
+/*
+inline CORVID_SCREENOBJECT<float>** load(const char* fileName) {
 	std::fstream fileStream;
 	fileStream.open(fileName);
 	return NULL;
 }
+*/
 #endif

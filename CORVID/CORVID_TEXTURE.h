@@ -40,7 +40,7 @@ public:
  * 0 - brick.png
  * 1 - titleScreen.png
  * 2 - sky.png
- *
+ * 3 - PlayerSprite.png
  *
  *
  *
@@ -52,4 +52,5 @@ public:
  * titleScreen.png
  * sky.png
  * brick-selected.png
+ * PlayerSprite.png
  */

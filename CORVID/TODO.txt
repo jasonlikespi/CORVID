@@ -1,9 +1,12 @@
 Rework CORVID_SCREEN in CORVID_WORLD
 MiniScreen
-Next Step is to load save files
 
 
 Now
-Create and simplify default constructor for CORVID_SCREEN and CORVID_WORLD
+
 Create methods to allow for selection, deletion, and modification of objects in the ingame UI
+Add textures that can be used to create larger and arbitrarily sized rectangles
+Add the player Sprite
+Add physics
+Fix the templates; probably make it so all screenobjects use float templates
 What I was doing: Reconfiguring the Texture Class to use a single static texture list

@@ -12,13 +12,12 @@ namespace CORVID_SPRITE {
 		CORVID_SPRITEDATATYPE() : id(0) {};
 		CORVID_SPRITEDATATYPE(int id) : id(id) {};
 	};
-	class CORVID_SCREENOBJECT : public CORVID_BOUNDBOX<int>, public CORVID_TEXTURE{
+	class CORVID_SCREENOBJECT : public CORVID_BOUNDBOX<double>, public CORVID_TEXTURE{
 	public:
 		CORVID_SPRITEDATATYPE id;
 		bool selected;
 		CORVID_SCREENOBJECT();
-		template <class NUMBER>
-		CORVID_SCREENOBJECT(NUMBER x, NUMBER y, CORVID_TEXTURE* texture) : CORVID_BOUNDBOX<NUMBER>(x, y), CORVID_TEXTURE(*texture) {};
+		CORVID_SCREENOBJECT(double x, double y, CORVID_TEXTURE* texture) : CORVID_BOUNDBOX<double>(x, y), CORVID_TEXTURE(*texture) {};
 		CORVID_SCREENOBJECT(std::vector<int>* objectData) : CORVID_BOUNDBOX(objectData->at(1), objectData->at(2), objectData->at(3), objectData->at(4), 0, 0), id(objectData->at(5)), CORVID_TEXTURE(objectData->at(6)), selected(false) { };// TODO Still need to fix constructor
 		void render(SDL_Surface* surface);
 		int* dataDump(); // This is definitely a memory leak, but considering how broken everything is already, I will fix it later
@@ -29,13 +28,14 @@ namespace CORVID_SPRITE {
 		CORVID_SCREENOBJECT* objectStandingOn;
 		CORVID_SCREENOBJECT* leftObject;
 		CORVID_SCREENOBJECT* rightObject;
-		CORVID_PLAYER() : CORVID_SCREENOBJECT(), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL) {};
+		CORVID_PLAYER() : CORVID_SCREENOBJECT(), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL) {}; // This one I actually do want to use as a default constructor
+		CORVID_PLAYER(double xloc, double yloc, CORVID_TEXTURE* texture) : CORVID_SCREENOBJECT(xloc, yloc, texture) {};
 	};
 	class CORVID_BACKGROUND { // TODO literally anything with this class;
 	public:
 		CORVID_SCREENOBJECT imageData;
 		int stationaryBackground;
-		CORVID_BACKGROUND() : imageData(CORVID_SCREENOBJECT()), stationaryBackground(0) {};;
+		CORVID_BACKGROUND() : imageData(CORVID_SCREENOBJECT()), stationaryBackground(0) {};
 	};
 }
 #endif

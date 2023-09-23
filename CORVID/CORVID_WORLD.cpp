@@ -2,11 +2,10 @@
 #include <iomanip>
 using namespace std::filesystem;
 using namespace CORVID_FILE;
-
 CORVID_SCREEN::CORVID_SCREEN() { // This should never run and only exists as a default constructor
 	createDataStructures();
 	CORVID_TEXTURE* backgroundTexture = new CORVID_TEXTURE(2);
-	background = new CORVID_SCREENOBJECT(0, 0, backgroundTexture);
+	background = new CORVID_SCREENOBJECT(0.0, 0.0, backgroundTexture);
 }
 CORVID_SCREEN::CORVID_SCREEN(const char* name) { // This is the constructor used for the base class; TODO have it inherit the g_textures so line 14 doesn't return NULL
 	this->name = name;	
@@ -17,17 +16,21 @@ CORVID_SCREEN::CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world){
 	this->loadScreen();
 	world->push_back(this);
 	if (this->background == nullptr) {
-		background = new CORVID_SCREENOBJECT(0, 0, new CORVID_TEXTURE(2));
+		background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(2));
+	}
+	if (this->player == nullptr) {
+		player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(4));
 	}
 }
 CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) : activeCheckPoint(NULL), cameraLocation(NULL), player(NULL), name("testo") { //TODO fix this constructor, as it is the main one
 	createDataStructures();
 	switch (levelNum) {
 		case 0:
-			background = new CORVID_SCREENOBJECT(0, 0, new CORVID_TEXTURE(1));
+			background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(1));
 			break;
 		case 1:
-			background = new CORVID_SCREENOBJECT(0, 0, new CORVID_TEXTURE(2));
+			background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(2));
+			player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(4));
 			break;
 		default:
 			break;
@@ -59,21 +62,18 @@ CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : CORVID_TEXTLIST(t
 void CORVID_SCREEN::createDataStructures(path fileName) {
 	staticList = new std::vector<CORVID_SCREENOBJECT*>();
 	dynamicList = new std::vector<CORVID_SCREENOBJECT*>();
-	// backgroundList = new std::vector<CORVID_SCREENOBJECT*>();
 	checkPoints = new std::vector<CORVID_SCREENOBJECT*>();
 	dataFile = new CORVID_OBJFILE(fileName);
 }
 void CORVID_SCREEN::createDataStructures() {
 	staticList = new std::vector<CORVID_SCREENOBJECT*>();
 	dynamicList = new std::vector<CORVID_SCREENOBJECT*>();
-	// backgroundList = new std::vector<CORVID_SCREENOBJECT*>();
 	checkPoints = new std::vector<CORVID_SCREENOBJECT*>();
 }
 CORVID_SCREENOBJECT* CORVID_SCREEN::findByPosition(int x, int y) { //  TODO I also need to do this for the select function
 	for (CORVID_SCREENOBJECT* i : *this->dynamicList) {}
 	for (CORVID_SCREENOBJECT* i : *this->staticList) {}
 	for (CORVID_SCREENOBJECT* i : *this->checkPoints) {}
-	// for (CORVID_SCREENOBJECT* i : *this->backgroundList) {} 
 	return nullptr;
 };
 void CORVID_SCREEN::loadScreen() {
@@ -101,10 +101,10 @@ void CORVID_SCREEN::loadScreen() {
 };
 void CORVID_SCREEN::render(SDL_Surface* surface) {
 	background->render(surface);
-	//for (CORVID_SCREENOBJECT* i : *this->backgroundList) { i->render(surface); } 
 	for (CORVID_SCREENOBJECT* i : *this->checkPoints)    { i->render(surface); }
 	for (CORVID_SCREENOBJECT* i : *this->staticList)     { i->render(surface); }
 	for (CORVID_SCREENOBJECT* i : *this->dynamicList)    { i->render(surface); }
+	if (player != nullptr) { player->render(surface); }
 };
 void CORVID_SCREEN::loadObject(char* data) {
 

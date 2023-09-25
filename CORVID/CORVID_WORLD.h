@@ -25,8 +25,9 @@ class CORVID_SCREEN{
 public:
 	const char* name;
 	CORVID_PLAYER* player;
-	CORVID_R2<int>* cameraLocation;
+	CORVID_R2* cameraLocation;
 	CORVID_SCREENOBJECT* activeCheckPoint;
+	CORVID_SCREENOBJECT* selectedObject;
 	CORVID_OBJFILE* dataFile;
 	// TODO Create automatic sorting of objects added to these lists via overloaded methods
 	std::vector<CORVID_SCREENOBJECT*>* staticList; 
@@ -52,7 +53,6 @@ public:
 	void render(SDL_Surface* surface);
 	// TODO Move this to the CORVID_SPRITE file or something
 	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); 
-
 };
 
 class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title screen
@@ -65,11 +65,12 @@ public:
 	int block_x;
 	int block_y;
 	std::vector<SDL_Surface*>* textures;
+	CORVID_SCREENOBJECT* selectedObject;
 	inline void setLevel(int newLevel) { activeLevelData = newLevel; };
 	//inline void setLevel(CORVID_SCREEN* newLevel) {} Need to make this eventually
 	inline CORVID_SCREEN* activeLevel() { return levels->at(activeLevelData); };// Needs edge case checking
 	inline CORVID_PLAYER* player() { return activeLevel()->player; };
-	inline CORVID_R2<int>* cameraLocation() { return activeLevel()->cameraLocation; };
+	inline CORVID_R2* cameraLocation() { return activeLevel()->cameraLocation; };
 	inline CORVID_SPRITE::CORVID_SCREENOBJECT* activeCheckPoint() { return activeLevel()->activeCheckPoint; };
 	inline std::vector<CORVID_SCREENOBJECT*>* staticList() { return activeLevel()->staticList; };
 	inline std::vector<CORVID_SCREENOBJECT*>* dynamicList() { return activeLevel()->dynamicList; };
@@ -88,6 +89,7 @@ public:
 	void saveWorld();
 	//void saveLevel();
 	inline void render(SDL_Surface* surface) { activeLevel()->render(surface); }
+	void selectObject(CORVID_SCREENOBJECT* objectToSelect);
 };
 /*
 inline CORVID_SCREENOBJECT<float>** load(const char* fileName) {

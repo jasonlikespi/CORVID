@@ -82,6 +82,7 @@ int main() {
 		SDL_BlitSurface(ObjectMenu, &menuWindow, EditSurface, NULL);
 		SDL_UpdateWindowSurface(window);
 	}
+
 	world->saveWorld();
 	return 0;
 }

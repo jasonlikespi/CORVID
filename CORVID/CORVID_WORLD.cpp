@@ -19,20 +19,30 @@ CORVID_SCREEN::CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world){
 	this->loadScreen();
 	world->push_back(this);
 	if (this->background == nullptr) {
-		background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(2));
+		background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(1));
 	}
 	if (this->player == nullptr) {
-		player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(4));
+		player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(2));
 	}
+	// This is just for the example block
+	std::vector<int>* blockData = new std::vector<int>(); 
+	blockData->push_back(0);
+	blockData->push_back(0);
+	blockData->push_back(0);
+	blockData->push_back(32);
+	blockData->push_back(160);
+	blockData->push_back(0);
+	blockData->push_back(4);
+	blockData->push_back(0);
+	this->staticList->push_back(new CORVID_SCREENOBJECT(blockData));
 }
-// TODO fix this constructor, as it is the main one
+// TODO find out what this constructor does and if it's redundant
 CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) : 
-	activeCheckPoint(NULL), cameraLocation(NULL), player(NULL), name("testo") { 
-
+	activeCheckPoint(NULL), cameraLocation(NULL), player(NULL), name("testo") {
 	createDataStructures();
 	switch (levelNum) {
 		case 0:
-			background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(1));
+			background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(0));
 			break;
 		case 1:
 			background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(2));
@@ -43,7 +53,7 @@ CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) :
 	}
 	world->push_back(this);
 }
-CORVID_WORLD::CORVID_WORLD() : time(0), activeLevelData(0), lastCheckPointLevel(0), block_x(32), block_y(32) { 
+CORVID_WORLD::CORVID_WORLD() : time(0), activeLevelData(0), lastCheckPointLevel(0), block_x(32), block_y(32), selectedObject(NULL) { 
 	levels = new std::vector<CORVID_SCREEN*>();
 	textures = new std::vector<SDL_Surface*>();
 	CORVID_SCREEN* level = new CORVID_SCREEN(levels, 0);
@@ -77,10 +87,10 @@ void CORVID_SCREEN::createDataStructures(path fileName) {
 }
 //  TODO I also need to do this for the select function
 CORVID_SCREENOBJECT* CORVID_SCREEN::findByPosition(int x, int y) { 
-	for (CORVID_SCREENOBJECT* i : *this->dynamicList) {}
-	for (CORVID_SCREENOBJECT* i : *this->staticList) {}
-	for (CORVID_SCREENOBJECT* i : *this->checkPoints) {}
-	return nullptr;
+	for (CORVID_SCREENOBJECT* i : *this->dynamicList) { if (i->pointIsInside(x, y)) { return i; } }
+	for (CORVID_SCREENOBJECT* i : *this->staticList) { if (i->pointIsInside(x, y)) { return i; } }
+	for (CORVID_SCREENOBJECT* i : *this->checkPoints) { if (i->pointIsInside(x, y)) { return i; } }
+	return background;
 };
 void CORVID_SCREEN::loadScreen() {
 	for ( std::vector<int>* i : *this->dataFile->objects){
@@ -139,10 +149,20 @@ void CORVID_SCREEN::saveLevel(path dataFile) {
 	int file_size = (int)in_file.tellg();
 	MyFile.close();
 }
+// TODO I think I can delete this
 void CORVID_WORLD::loadTextures() {
 	for (path i : *this->imgfiles) {
 		std::string pathstring = i.string();
 		const char* pathchar = pathstring.c_str();
 		this->textures->push_back(IMG_Load(pathchar));
 	}
+};
+// This is the method to select an object, and unselect any objects currently selected
+void CORVID_WORLD::selectObject(CORVID_SCREENOBJECT* objectToSelect) {
+	if (this->selectedObject != nullptr) {
+		this->selectedObject->selected = false;
+	}
+	objectToSelect->selected = true;
+	this->selectedObject = objectToSelect;
+	this->activeLevel()->selectedObject = objectToSelect;
 };

@@ -28,6 +28,7 @@ public:
 	CORVID_R2* cameraLocation;
 	CORVID_SCREENOBJECT* activeCheckPoint;
 	CORVID_SCREENOBJECT* selectedObject;
+	CORVID_SCREENOBJECT* unselectedObject;
 	CORVID_OBJFILE* dataFile;
 	// TODO Create automatic sorting of objects added to these lists via overloaded methods
 	std::vector<CORVID_SCREENOBJECT*>* staticList; 
@@ -53,6 +54,7 @@ public:
 	void render(SDL_Surface* surface);
 	// TODO Move this to the CORVID_SPRITE file or something
 	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); 
+	void removeObject(CORVID_SCREENOBJECT* object);
 };
 
 class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title screen
@@ -66,6 +68,7 @@ public:
 	int block_y;
 	std::vector<SDL_Surface*>* textures;
 	CORVID_SCREENOBJECT* selectedObject;
+	CORVID_SCREENOBJECT* unselectedObject;
 	inline void setLevel(int newLevel) { activeLevelData = newLevel; };
 	//inline void setLevel(CORVID_SCREEN* newLevel) {} Need to make this eventually
 	inline CORVID_SCREEN* activeLevel() { return levels->at(activeLevelData); };// Needs edge case checking
@@ -90,6 +93,8 @@ public:
 	//void saveLevel();
 	inline void render(SDL_Surface* surface) { activeLevel()->render(surface); }
 	void selectObject(CORVID_SCREENOBJECT* objectToSelect);
+	void unselectObject();
+	void deleteObject();
 };
 /*
 inline CORVID_SCREENOBJECT<float>** load(const char* fileName) {

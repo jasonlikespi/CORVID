@@ -39,20 +39,31 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			world->levels->at(1)->staticList->push_back(new CORVID_SCREENOBJECT(world->block_x, world->block_y, new CORVID_TEXTURE(3)));
 			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
 			break;
+		case SDLK_DELETE:
+			world->deleteObject();
+			break;
 		default:
 			break;
 		};
 	}
+	SDL_GetMouseState(&cursor_x, &cursor_y);
+	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x, cursor_y);
 	if ((*E).type == SDL_MOUSEBUTTONDOWN) {
 		// TODO: make sure this method never returns NULL by having it return the background as default
-		SDL_GetMouseState(&cursor_x, &cursor_y);
-		CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x, cursor_y);
 		if (objectUnderCursor != world->getbackground()) {
 			world->selectObject(objectUnderCursor);
+		} else {
+			CORVID_SCREENOBJECT* newObject = new CORVID_SCREENOBJECT(32 * (cursor_x / 32), 32 * (cursor_y / 32), new CORVID_TEXTURE(4));
+			world->levels->at(1)->staticList->push_back(newObject);
+			world->selectObject(newObject);
 		}
-		else {
-			std::cout << "No object here.\n";
-		}
+	}
+	if (objectUnderCursor == world->getbackground()) {
+		world->unselectedObject->location.x = 32 * (cursor_x / 32);
+		world->unselectedObject->location.y = 32 * (cursor_y / 32);
+	} else {
+		// The -2048 is completely arbitrary
+		world->unselectedObject->location.x = -2048;
 	}
 	return 1;
 }

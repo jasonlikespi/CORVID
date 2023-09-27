@@ -5,3 +5,4 @@ brick-selected.png
 PlayerSprite.png
 SpriteSheetBlock.png
 SpriteSheetBlockSelected.png
+SpriteSheetBlockSeeThrough.png

@@ -138,6 +138,12 @@
     <Image Include="titleScreen.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="SpriteSheetBlockSeeThrough.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="SpriteSheetBlockSelected.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="folderMaker.sh">

@@ -70,7 +70,7 @@ public:
  * 2 - Player
  * 3 - Brick- Selectable
  * 4 - Block- Selectable
- *
+ * 5 - Unselected Block
  *
  */
 
@@ -83,4 +83,5 @@ public:
  * 4  PlayerSprite.png
  * 5  SpriteSheetBlock.png
  * 6  SpriteSheetBlockSelected.png
+ * 7  SpriteSheetBlockSeeThrough.png
  */

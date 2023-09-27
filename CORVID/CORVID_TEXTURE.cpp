@@ -6,12 +6,7 @@ CORVID_TEXTURE::CORVID_TEXTURE(){
 };
 // Can't think of anything to include in the constructor
 CORVID_TEXTURE::CORVID_TEXTURE(int texture) : textureID(texture){};
-// Constructor for objects that can be selected, with a different appearance to indicate that they are being selected
-//CORVID_TEXTURE::CORVID_TEXTURE(int unselected, int selected) : activePNG(0) { 
-//	textureList = new std::vector<int>();
-//	textureList->push_back(unselected);
-//	textureList->push_back(selected);
-//};
+
 void CORVID_TEXTURE::initializeTextures(std::vector<path>* imgfiles) {
 	if (global_textureList != nullptr) { return; }
 	// TODO this may lead to complicated problems down the line if there are multiple texture files
@@ -49,7 +44,10 @@ void CORVID_TEXTURE::render(SDL_Surface* surface, SDL_Rect* offset, int objectSt
 			renderCustom(surface, offset, 5);
 		}
 		break;
-		default:
+	case(5):
+		renderCustom(surface, offset, 7);
+		break;
+	default:
 		break;
 	}
 
@@ -75,7 +73,7 @@ void CORVID_TEXTURE::renderCustom(SDL_Surface* surface, SDL_Rect* offset, int sp
 void CORVID_TEXTURE::renderCustomVert(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet) {
 	// TODO topEdge is functionally identical to offset, but for some inexplicable reason, it keeps deleting the memory
 	SDL_Rect topEdge = { offset->x, offset->y, 0, 0 };
-	SDL_Rect bottomEdge = { offset->x, offset->y + offset->h, 0, 0 };
+	SDL_Rect bottomEdge = { offset->x, offset->y + offset->h - 32, 0, 0 };
 	SDL_BlitSurface(global_textureList->at(spriteSheet), &spriteList[14], surface, offset);
 	SDL_BlitSurface(global_textureList->at(spriteSheet), &spriteList[12], surface, &bottomEdge);
 	for (int i = topEdge.y + 32; i < bottomEdge.y; i+= 32) {
@@ -87,7 +85,7 @@ void CORVID_TEXTURE::renderCustomVert(SDL_Surface* surface, SDL_Rect* offset, in
 void CORVID_TEXTURE::renderCustomHorz(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet) {
 	// TODO leftEdge is functionally identical to offset, but for some inexplicable reason, it keeps deleting the memory
 	SDL_Rect leftEdge = { offset->x, offset->y, 0, 0 };
-	SDL_Rect rightEdge = { offset->x + offset->w, offset->y, 0, 0 };
+	SDL_Rect rightEdge = { offset->x + offset->w, offset->y - 32, 0, 0 };
 	SDL_BlitSurface(global_textureList->at(spriteSheet), &spriteList[15], surface, offset);
 	SDL_BlitSurface(global_textureList->at(spriteSheet), &spriteList[13], surface, &rightEdge);
 	for (int i = leftEdge.x + 32; i < rightEdge.x; i+= 32) {

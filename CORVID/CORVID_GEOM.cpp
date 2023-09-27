@@ -3,13 +3,13 @@
 // TODO Write Method
 //template <typename NM>
 bool CORVID_RECT::pointIsInside(double x_val, double y_val) {
-	return(this->location.x < x_val && this->location.x + this->size.x > x_val && this->location.y < y_val && this->location.y + this->size.y > y_val);
+	return(this->location.x <= x_val && this->location.x + this->size.x >= x_val && this->location.y <= y_val && this->location.y + this->size.y >= y_val);
 };
 
 // TODO Write Method
 // template <typename NM>
 bool CORVID_RECT::pointIsInside(CORVID_R2 point) {
-	return(this->location.x < point.x && this->location.x + this->size.x > point.x && this->location.y < point.y && this->location.y + this->size.y > point.y);
+	return(this->location.x <= point.x && this->location.x + this->size.x >= point.x && this->location.y <= point.y && this->location.y + this->size.y >= point.y);
 };
 /*
 CORVID_BOUNDBOX<int>::CORVID_BOUNDBOX(int xval, int yval) : 

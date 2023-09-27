@@ -31,7 +31,19 @@ SDL_Surface* GameSurface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 
 SDL_Surface* ObjectMenu = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
 std::vector<SDL_Surface*>* CORVID_TEXTURE::global_textureList = NULL;
 using namespace std::filesystem;
-
+/*
+static CORVID_EVENTHANDLER::Bleft = false;
+static CORVID_EVENTHANDLER::Bright = false;
+static CORVID_EVENTHANDLER::Bdown = false;
+static CORVID_EVENTHANDLER::Bup = false;
+static CORVID_EVENTHANDLER::B1 = false;
+static CORVID_EVENTHANDLER::B2 = false;
+static CORVID_EVENTHANDLER::BW = false;
+static CORVID_EVENTHANDLER::BA = false;
+static CORVID_EVENTHANDLER::BS = false;
+static CORVID_EVENTHANDLER::BD = false;
+static CORVID_EVENTHANDLER::BC = false;
+*/
 bool init() {
 	bool success = true;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {

@@ -203,6 +203,19 @@ void CORVID_WORLD::deleteObject() {
 		this->activeLevel()->removeObject(this->selectedObject);
 	}
 };
+
+void CORVID_WORLD::playerMoveLeft() {
+
+};
+
+void CORVID_WORLD::playerMoveRight() {
+
+};
+
+void CORVID_WORLD::playerJump() {
+
+};
+
 // So complicated I'm putting it off until later if at all
 // Used to merge rectangles that are added
 /*void CORVID_WORLD::assembleRectangles() {

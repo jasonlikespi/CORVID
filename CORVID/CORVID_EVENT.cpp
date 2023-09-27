@@ -7,7 +7,27 @@ CORVID_EVENTHANDLER::CORVID_EVENTHANDLER() {
 }
 int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 	SDL_PollEvent(E);
+	SDL_GetMouseState(&cursor_x, &cursor_y);
+	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x, cursor_y);
+	// Shuts down the program if the window is exited out of
 	if ((*E).type == SDL_QUIT) { return 0; };
+	// What happens when a key is released- mostly just their respective variables resetting
+	if ((*E).type == SDL_KEYUP) {
+		switch ((*E).key.keysym.sym){
+		case SDLK_DOWN:
+			Bdown = false;
+			break;
+		case SDLK_UP:
+			Bup = false;
+			break;
+		case SDLK_LEFT:
+			Bleft = false;
+			break;
+		case SDLK_RIGHT:
+			Bright = false;
+		};
+	}
+	// What happens when a key is pressed down
 	if ((*E).type == SDL_KEYDOWN) {
 		switch ((*E).key.keysym.sym) {
 		case SDLK_p:
@@ -15,6 +35,16 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			break;
 		case SDLK_DOWN:
 			world->setLevel(1);
+			Bdown = true;
+			break;
+		case SDLK_UP:
+			Bup = true;
+			break;
+		case SDLK_LEFT:
+			Bleft = true;
+			break;
+		case SDLK_RIGHT:
+			Bright = true;
 			break;
 		case SDLK_q:
 			return 0;
@@ -46,10 +76,8 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			break;
 		};
 	}
-	SDL_GetMouseState(&cursor_x, &cursor_y);
-	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x, cursor_y);
+	// The clicking portion of the program
 	if ((*E).type == SDL_MOUSEBUTTONDOWN) {
-		// TODO: make sure this method never returns NULL by having it return the background as default
 		if (objectUnderCursor != world->getbackground()) {
 			world->selectObject(objectUnderCursor);
 		} else {
@@ -58,6 +86,7 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			world->selectObject(newObject);
 		}
 	}
+	// This runs whenever the mouse moves (It also runs when the mouse doesn't move but in that case it does nothing)
 	if (objectUnderCursor == world->getbackground()) {
 		world->unselectedObject->location.x = 32 * (cursor_x / 32);
 		world->unselectedObject->location.y = 32 * (cursor_y / 32);
@@ -67,3 +96,11 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 	}
 	return 1;
 }
+void CORVID_EVENTHANDLER::updateWorld(CORVID_WORLD* world) { 
+	if (Bleft) { world->playerMoveLeft(); }
+	if (Bright) { world->playerMoveRight(); }
+	if (Bup) { world->playerJump(); }
+	if (Bdown) { 
+		world->setLevel(1);
+	};
+};

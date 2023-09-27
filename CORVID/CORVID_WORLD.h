@@ -95,6 +95,9 @@ public:
 	void selectObject(CORVID_SCREENOBJECT* objectToSelect);
 	void unselectObject();
 	void deleteObject();
+	void playerMoveLeft();
+	void playerMoveRight();
+	void playerJump();
 };
 /*
 inline CORVID_SCREENOBJECT<float>** load(const char* fileName) {

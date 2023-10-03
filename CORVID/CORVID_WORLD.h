@@ -26,6 +26,7 @@ public:
 	const char* name;
 	CORVID_PLAYER* player;
 	CORVID_R2* cameraLocation;
+	CORVID_R2* cameraSpeed;
 	CORVID_SCREENOBJECT* activeCheckPoint;
 	CORVID_SCREENOBJECT* selectedObject;
 	CORVID_SCREENOBJECT* unselectedObject;
@@ -37,13 +38,10 @@ public:
 	CORVID_SCREENOBJECT* background;
 	inline int totalStaticObjects() { return (int)staticList->size(); }
 	inline int totalDynamicObjects() { return (int)dynamicList->size(); }
-	//inline int totalBackgroundObjects() { return (int)backgroundList->size(); }
 	inline int totalCheckPoints() { return (int)checkPoints->size(); }
 	CORVID_SCREENOBJECT* findByPosition(int x, int y);
 	int totalCount() { return (int)(staticList->size() + dynamicList->size() + checkPoints->size()); };
 	CORVID_SCREEN();
-	// Used as base class for CORVID_WORLD
-	// TODO have it where the base class holds the data for active level to prevent NULL data and perhaps efficiency in some way
 	CORVID_SCREEN(const char* name); 
 	CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world);
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum); 
@@ -73,7 +71,8 @@ public:
 	//inline void setLevel(CORVID_SCREEN* newLevel) {} Need to make this eventually
 	inline CORVID_SCREEN* activeLevel() { return levels->at(activeLevelData); };// Needs edge case checking
 	inline CORVID_PLAYER* player() { return activeLevel()->player; };
-	inline CORVID_R2* cameraLocation() { return activeLevel()->cameraLocation; };
+	inline CORVID_R2* getcameraLocation() { return activeLevel()->cameraLocation; };
+	inline CORVID_R2* getcameraSpeed() { return activeLevel()->cameraSpeed; }
 	inline CORVID_SPRITE::CORVID_SCREENOBJECT* activeCheckPoint() { return activeLevel()->activeCheckPoint; };
 	inline std::vector<CORVID_SCREENOBJECT*>* staticList() { return activeLevel()->staticList; };
 	inline std::vector<CORVID_SCREENOBJECT*>* dynamicList() { return activeLevel()->dynamicList; };
@@ -98,6 +97,14 @@ public:
 	void playerMoveLeft();
 	void playerMoveRight();
 	void playerJump();
+	void stopJump();
+	void updateStatics();
+	void updateDynamics();
+	void updatePlayer();
+	void collisionDetect();
+	void updateCamera();
+	void centerPlayer();
+	void staticPlayerObjectCollision();
 };
 /*
 inline CORVID_SCREENOBJECT<float>** load(const char* fileName) {

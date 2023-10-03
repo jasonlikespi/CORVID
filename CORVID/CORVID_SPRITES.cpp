@@ -1,5 +1,30 @@
 #include "CORVID_SPRITES.h"
 using namespace std;
+bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::isEffectedByGravity() {
+	switch (id) {
+	case(2):
+		return true;
+	default:
+		return false;
+	}
+};
+// TODO Write Method
+bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::hasFriction() {
+	return true;
+};
+// TODO Write Method
+bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::canDamage() {
+	return true;
+};
+// TODO Write Method
+bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::isCheckPoint() {
+	return true;
+};
+// TODO Write Method
+bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::isLevelSwap() {
+	return true;
+};
+
 // This is only remaining because a default constructor is required; it should not be used
 CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : 
 	CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), CORVID_SPRITEDATATYPE(), selected(false) {
@@ -16,28 +41,8 @@ void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) {
 	} else {
 		CORVID_TEXTURE::render(surface, &offset, 0);
 	}
-	/*
-	switch (this->textureType) { 
-		case(PNG):
-			offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
-			CORVID_TEXTURE::render(surface, &offset);
-		break;
-		case(BRICK):
-			offset = { (int)this->location.x, (int)this->location.y, 0, 0 };
-			// TODO Make sure that the selected option is added to the rendertext method
-			CORVID_TEXTURE::render(surface, &offset); 
-		break;
-		case(CUSTOM):
-			offset = { (int)this->location.x, (int)this->location.y, (int)this->size.x, (int)this->size.y};
-			CORVID_TEXTURE::render(surface, &offset);
-		case(EMPTY):
-			break;
-		default:
-			printf("Error: Empty Object\n");
-		break;
-	}
-	*/
 };
+
 int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 	int* dataDump = new int[8];
 	dataDump[0] = 0;
@@ -45,24 +50,59 @@ int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 	dataDump[2] = (int)this->location.y;
 	dataDump[3] = (int)this->size.x;
 	dataDump[4] = (int)this->size.y;
-	dataDump[5] = (int)this->id;
-	dataDump[6] = 0;
+	dataDump[5] = 0;
+	dataDump[6] = (int)this->id;
 	dataDump[7] = 0;
 	return dataDump;
 };
 
-/*
-void CORVID_SPRITE::CORVID_SCREENOBJECT::loadSpriteTexture() {
-	switch (textureNumber) {
-		case(0):
-			path unselectedPath = textureSource->imgfiles->at(textureNumber);
-			std::string unselectedString = unselectedPath.string();
-			const char* unselectedCString = unselectedString.c_str();
-			this->texture = IMG_Load(textureCString);
+void CORVID_SPRITE::CORVID_SCREENOBJECT::updateFrame() {
+	if (isEffectedByGravity() && freeFall) {
+		velocity.y += STRENGTH_OF_GRAVITY;
 	}
-	path texturePath = textureSource->imgfiles->at(textureNumber);
-	std::string textureString = texturePath.string();
-	const char* textureCString = textureString.c_str();
-	this->texture = IMG_Load(textureCString);
+	velocity.x *= FRICTION_CONSTANT_HORIZONTAL;
+	velocity.y *= FRICTION_CONSTANT_VERTICAL;
+	location = location + velocity;
 };
-*/
+
+void CORVID_SPRITE::CORVID_PLAYER::moveLeft() {
+	if (velocity.x > -SPEED_CAP) {
+		velocity.x -= ACCELERATION;
+	}
+};
+
+void CORVID_SPRITE::CORVID_PLAYER::moveRight() {
+	if (velocity.x < SPEED_CAP) {
+		velocity.x += ACCELERATION;
+	}
+};
+
+void CORVID_SPRITE::CORVID_PLAYER::jump() {
+	switch(jumpFrame){
+		case(0):
+			this->velocity.y -= PLAYER_JUMP_FORCE_1;
+			break;
+		case(1):
+			this->velocity.y -= PLAYER_JUMP_FORCE_2;
+			break;
+		case(2):
+			this->velocity.y -= PLAYER_JUMP_FORCE_3;
+			break;
+		case(3):
+			this->velocity.y -= PLAYER_JUMP_FORCE_4;
+			break;
+		case(4):
+			this->velocity.y -= PLAYER_JUMP_FORCE_5;
+			break;
+		case(5):
+			jumpFrame = -1;
+			return;
+			break;
+		case(-1):
+			return;
+			break;
+		default:
+			break;
+	}
+	jumpFrame++;
+};

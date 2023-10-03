@@ -3,28 +3,13 @@
 #define CORVID_TEXTURE_H
 #include "SDL.h"
 #include "SDL_Image.h"
+#include "CORVID_CONSTS.cpp"
 #include <vector>
 #include <filesystem>
 // TODO Maybe make another consts file?
-const SDL_Rect spriteList[16] = { 
-	 {  0,  0,  32,  32 },
-	 { 32,  0,  32,  32 },
-	 { 64,  0,  32,  32 },
-	 { 96,  0,  32,  32 },
-	 {128,  0,  32,  32 },
-	 {160,  0,  32,  32 },
-	 {192,  0,  32,  32 },
-	 {224,  0,  32,  32 },
-	 {  0, 32,  32,  32 },
-	 { 32, 32,  32,  32 },
-	 { 64, 32,  32,  32 },
-	 { 96, 32,  32,  32 },
-	 {128, 32,  32,  32 },
-	 {160, 32,  32,  32 },
-	 {192, 32,  32,  32 },
-	 {224, 32,  32,  32 }
-};
+
 using namespace std::filesystem;
+using namespace CORVID_CONSTS;
 
 class CORVID_TEXTURE{
 public:
@@ -32,7 +17,6 @@ public:
 	static std::vector<SDL_Surface*>* global_textureList;
 	CORVID_TEXTURE();
 	CORVID_TEXTURE(int texture);
-	// CORVID_TEXTURE(int unselected, int selected);
 	static void initializeTextures(std::vector<path>* imgfiles);
 	// TODO make these private
 	void render(SDL_Surface* surface, SDL_Rect* offset, int objectState);

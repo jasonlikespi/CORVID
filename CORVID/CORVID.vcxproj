@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CORVID_CONSTS.cpp" />
     <ClCompile Include="CORVID_COORDS.cpp" />
     <ClCompile Include="CORVID_EVENT.cpp" />
     <ClCompile Include="CORVID_FILE.cpp" />

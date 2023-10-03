@@ -11,16 +11,16 @@
 #include <fstream>
 #include "SDL_filesystem.h"
 #include <windows.h>
+#include <stdlib.h>
+
+using namespace CORVID_CONSTS;
 
 bool init();
 void close();
 int currentLevel = 0;
 SDL_Window* window = NULL;
 SDL_Surface* EditSurface = NULL;
-const int SCREEN_WIDTH = 1920;
-const int  SCREEN_HEIGHT = 1080;
-const int MINI_SCREEN_WIDTH = 1920; // To change to miniscreen mode: change this to the screen size
-const int MINI_SCREEN_HEIGHT = 1080;
+
 SDL_Rect windowHalver = SDL_Rect{ SCREEN_WIDTH - MINI_SCREEN_WIDTH, SCREEN_HEIGHT - MINI_SCREEN_HEIGHT, 0, 0 };
 SDL_Rect menuWindow = SDL_Rect{ 0, -164, SCREEN_WIDTH - MINI_SCREEN_WIDTH, SCREEN_HEIGHT - MINI_SCREEN_HEIGHT };
 const char* staticFiles = "asdf";
@@ -31,19 +31,8 @@ SDL_Surface* GameSurface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 
 SDL_Surface* ObjectMenu = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
 std::vector<SDL_Surface*>* CORVID_TEXTURE::global_textureList = NULL;
 using namespace std::filesystem;
-/*
-static CORVID_EVENTHANDLER::Bleft = false;
-static CORVID_EVENTHANDLER::Bright = false;
-static CORVID_EVENTHANDLER::Bdown = false;
-static CORVID_EVENTHANDLER::Bup = false;
-static CORVID_EVENTHANDLER::B1 = false;
-static CORVID_EVENTHANDLER::B2 = false;
-static CORVID_EVENTHANDLER::BW = false;
-static CORVID_EVENTHANDLER::BA = false;
-static CORVID_EVENTHANDLER::BS = false;
-static CORVID_EVENTHANDLER::BD = false;
-static CORVID_EVENTHANDLER::BC = false;
-*/
+using namespace CORVID_CONSTS;
+
 bool init() {
 	bool success = true;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -56,8 +45,8 @@ bool init() {
 			"An SDL2 window",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
-			SCREEN_WIDTH,
-			SCREEN_HEIGHT,
+			WINDOW_WIDTH,
+			WINDOW_HEIGHT,
 			SDL_WINDOW_OPENGL
 		);
 		if (window == NULL) {
@@ -88,11 +77,15 @@ int main() {
 
 	CORVID_EVENTHANDLER* E = new CORVID_EVENTHANDLER();
 	while (E->poll(world)) {
+		E->updateWorld(world);
 		world->render(Stage);
-		SDL_BlitSurface(Stage, NULL, GameSurface, NULL);
-		SDL_BlitSurface(GameSurface, NULL, EditSurface, &windowHalver);
-		SDL_BlitSurface(ObjectMenu, &menuWindow, EditSurface, NULL);
+		SDL_Rect cameraOffset = { (int)world->getcameraLocation()->x, (int)world->getcameraLocation()->y, 0, 0 };
+		SDL_BlitSurface(Stage, NULL, GameSurface, &cameraOffset);
+		SDL_BlitSurface(GameSurface, NULL, EditSurface, NULL);
+		//SDL_BlitSurface(GameSurface, NULL, EditSurface, &windowHalver);
+		//SDL_BlitSurface(ObjectMenu, &menuWindow, EditSurface, NULL);
 		SDL_UpdateWindowSurface(window);
+		SDL_Delay(10);
 	}
 
 	world->saveWorld();

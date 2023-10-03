@@ -8,7 +8,7 @@ CORVID_EVENTHANDLER::CORVID_EVENTHANDLER() {
 int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 	SDL_PollEvent(E);
 	SDL_GetMouseState(&cursor_x, &cursor_y);
-	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x, cursor_y);
+	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x - (int)world->getcameraLocation()->x, cursor_y - (int)world->getcameraLocation()->y);
 	// Shuts down the program if the window is exited out of
 	if ((*E).type == SDL_QUIT) { return 0; };
 	// What happens when a key is released- mostly just their respective variables resetting
@@ -25,6 +25,10 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			break;
 		case SDLK_RIGHT:
 			Bright = false;
+			break;
+		case SDLK_RETURN:
+			BEnter = false;
+			break;
 		};
 	}
 	// What happens when a key is pressed down
@@ -34,7 +38,7 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			world->saveWorld();
 			break;
 		case SDLK_DOWN:
-			world->setLevel(1);
+			//world->setLevel(1);
 			Bdown = true;
 			break;
 		case SDLK_UP:
@@ -50,24 +54,22 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			return 0;
 			break;
 		case SDLK_s:
-			world->block_y += 32;
-			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
+			world->unselectedObject->size.y += 32;
 			break;
 		case SDLK_a:
-			world->block_x -= 32;
-			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
+			world->unselectedObject->size.x -= 32;
 			break;
 		case SDLK_w:
-			world->block_y -= 32;
-			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
+			world->unselectedObject->size.y -= 32;
 			break;
 		case SDLK_d:
-			world->block_x += 32;
-			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
+			world->unselectedObject->size.x += 32;
+			break;
+		case SDLK_RETURN:
+			BEnter = true;
 			break;
 		case SDLK_r:
-			world->levels->at(1)->staticList->push_back(new CORVID_SCREENOBJECT(world->block_x, world->block_y, new CORVID_TEXTURE(3)));
-			std::cout << "[" << world->block_x << ", " << world->block_y << "]\n";
+			std::cout << "Huh?\n";
 			break;
 		case SDLK_DELETE:
 			world->deleteObject();
@@ -75,21 +77,23 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 		default:
 			break;
 		};
+		if (world->unselectedObject->size.x < 32) { world->unselectedObject->size.x = 32; }
+		if (world->unselectedObject->size.y < 32) { world->unselectedObject->size.y = 32; }
 	}
 	// The clicking portion of the program
 	if ((*E).type == SDL_MOUSEBUTTONDOWN) {
 		if (objectUnderCursor != world->getbackground()) {
 			world->selectObject(objectUnderCursor);
 		} else {
-			CORVID_SCREENOBJECT* newObject = new CORVID_SCREENOBJECT(32 * (cursor_x / 32), 32 * (cursor_y / 32), new CORVID_TEXTURE(4));
+			CORVID_SCREENOBJECT* newObject = new CORVID_SCREENOBJECT(0, 32 * ((cursor_x - (int)world->getcameraLocation()->x) / 32), 32 * ((cursor_y - (int)world->getcameraLocation()->y) / 32), (int)world->unselectedObject->size.x, (int)world->unselectedObject->size.y, 0, 4, 0);
 			world->levels->at(1)->staticList->push_back(newObject);
 			world->selectObject(newObject);
 		}
 	}
 	// This runs whenever the mouse moves (It also runs when the mouse doesn't move but in that case it does nothing)
 	if (objectUnderCursor == world->getbackground()) {
-		world->unselectedObject->location.x = 32 * (cursor_x / 32);
-		world->unselectedObject->location.y = 32 * (cursor_y / 32);
+		world->unselectedObject->location.x = 32 * ((cursor_x - (int)world->getcameraLocation()->x) / 32) ;
+		world->unselectedObject->location.y = 32 * ((cursor_y - (int)world->getcameraLocation()->y) / 32) ;
 	} else {
 		// The -2048 is completely arbitrary
 		world->unselectedObject->location.x = -2048;
@@ -97,10 +101,18 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 	return 1;
 }
 void CORVID_EVENTHANDLER::updateWorld(CORVID_WORLD* world) { 
-	if (Bleft) { world->playerMoveLeft(); }
-	if (Bright) { world->playerMoveRight(); }
-	if (Bup) { world->playerJump(); }
-	if (Bdown) { 
+	if (BEnter) {
 		world->setLevel(1);
 	};
+	if (world->activeLevel()->player != nullptr) {
+		if (Bleft) { world->playerMoveLeft(); }
+		if (Bright) { world->playerMoveRight(); }
+		if (Bup) { world->playerJump(); }
+		if (!Bup) { world->stopJump(); }
+		world->updateStatics();
+		world->updateDynamics();
+		world->updatePlayer();
+		world->collisionDetect();
+		world->updateCamera();
+	}
 };

@@ -42,6 +42,9 @@
     <ClCompile Include="CORVID_TEXTURE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CORVID_CONSTS.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CORVID_GEOM.h">

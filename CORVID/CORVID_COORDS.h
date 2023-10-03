@@ -8,7 +8,6 @@
 namespace CORVID_COORDS {
 	enum CORVID_COORDTYPE { ENGINE, SURFACE, ENGINE_VECTOR, SURFACE_VECTOR, DEFAULT };
 	
-	// template <typename NM>
 	class CORVID_R2 {
 	public:
 		double x;
@@ -17,6 +16,8 @@ namespace CORVID_COORDS {
 		CORVID_R2() : x(0), y(0), coordType(DEFAULT) {};
 		CORVID_R2(double x, double y) : x(x), y(y), coordType(DEFAULT) {};
 		CORVID_R2(double x, double y, CORVID_COORDTYPE type) : x(x), y(y), coordType(type) {};
+		CORVID_R2& operator+(CORVID_R2& num1);
+		//CORVID_R2 operator+(CORVID_R2 p1, CORVID_R2 p2);
 	};
 };
 #endif

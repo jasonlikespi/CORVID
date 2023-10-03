@@ -1,9 +1,10 @@
 #include "CORVID_TEXTURE.h"
+using namespace CORVID_CONSTS;
 // Default Constructor; Should never run
 CORVID_TEXTURE::CORVID_TEXTURE(){
 	textureID = 3;
-	//textureList = new std::vector<int>(); 
 };
+
 // Can't think of anything to include in the constructor
 CORVID_TEXTURE::CORVID_TEXTURE(int texture) : textureID(texture){};
 
@@ -85,7 +86,7 @@ void CORVID_TEXTURE::renderCustomVert(SDL_Surface* surface, SDL_Rect* offset, in
 void CORVID_TEXTURE::renderCustomHorz(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet) {
 	// TODO leftEdge is functionally identical to offset, but for some inexplicable reason, it keeps deleting the memory
 	SDL_Rect leftEdge = { offset->x, offset->y, 0, 0 };
-	SDL_Rect rightEdge = { offset->x + offset->w, offset->y - 32, 0, 0 };
+	SDL_Rect rightEdge = { offset->x + offset->w - 32, offset->y, 0, 0 };
 	SDL_BlitSurface(global_textureList->at(spriteSheet), &spriteList[15], surface, offset);
 	SDL_BlitSurface(global_textureList->at(spriteSheet), &spriteList[13], surface, &rightEdge);
 	for (int i = leftEdge.x + 32; i < rightEdge.x; i+= 32) {

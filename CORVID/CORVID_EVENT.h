@@ -17,6 +17,7 @@ class CORVID_EVENTHANDLER{
 	inline static bool BS = false;
 	inline static bool BD = false;
 	inline static bool BC = false;
+	inline static bool BEnter = false;
 	int keyPressData;
 	SDL_Event* E;
 	int cursor_x;

@@ -4,8 +4,10 @@ bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::isEffectedByGravity() {
 	switch (id) {
 	case(2):
 		return true;
+		break;
 	default:
 		return false;
+		break;
 	}
 };
 // TODO Write Method

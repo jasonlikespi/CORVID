@@ -47,7 +47,7 @@ CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) :
 	}
 	world->push_back(this);
 }
-CORVID_WORLD::CORVID_WORLD() : time(0), activeLevelData(0), lastCheckPointLevel(0), block_x(32), block_y(32), selectedObject(NULL) { 
+CORVID_WORLD::CORVID_WORLD() : frame(0), activeLevelData(0), lastCheckPointLevel(0), block_x(32), block_y(32), selectedObject(NULL) { 
 	levels = new std::vector<CORVID_SCREEN*>();
 	textures = new std::vector<SDL_Surface*>();
 }
@@ -58,7 +58,7 @@ void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOu
 		binOut->write(reinterpret_cast<const char*>(&currentObject[i]), sizeof(currentObject[i]));
 	}
 };
-CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : CORVID_TEXTLIST(textureFile), activeLevelData(0), block_x(32), block_y(32), lastCheckPointLevel(0), time(0) {
+CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : CORVID_TEXTLIST(textureFile), activeLevelData(0), block_x(32), block_y(32), lastCheckPointLevel(0), frame(0) {
 	CORVID_TEXTURE::initializeTextures(this->imgfiles);
 	textures = new std::vector<SDL_Surface*>();
 	levels = new std::vector<CORVID_SCREEN*>();

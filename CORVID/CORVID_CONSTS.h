@@ -1,3 +1,6 @@
+#pragma once
+#ifndef CORVID_CONSTS_H
+#define CORVID_CONSTS_H
 #include "SDL.h"
 #include <filesystem>
 namespace CORVID_CONSTS {
@@ -19,12 +22,12 @@ namespace CORVID_CONSTS {
 		 {192, 32,  32,  32 },
 		 {224, 32,  32,  32 }
 	};
-	const int WINDOW_WIDTH = 1920; // TODO move to consts file
+	const int WINDOW_WIDTH = 1920;
 	const int WINDOW_HEIGHT = 1080;
 	const int SCREEN_WIDTH = 7680;
 	const int SCREEN_HEIGHT = 1080;
-	const int MINI_SCREEN_WIDTH = 1920; // To change to miniscreen mode: change this to the screen size
-	const int MINI_SCREEN_HEIGHT = 1080;
+	const int MINI_SCREEN_WIDTH = 1680; // To change to miniscreen mode: change this to the screen size
+	const int MINI_SCREEN_HEIGHT = 945;
 	const double STRENGTH_OF_GRAVITY = 5;
 	const double FRICTION_CONSTANT_VERTICAL = .8;
 	const double FRICTION_CONSTANT_HORIZONTAL = .9;
@@ -50,4 +53,7 @@ namespace CORVID_CONSTS {
 	// TODO BUG Screen scrolls at half of the screen instead of three quarters
 	// TODO Add metaanalysis to determine which functions are running most often (probaly needed to fix lag, useful to optimize)
 	// TODO Get rid of memory leaks
+	// TODO Add actual documentation
+	// TODO Add ground to default world creation
 }
+#endif

@@ -136,7 +136,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CORVID_CONSTS.cpp" />
     <ClCompile Include="CORVID_COORDS.cpp" />
     <ClCompile Include="CORVID_EVENT.cpp" />
     <ClCompile Include="CORVID_FILE.cpp" />
@@ -148,6 +147,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CORVID_CONSTS.h" />
     <ClInclude Include="CORVID_COORDS.h" />
     <ClInclude Include="CORVID_EVENT.h" />
     <ClInclude Include="CORVID_FILE.h" />

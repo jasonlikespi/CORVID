@@ -3,7 +3,7 @@
 #define CORVID_TEXTURE_H
 #include "SDL.h"
 #include "SDL_Image.h"
-#include "CORVID_CONSTS.cpp"
+#include "CORVID_CONSTS.h"
 #include <vector>
 #include <filesystem>
 // TODO Maybe make another consts file?

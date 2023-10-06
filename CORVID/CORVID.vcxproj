@@ -141,6 +141,7 @@
     <ClCompile Include="CORVID_FILE.cpp" />
     <ClCompile Include="CORVID_GEOM.cpp" />
     <ClCompile Include="CORVID_SPRITES.cpp" />
+    <ClCompile Include="CORVID_TEXT.cpp" />
     <ClCompile Include="CORVID_TEXTURE.cpp" />
     <ClCompile Include="CORVID_WINDOW.cpp" />
     <ClCompile Include="CORVID_WORLD.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="CORVID_FILE.h" />
     <ClInclude Include="CORVID_GEOM.h" />
     <ClInclude Include="CORVID_SPRITES.h" />
+    <ClInclude Include="CORVID_TEXT.h" />
     <ClInclude Include="CORVID_TEXTURE.h" />
     <ClInclude Include="CORVID_WINDOW.h" />
     <ClInclude Include="CORVID_WORLD.h" />

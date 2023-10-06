@@ -26,7 +26,7 @@ namespace CORVID_CONSTS {
 	const int WINDOW_HEIGHT = 1080;
 	const int SCREEN_WIDTH = 7680;
 	const int SCREEN_HEIGHT = 1080;
-	const int MINI_SCREEN_WIDTH = 1680; // To change to miniscreen mode: change this to the screen size
+	const int MINI_SCREEN_WIDTH = 1680; 
 	const int MINI_SCREEN_HEIGHT = 945;
 	const double STRENGTH_OF_GRAVITY = 5;
 	const double FRICTION_CONSTANT_VERTICAL = .8;
@@ -46,8 +46,7 @@ namespace CORVID_CONSTS {
 	const double MAX_X = 7680;
 	const double MAX_Y = 1080;
 	// TODO Fix framedip
-	// TODO Add way to measure frame rate
-	// TODO Player cannot move from block to another at same level
+	// TODO Player cannot move from block to another at same height
 	// TODO Add duck button
 	// TODO Add sprint
 	// TODO BUG Screen scrolls at half of the screen instead of three quarters
@@ -55,5 +54,7 @@ namespace CORVID_CONSTS {
 	// TODO Get rid of memory leaks
 	// TODO Add actual documentation
 	// TODO Add ground to default world creation
+	// TODO add text renderer
+	// TODO Add better file system
 }
 #endif

@@ -61,7 +61,8 @@ class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title 
 public:
 	std::vector<CORVID_SCREEN*>* levels;
 	int lastCheckPointLevel;
-	int frame;
+	//int frameOfLastSecond;
+	//int frame;
 	int block_x;
 	int block_y;
 	std::vector<SDL_Surface*>* textures;

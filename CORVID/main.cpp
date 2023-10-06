@@ -12,6 +12,7 @@
 #include "SDL_filesystem.h"
 #include <windows.h>
 #include <stdlib.h>
+#include <time.h>
 
 using namespace CORVID_CONSTS;
 using namespace std::filesystem;
@@ -64,6 +65,14 @@ void close() {
 }
 
 int main() {
+	int fps = 0;
+	int frameOfLastSecond = 0;
+	int frame = 0;
+	time_t startTime;
+	time_t currentTime;
+	time_t now;
+	time(&startTime);
+	time(&currentTime);
 	path worldFile = current_path() / "testo\\testo.bin";
 	path textureFile = current_path() / "testo\\textures.txt.txt";
 	CORVID_WORLD* world = new CORVID_WORLD(worldFile, textureFile);
@@ -82,8 +91,16 @@ int main() {
 		//SDL_BlitSurface(GameSurface, NULL, EditSurface, &windowHalver);
 		//SDL_BlitSurface(ObjectMenu, &menuWindow, EditSurface, NULL);
 		SDL_UpdateWindowSurface(window);
-		SDL_Delay(10);
-		world->frame++;
+		SDL_Delay(1);
+		frame++;
+		time(&now);
+		if (now != currentTime) {
+			currentTime++;
+			fps = frame - frameOfLastSecond;
+			frameOfLastSecond = frame;
+			std::cout << fps;
+			std::cout << "\n";
+		}
 	}
 	world->saveWorld();
 	return 0;

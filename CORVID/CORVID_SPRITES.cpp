@@ -29,15 +29,13 @@ bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::isLevelSwap() {
 
 // This is only remaining because a default constructor is required; it should not be used
 CORVID_SPRITE::CORVID_SCREENOBJECT::CORVID_SCREENOBJECT() : 
-	CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), CORVID_SPRITEDATATYPE(), selected(false) {
+	CORVID_BOUNDBOX(CORVID_BOUNDBOX()), CORVID_TEXTURE(), CORVID_SPRITEDATATYPE(), selected(false), freeFall(false) {
 
 }; 
 
-// The outer ifelse section is only used for error checking
-// TODO Removed error checking for out of index because it incorrectly gave
-// error on texture data 0 but too tedious to add back in
-void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Surface* surface) { 
-	SDL_Rect offset = { (int)this->location.x, (int)this->location.y, (int)this->size.x, (int)this->size.y };
+void CORVID_SPRITE::CORVID_SCREENOBJECT::render(SDL_Renderer* surface, CORVID_R2* cameraLocation) {
+	SDL_Rect offset = { (int)((((this->location.x + cameraLocation->x)) * MINI_SCREEN_FACTOR) + MINI_SCREEN_CORNER_WIDTH), (int)((this->location.y * MINI_SCREEN_FACTOR) + MINI_SCREEN_CORNER_HEIGHT), (int)(this->size.x * MINI_SCREEN_FACTOR), (int)(this->size.y * MINI_SCREEN_FACTOR) };
+	
 	if (this->selected) {
 		CORVID_TEXTURE::render(surface, &offset, 1);
 	} else {
@@ -65,6 +63,12 @@ void CORVID_SPRITE::CORVID_SCREENOBJECT::updateFrame() {
 	velocity.x *= FRICTION_CONSTANT_HORIZONTAL;
 	velocity.y *= FRICTION_CONSTANT_VERTICAL;
 	location = location + velocity;
+	if (location.x < 0) {
+		location.x = 0;
+	}
+	if (location.x > SCREEN_WIDTH - size.x) {
+		location.x = SCREEN_WIDTH - size.x;
+	}
 };
 
 void CORVID_SPRITE::CORVID_PLAYER::moveLeft() {

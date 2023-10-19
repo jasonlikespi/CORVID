@@ -1,12 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="FullSignature">
-  <Class Name="CORVID_COORDS::CORVID_R2">
-    <Position X="13.5" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAEAgAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
-      <FileName>CORVID_COORDS.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="CORVID_EVENTHANDLER">
     <Position X="9.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
@@ -45,7 +38,7 @@
   <Class Name="CORVID_WORLD">
     <Position X="1.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EQIAgQgB5EBYIBAAAIQQJwGAMAESCgAFEAAAAQAQhEA=</HashCode>
+      <HashCode>EQIAgQgB4ABYIBAAAIQQJwGAMAESCgAFEAAAAAAQhEA=</HashCode>
       <FileName>CORVID_WORLD.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -64,7 +57,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="CORVID_SPRITE::CORVID_SPRITEDATATYPE">
-    <Position X="5" Y="5.75" Width="2.5" />
+    <Position X="5.25" Y="6.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAIEAACAAAAAAAAAAAAAgAAIAAAIAAAgA=</HashCode>
       <FileName>CORVID_SPRITES.h</FileName>
@@ -84,7 +77,7 @@
       <FileName>CORVID_SPRITES.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CORVID_SPRITE::CORVID_PLAYER">
+  <Class Name="CORVID_SPRITE::CORVID_PLAYER" Collapsed="true">
     <Position X="4.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAGACAAAAAAAAAAAAAAAAAAAAAAgAAAAAgAGEAAAAA=</HashCode>
@@ -98,12 +91,5 @@
       <FileName>CORVID_SPRITES.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Enum Name="CORVID_COORDS::CORVID_COORDTYPE">
-    <Position X="16" Y="7.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAAEAAAABAAAgAAAAEAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>CORVID_COORDS.h</FileName>
-    </TypeIdentifier>
-  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

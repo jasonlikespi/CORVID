@@ -36,9 +36,6 @@
     <ClCompile Include="CORVID_FILE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CORVID_COORDS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CORVID_TEXTURE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CORVID_FILE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CORVID_COORDS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CORVID_TEXTURE.h">
@@ -99,15 +93,6 @@
     <Image Include="darkSky.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="DownCornerBlock.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="DownLeftBlock.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="DownRightBlock.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="GreenGoal.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -115,12 +100,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="LargeBrick.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="LeftRightBlock.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="OopsAllCornersBlock.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="PlayerSprite.png">
@@ -141,9 +120,6 @@
     <Image Include="SpriteSheetSpike.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="testFile.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="titleScreen.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -155,12 +131,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="folderMaker.sh">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="fileAdder.sh">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="testo\testo.bin">
       <Filter>Resource Files</Filter>
     </None>

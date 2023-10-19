@@ -136,7 +136,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CORVID_COORDS.cpp" />
     <ClCompile Include="CORVID_EVENT.cpp" />
     <ClCompile Include="CORVID_FILE.cpp" />
     <ClCompile Include="CORVID_GEOM.cpp" />
@@ -149,7 +148,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CORVID_CONSTS.h" />
-    <ClInclude Include="CORVID_COORDS.h" />
     <ClInclude Include="CORVID_EVENT.h" />
     <ClInclude Include="CORVID_FILE.h" />
     <ClInclude Include="CORVID_GEOM.h" />
@@ -168,14 +166,9 @@
     <Image Include="BlueGoal.png" />
     <Image Include="brick.png" />
     <Image Include="darkSky.png" />
-    <Image Include="DownCornerBlock.png" />
-    <Image Include="DownLeftBlock.png" />
-    <Image Include="DownRightBlock.png" />
     <Image Include="GreenGoal.png" />
     <Image Include="ground.png" />
     <Image Include="LargeBrick.png" />
-    <Image Include="LeftRightBlock.png" />
-    <Image Include="OopsAllCornersBlock.png" />
     <Image Include="PlayerSprite.png" />
     <Image Include="sky.png" />
     <Image Include="sky2.png" />
@@ -184,13 +177,10 @@
     <Image Include="SpriteSheetBlockSeeThrough.png" />
     <Image Include="SpriteSheetBlockSelected.png" />
     <Image Include="SpriteSheetSpike.png" />
-    <Image Include="testFile.png" />
     <Image Include="titleScreen.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="fileAdder.sh" />
-    <None Include="folderMaker.sh" />
     <None Include="testo\testo.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,8 +1,2 @@
 For ID
 For the moment (will definitely change this later) dynamic object will refer to the player
-
-
-
-
-
-  @ ` €   À à    @ ` €   À à    @ ` €   À à    

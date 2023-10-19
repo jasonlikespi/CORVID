@@ -6,7 +6,6 @@
 #include "CORVID_CONSTS.h"
 #include <vector>
 #include <filesystem>
-// TODO Maybe make another consts file?
 
 using namespace std::filesystem;
 using namespace CORVID_CONSTS;
@@ -14,17 +13,17 @@ using namespace CORVID_CONSTS;
 class CORVID_TEXTURE{
 public:
 	int textureID;
-	static std::vector<SDL_Surface*>* global_textureList;
+	static std::vector<SDL_Texture*>* global_textureList;
 	CORVID_TEXTURE();
 	CORVID_TEXTURE(int texture);
-	static void initializeTextures(std::vector<path>* imgfiles);
+	static void initializeTextures(std::vector<path>* imgfiles, SDL_Renderer* renderer);
 	// TODO make these private
-	void render(SDL_Surface* surface, SDL_Rect* offset, int objectState);
-	void renderCustom(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet);
-	void renderCustomVert(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet);
-	void renderCustomHorz(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet);
-	void renderCustomSingle(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet);
-	void renderCustomBlock(SDL_Surface* surface, SDL_Rect* offset, int spriteSheet);
+	void render(SDL_Renderer* surface, SDL_Rect* offset, int objectState);
+	void renderCustom(SDL_Renderer* surface, SDL_Rect* offset, int spriteSheet);
+	void renderCustomVert(SDL_Renderer* surface, SDL_Rect* offset, int spriteSheet);
+	void renderCustomHorz(SDL_Renderer* surface, SDL_Rect* offset, int spriteSheet);
+	void renderCustomSingle(SDL_Renderer* surface, SDL_Rect* offset, int spriteSheet);
+	void renderCustomBlock(SDL_Renderer* surface, SDL_Rect* offset, int spriteSheet);
 };
 #endif
 

@@ -8,7 +8,7 @@ CORVID_EVENTHANDLER::CORVID_EVENTHANDLER() {
 int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 	SDL_PollEvent(E);
 	SDL_GetMouseState(&cursor_x, &cursor_y);
-	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x - (int)world->getcameraLocation()->x, cursor_y - (int)world->getcameraLocation()->y);
+	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x - (int)world->getcameraLocation()->x - (int)MINI_SCREEN_CORNER_WIDTH, cursor_y - (int)world->getcameraLocation()->y - (int)MINI_SCREEN_CORNER_HEIGHT);
 	// Shuts down the program if the window is exited out of
 	if ((*E).type == SDL_QUIT) { return 0; };
 	// What happens when a key is released- mostly just their respective variables resetting
@@ -38,7 +38,6 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 			world->saveWorld();
 			break;
 		case SDLK_DOWN:
-			//world->setLevel(1);
 			Bdown = true;
 			break;
 		case SDLK_UP:
@@ -85,17 +84,17 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 		if (objectUnderCursor != world->getbackground()) {
 			world->selectObject(objectUnderCursor);
 		} else {
-			CORVID_SCREENOBJECT* newObject = new CORVID_SCREENOBJECT(0, 32 * ((cursor_x - (int)world->getcameraLocation()->x) / 32), 32 * ((cursor_y - (int)world->getcameraLocation()->y) / 32), (int)world->unselectedObject->size.x, (int)world->unselectedObject->size.y, 0, 4, 0);
+			CORVID_SCREENOBJECT* newObject = new CORVID_SCREENOBJECT(0, 32 * ((cursor_x - (int)world->getcameraLocation()->x) / 32) - MINI_SCREEN_CORNER_WIDTH, 32 * ((cursor_y - (int)world->getcameraLocation()->y) / 32) - MINI_SCREEN_CORNER_HEIGHT, (int)world->unselectedObject->size.x, (int)world->unselectedObject->size.y, 0, 4, 0);
 			world->levels->at(1)->staticList->push_back(newObject);
 			world->selectObject(newObject);
 		}
 	}
 	// This runs whenever the mouse moves (It also runs when the mouse doesn't move but in that case it does nothing)
 	if (objectUnderCursor == world->getbackground()) {
-		world->unselectedObject->location.x = 32 * ((cursor_x - (int)world->getcameraLocation()->x) / 32) ;
-		world->unselectedObject->location.y = 32 * ((cursor_y - (int)world->getcameraLocation()->y) / 32) ;
+		world->unselectedObject->location.x = (cursor_x - (int)world->getcameraLocation()->x - ((cursor_x - (int)world->getcameraLocation()->x) % (int)KUNIT)) - MINI_SCREEN_CORNER_WIDTH;
+		world->unselectedObject->location.y = (cursor_y - (int)world->getcameraLocation()->y - ((cursor_y - (int)world->getcameraLocation()->y) % (int)KUNIT)) - MINI_SCREEN_CORNER_HEIGHT;
 	} else {
-		// The -2048 is completely arbitrary
+		// The -2048 is completely arbitrary, it just makes it out of frame
 		world->unselectedObject->location.x = -2048;
 	}
 	return 1;

@@ -1,5 +1,10 @@
 #include "CORVID_GEOM.h"
 
+CORVID_R2& CORVID_R2::operator+(CORVID_R2& num1) {
+	x += num1.x;
+	y += num1.y;
+	return *this;
+}
 bool CORVID_RECT::pointIsInside(double x_val, double y_val) {
 	return(this->location.x <= x_val && this->location.x + this->size.x >= x_val && this->location.y <= y_val && this->location.y + this->size.y >= y_val);
 };
@@ -70,7 +75,6 @@ CORVID_R2* CORVID_RECT::shoveDirection(CORVID_RECT* toBeShoved) {
 	}
 	// Below
 	else if (distanceDown < distanceLeft && distanceDown < distanceRight) {
-		// pushVector->y = toBeShoved->location.y - location.y - size.y;
 		pushVector->y = location.y + size.y - toBeShoved->location.y;
 	}
 	// Left

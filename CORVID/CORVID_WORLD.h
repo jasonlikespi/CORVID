@@ -46,26 +46,21 @@ public:
 	CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world);
 	CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum); 
 	void loadScreen();
-	//void save();
 	void saveLevel(path dataFile);
 	void loadObject(char* data);
-	void render(SDL_Surface* surface);
+	void render(SDL_Renderer* surface);
 	// TODO Move this to the CORVID_SPRITE file or something
 	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); 
 	void removeObject(CORVID_SCREENOBJECT* object);
 };
 
-class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title screen
+class CORVID_WORLD: public CORVID_TEXTLIST{ // The inherited class is the title screen TODO what does the previous phrase mean
 	int activeLevelData;
-	void loadTextures();
 public:
 	std::vector<CORVID_SCREEN*>* levels;
 	int lastCheckPointLevel;
-	//int frameOfLastSecond;
-	//int frame;
 	int block_x;
 	int block_y;
-	std::vector<SDL_Surface*>* textures;
 	CORVID_SCREENOBJECT* selectedObject;
 	CORVID_SCREENOBJECT* unselectedObject;
 	inline void setLevel(int newLevel) { activeLevelData = newLevel; };
@@ -88,10 +83,9 @@ public:
 	inline int totalCount() { return (int)activeLevel()->totalCount(); }
 	inline CORVID_SCREENOBJECT* findByPosition(int x, int y) { return activeLevel()->findByPosition(x, y); };
 	CORVID_WORLD(); // Default Constructor, should be the main one
-	CORVID_WORLD(path worldFile, path textureFile);
+	CORVID_WORLD(path worldFile, path textureFile, SDL_Renderer* renderer);
 	void saveWorld();
-	//void saveLevel();
-	inline void render(SDL_Surface* surface) { activeLevel()->render(surface); }
+	inline void render(SDL_Renderer* surface) { activeLevel()->render(surface); }
 	void selectObject(CORVID_SCREENOBJECT* objectToSelect);
 	void unselectObject();
 	void deleteObject();
@@ -107,11 +101,4 @@ public:
 	void centerPlayer();
 	void staticPlayerObjectCollision();
 };
-/*
-inline CORVID_SCREENOBJECT<float>** load(const char* fileName) {
-	std::fstream fileStream;
-	fileStream.open(fileName);
-	return NULL;
-}
-*/
 #endif

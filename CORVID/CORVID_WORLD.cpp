@@ -22,25 +22,29 @@ CORVID_SCREEN::CORVID_SCREEN(path fileName, std::vector<CORVID_SCREEN*>* world) 
 	this->loadScreen();
 	world->push_back(this);
 	if (this->background == nullptr) {
-		background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(1));
+		background = new CORVID_SCREENOBJECT(0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 1, 0);
 	}
 	if (this->player == nullptr) {
-		player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(2));
+		// player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(2));
+		player = new CORVID_PLAYER(0, 128, 128, 32, 64, 0, 2, 0);
 	}
 	// This is for the unselected block
 	unselectedObject = new CORVID_SCREENOBJECT(0, 256, 256, 32, 32, 0, 5, 0);
 }
 // TODO find out what this constructor does and if it's redundant
+// TODO Simplify or deprecate
 CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) : 
 	activeCheckPoint(NULL), cameraLocation(new CORVID_R2(0, 0)), player(NULL), name("testo"), cameraSpeed(new CORVID_R2(0, 0)) {
 	createDataStructures();
 	switch (levelNum) {
 		case 0:
-			background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(0));
+			// background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(0));
+			// TODO Use background object
+			background = new CORVID_SCREENOBJECT(0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, 0);
 			break;
 		case 1:
-			background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(2));
-			player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(4));
+			// background = new CORVID_SCREENOBJECT(0.0, 0.0, new CORVID_TEXTURE(2));
+			// player = new CORVID_PLAYER(128.0, 128.0, new CORVID_TEXTURE(4));
 			break;
 		default:
 			break;
@@ -49,7 +53,7 @@ CORVID_SCREEN::CORVID_SCREEN(std::vector<CORVID_SCREEN*>* world, int levelNum) :
 }
 CORVID_WORLD::CORVID_WORLD() :  activeLevelData(0), lastCheckPointLevel(0), block_x(32), block_y(32), selectedObject(NULL), unselectedObject(NULL) { 
 	levels = new std::vector<CORVID_SCREEN*>();
-	textures = new std::vector<SDL_Surface*>();
+	// textures = new std::vector<SDL_Texture*>();
 }
 // Move this to ScreenObject TODO try to remove fors that are not for eaches to reduce index errors
 void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut) { 
@@ -58,14 +62,16 @@ void CORVID_SCREEN::saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOu
 		binOut->write(reinterpret_cast<const char*>(&currentObject[i]), sizeof(currentObject[i]));
 	}
 };
-CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile) : CORVID_TEXTLIST(textureFile), activeLevelData(0), block_x(32), block_y(32), lastCheckPointLevel(0){
-	CORVID_TEXTURE::initializeTextures(this->imgfiles);
-	textures = new std::vector<SDL_Surface*>();
+// TODO remove hard links from active level to level 1 when I add more levels
+CORVID_WORLD::CORVID_WORLD(path worldFile, path textureFile, SDL_Renderer* renderer) : CORVID_TEXTLIST(textureFile), activeLevelData(0), block_x(32), block_y(32), lastCheckPointLevel(0){
+	CORVID_TEXTURE::initializeTextures(this->imgfiles, renderer);
+	// textures = new std::vector<SDL_Texture*>();
 	levels = new std::vector<CORVID_SCREEN*>();
-	loadTextures();
+	// loadTextures();
 	CORVID_SCREEN* level = new CORVID_SCREEN(levels, 0);
 	CORVID_SCREEN* level1 = new CORVID_SCREEN(worldFile, levels);
 	this->unselectedObject = level1->unselectedObject;
+	this->selectedObject = level1->background;
 	// Add Reference to the File Class in Here
 };
 void CORVID_SCREEN::createDataStructures() {
@@ -108,13 +114,13 @@ void CORVID_SCREEN::loadScreen() {
 		}
 	}
 };
-void CORVID_SCREEN::render(SDL_Surface* surface) {
-	background->render(surface);
-	for (CORVID_SCREENOBJECT* i : *this->checkPoints)    { i->render(surface); }
-	for (CORVID_SCREENOBJECT* i : *this->staticList)     { i->render(surface); }
-	for (CORVID_SCREENOBJECT* i : *this->dynamicList)    { i->render(surface); }
-	if (unselectedObject != nullptr) { unselectedObject->render(surface); }
-	if (player != nullptr) { player->render(surface); }
+void CORVID_SCREEN::render(SDL_Renderer* surface) {
+	background->render(surface, cameraLocation);
+	for (CORVID_SCREENOBJECT* i : *this->checkPoints)    { i->render(surface, cameraLocation); }
+	for (CORVID_SCREENOBJECT* i : *this->staticList)     { i->render(surface, cameraLocation); }
+	for (CORVID_SCREENOBJECT* i : *this->dynamicList)    { i->render(surface, cameraLocation); }
+	if (unselectedObject != nullptr) { unselectedObject->render(surface, cameraLocation); }
+	if (player != nullptr) { player->render(surface, cameraLocation); }
 };
 void CORVID_SCREEN::loadObject(char* data) {
 
@@ -138,13 +144,11 @@ void CORVID_SCREEN::saveLevel(path dataFile) {
 	for (CORVID_SCREENOBJECT* i : *checkPoints) {
 		saveObject(i,  binFile);
 	}
-	// std::ifstream in_file(this->name, std::ios::binary);
-	// in_file.seekg(0, std::ios::end);
-	// int file_size = (int)in_file.tellg();
 	MyFile.close();
 }
 
 // TODO I think I can delete this
+/*
 void CORVID_WORLD::loadTextures() {
 	for (path i : *this->imgfiles) {
 		std::string pathstring = i.string();
@@ -152,6 +156,7 @@ void CORVID_WORLD::loadTextures() {
 		this->textures->push_back(IMG_Load(pathchar));
 	}
 };
+*/
 
 // This is the method to select an object, and unselect any objects currently selected
 void CORVID_WORLD::selectObject(CORVID_SCREENOBJECT* objectToSelect) {
@@ -211,26 +216,38 @@ void CORVID_WORLD::updateDynamics() {
 		i->updateFrame();
 	}
 };
+
 // TODO Write part of method that effects leftAdjacent and rightAdjacent
 void CORVID_WORLD::updatePlayer() {
 	player()->updateFrame();
 	centerPlayer();
 };
 
+// Handles all collision detection: At the moment it just calls staticPlayerObjectCollision
+// but the method will be made more complicated when dynamic objects are added 
 void CORVID_WORLD::collisionDetect() {
 	staticPlayerObjectCollision();
 };
 
+// TODO Make the camera up and left be the right direction
 void CORVID_WORLD::updateCamera() {
 	this->getcameraLocation()->x = this->getcameraLocation()->x + getcameraSpeed()->x;
 	this->getcameraLocation()->y = this->getcameraLocation()->y + getcameraSpeed()->y;
+	if (this->getcameraLocation()->x > 0) {
+		this->getcameraLocation()->x = 0;
+	}
+	if (this->getcameraLocation()->x < WINDOW_WIDTH - SCREEN_WIDTH) {
+		this->getcameraLocation()->x = WINDOW_WIDTH - SCREEN_WIDTH;
+	}
 };
+
+// Moves the camera left or right depending on whether or not the player is on the outside quarter of the screen
 void CORVID_WORLD::centerPlayer() {
 	if (player()->location.x + getcameraLocation()->x > RIGHT_QUARTER_SCREEN) {
 		getcameraSpeed()->x -= .5;
 		return;
 	}
-	if (player()->location.x + getcameraLocation()->x < LEFT_QUARTER_SCREEN && getcameraLocation()->x < 0) {
+	if (player()->location.x + getcameraLocation()->x < LEFT_QUARTER_SCREEN) {
 		getcameraSpeed()->x += .5;
 		return;
 	}

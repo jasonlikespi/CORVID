@@ -1,76 +1,78 @@
-Rework CORVID_SCREEN in CORVID_WORLD
-MiniScreen
+DONE Rework CORVID_SCREEN in CORVID_WORLD
+DONE MiniScreen
+DONE Create methods to allow for selection, deletion, and modification of objects in the ingame UI
+DONE Add textures that can be used to create larger and arbitrarily sized rectangles
+DONE Add the player Sprite
+DONE Add physics
+DONE Fix the templates; probably make it so all screenobjects use float templates
+DONE What I was doing: Reconfiguring the Texture Class to use a single static texture list
 
+TODO Rework the CORVID_WORLD system of classes to create 
+	 1- a framework allowing for screens player to move from screen to screen,
+	 2- allowing automatic object loading and unloading
+	 3- simplified file data storage, with each level (or other nomenclature) having its own corresponding folder
+	 4- Creation of multiple levels with corresponding names
+	 5- Default World including ground upon loading blank level
+	 6- Record player position in each world as a part of level(or other nomenclature) data
 
-Now
+TODO Clamp Framerate Such that
+	 1- Game with physics simulation runs at constant 60 fps
+	 2- Screen is syncronized with the gameplay at one to one rate such that
+	 3- When performance is at above 60 fps, there are no framedips, and no frames are rendered twice unnecessarily
+	 4- When performance is below 60 fps (this may happen on slower computers), lag makes the speed of the games physics engine run slower, rather than risk increased speed per frame allowing risk of clipping
 
-Create methods to allow for selection, deletion, and modification of objects in the ingame UI
-Add textures that can be used to create larger and arbitrarily sized rectangles
-Add the player Sprite
-Add physics
-Fix the templates; probably make it so all screenobjects use float templates
-What I was doing: Reconfiguring the Texture Class to use a single static texture list
+TODO Collision Detection Fixes
+	 1- Rework collision detection to optimize hexagonal trajectory to prevent full object clipping
+	 2- Player cannot move from block to another at same height
 
+TODO Text Renderer
 
+TODO Have Camera Match player speed to avoid stuttering effect as it speeds and slows
 
-Copypasty
-#ifndef CORVID_CONSTS_H
-#define CORVID_CONSTS_H
-#include "SDL.h"
-#include <filesystem>
-namespace CORVID_CONSTS {
-	const SDL_Rect spriteList[16] = {
-		 {  0,  0,  32,  32 },
-		 { 32,  0,  32,  32 },
-		 { 64,  0,  32,  32 },
-		 { 96,  0,  32,  32 },
-		 {128,  0,  32,  32 },
-		 {160,  0,  32,  32 },
-		 {192,  0,  32,  32 },
-		 {224,  0,  32,  32 },
-		 {  0, 32,  32,  32 },
-		 { 32, 32,  32,  32 },
-		 { 64, 32,  32,  32 },
-		 { 96, 32,  32,  32 },
-		 {128, 32,  32,  32 },
-		 {160, 32,  32,  32 },
-		 {192, 32,  32,  32 },
-		 {224, 32,  32,  32 }
-	};
-	const int WINDOW_WIDTH = 1920;
-	const int WINDOW_HEIGHT = 1080;
-	const int SCREEN_WIDTH = 7680;
-	const int SCREEN_HEIGHT = 1080;
-	const int MINI_SCREEN_WIDTH = 1680; // To change to miniscreen mode: change this to the screen size
-	const int MINI_SCREEN_HEIGHT = 945;
-	const double STRENGTH_OF_GRAVITY = 5;
-	const double FRICTION_CONSTANT_VERTICAL = .8;
-	const double FRICTION_CONSTANT_HORIZONTAL = .9;
-	const double PLAYER_JUMP_FORCE_1 = 20;
-	const double PLAYER_JUMP_FORCE_2 = 20;
-	const double PLAYER_JUMP_FORCE_3 = 20;
-	const double PLAYER_JUMP_FORCE_4 = 20;
-	const double PLAYER_JUMP_FORCE_5 = 20;
-	const double ACCELERATION = 1;
-	const double SPEED_CAP = 20;
-	const double LEFT_QUARTER_SCREEN = 320;
-	const double RIGHT_QUARTER_SCREEN = 960;
-	const double HALF_SCREEN_HORZ = 640;
-	const double MIN_X = 0; // TODO Add failsafe preventing camera from scrolling past these points.
-	const double MIN_Y = 0; // TODO Add failsave preventing player from moving past these points.
-	const double MAX_X = 7680;
-	const double MAX_Y = 1080;
-	SDL_Rect windowHalver = SDL_Rect{ SCREEN_WIDTH - MINI_SCREEN_WIDTH, SCREEN_HEIGHT - MINI_SCREEN_HEIGHT, 0, 0 };
-	SDL_Rect menuWindow = SDL_Rect{ 0, -164, SCREEN_WIDTH - MINI_SCREEN_WIDTH, SCREEN_HEIGHT - MINI_SCREEN_HEIGHT };
-	// TODO Fix framedip
-	// TODO Add way to measure frame rate
-	// TODO Player cannot move from block to another at same level
-	// TODO Add duck button
-	// TODO Add sprint
-	// TODO BUG Screen scrolls at half of the screen instead of three quarters
-	// TODO Add metaanalysis to determine which functions are running most often (probaly needed to fix lag, useful to optimize)
-	// TODO Get rid of memory leaks
-	// TODO Add actual documentation
-	// TODO Add ground to default world creation
-}
-#endif
+TODO Player Movement Features
+	 1- Duck Button
+	 2- Sprint
+	 3- Kick
+
+TODO Clarity and Efficiency
+	 1- Keep track of and remove memory leaks
+	 2- Keep track of simulation framerate. As of writing this, the simulation runs at 4000 fps unclamped on a very simple world with just player, ~15 simple brick objects and png backgrounds and textures.
+	 While it's physically impossible to keep that rate when I build more complicated levels, I want it to stay consistently above the 60 fps needed for syncronicity with a normal screen.
+	 3- If I recall correctly, the collsion detection algorithm runs at ~O(D! * S + B), Where D == Dynamic Objects, S == Static Objects, and B = Background Objects. The speed of this hasn't
+	 come up yet, since I haven't even added ways to add multiple Dynamic Objects, but when I get to the point of adding it, I should be able to make it so that it runs at close to O(D^2 * S + B),
+	 which should reduce improve speed for more than 1 dynamic object. If performance continues to become an issue, I may be able to get the D term to DlogD using advanced data structures.
+
+TODO Seperating Documentation into its own issue
+DONE 1- CONSTS.h
+	 2- EVENT.h
+	 3- FILE.h
+	 4- GEOM.h
+	 5- SPRITES.h
+	 6- TEXT.h
+	 7- TEXTURE.h
+	 8- WINDOW.h
+	 9- WORLD.h
+	 10- EVENT.cpp
+	 11- FILE.cpp
+	 12- GEOM.cpp
+	 13- SPRITES.cpp
+	 14- TEXT.cpp
+	 15- TEXTURE.cpp
+	 16- WINDOW.cpp
+	 17- WORLD.cpp
+	 18- main.cpp
+
+TODO Clean up Resource Files
+
+TODO Fix the Warnings about datatype conversion
+
+DONE Merge the CORVID_COORDS class back into CORVID_GEOM
+
+TODO The Miniscreen
+	 1- Make Miniscreen Toggleable
+	 2- Left side of screen is bled into when the camera scrolls
+	 3- ObjectCreation should display correct offset for unselected object, and when object is placed
+
+TODO Make Executable
+	 1- Make it
+	 2- Make it work on other computers

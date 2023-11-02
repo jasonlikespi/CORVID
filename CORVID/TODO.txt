@@ -44,23 +44,21 @@ TODO Clarity and Efficiency
 
 TODO Seperating Documentation into its own issue
 DONE 1- CONSTS.h
-	 2- EVENT.h
-	 3- FILE.h
-	 4- GEOM.h
-	 5- SPRITES.h
-	 6- TEXT.h
-	 7- TEXTURE.h
-	 8- WINDOW.h
+DONE 2- EVENT.h
+DONE 3- FILE.h
+DONE 4- GEOM.h
+DONE 5- SPRITES.h
+DONE 6- TEXT.h
+DONE 7- TEXTURE.h
+DONE 8- WINDOW.h
 	 9- WORLD.h
 	 10- EVENT.cpp
 	 11- FILE.cpp
 	 12- GEOM.cpp
 	 13- SPRITES.cpp
-	 14- TEXT.cpp
-	 15- TEXTURE.cpp
-	 16- WINDOW.cpp
-	 17- WORLD.cpp
-	 18- main.cpp
+	 14- TEXTURE.cpp
+	 15- WORLD.cpp
+	 16- main.cpp
 
 TODO Clean up Resource Files
 

@@ -75,7 +75,7 @@ int main() {
 	time(&currentTime);
 	path worldFile = current_path() / "testo\\testo.bin";
 	path textureFile = current_path() / "testo\\textures.txt.txt";
-	CORVID_WORLD* world = new CORVID_WORLD(worldFile, textureFile, screenSurface);
+	CORVID_LEVEL* world = new CORVID_LEVEL(worldFile, textureFile, screenSurface);
 
 	CORVID_EVENTHANDLER* E = new CORVID_EVENTHANDLER();
 	while (E->poll(world)) {

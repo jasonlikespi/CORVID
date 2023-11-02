@@ -8,13 +8,13 @@ CORVID_TEXTURE::CORVID_TEXTURE(){
 // Can't think of anything to include in the constructor
 CORVID_TEXTURE::CORVID_TEXTURE(int texture) : textureID(texture){};
 
-void CORVID_TEXTURE::initializeTextures(std::vector<path>* imgfiles, SDL_Renderer* renderer) {
+void CORVID_TEXTURE::initializeTextures(std::vector<std::filesystem::path>* imgfiles, SDL_Renderer* renderer) {
 	if (global_textureList != nullptr) { return; }
 	// TODO this may lead to complicated problems down the line if there are multiple texture files
 	// but if that's the case then I will need to rewrite this section anyways
 	// Also, the first line of the method may be able to prevent memory leaks if there are multiple worlds
 	global_textureList = new std::vector<SDL_Texture*>(); 
-	for (path i : *imgfiles) { 
+	for (std::filesystem::path i : *imgfiles) { 
 		SDL_Surface* loader = IMG_Load(i.string().c_str());
 		global_textureList->push_back(SDL_CreateTextureFromSurface(renderer, loader));
 		// For some reason, I need to convert loader to a string, and then a C string

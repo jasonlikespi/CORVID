@@ -1,6 +1,6 @@
 #include "CORVID_SPRITES.h"
 using namespace std;
-bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::isEffectedByGravity() {
+bool CORVID_SPRITE::CORVID_SPRITEDATATYPE::isAffectedByGravity() {
 	switch (id) {
 	case(2):
 		return true;
@@ -57,7 +57,7 @@ int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 };
 
 void CORVID_SPRITE::CORVID_SCREENOBJECT::updateFrame() {
-	if (isEffectedByGravity() && freeFall) {
+	if (isAffectedByGravity() && freeFall) {
 		velocity.y += STRENGTH_OF_GRAVITY;
 	}
 	velocity.x *= FRICTION_CONSTANT_HORIZONTAL;

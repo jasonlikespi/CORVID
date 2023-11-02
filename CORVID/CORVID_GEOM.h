@@ -1,61 +1,171 @@
 #pragma once
 #ifndef CORVID_GEOM_H
 #define CORVID_GEOM_H
-#include <string>
-#include <math.h>
-#include <vector>
-// #include "CORVID_COORDS.h"
-#include "SDL.h"
 
-// using namespace CORVID_COORDS;
+// This is for if I decide to add the toRect() method back
+// #include "SDL.h"
+
+// Enum Class for the 9 2D Directions; Used for Relative Point Locations.
 enum DIRECTION { INSIDE, ABOVE, BELOW, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT };
-enum CORVID_COORDTYPE { ENGINE, SURFACE, ENGINE_VECTOR, SURFACE_VECTOR, DEFAULT };
-// ENGINE and ENGINE_VECTOR has +y for up, -y for down, +x for right, and -x for left
+
+// ENGINE_LOCAL, ENGINE_GLOBAL and ENGINE_VECTOR has +y for up, -y for down, +x for right, and -x for left
+// ENGINE_LOCAL and ENGINE_GLOBAL coordinates should not be mixed
 // SURFACE and SURFACE_VECTOR has +x for right, -x for left, +y for down, and -y for up
 // DEFAULT is for situations that don't require the values to specify direction
-// TODO merge file into CORVID_GEOM
+enum CORVID_COORDTYPE { ENGINE_LOCAL, ENGINE_GLOBAL, SURFACE, ENGINE_VECTOR, SURFACE_VECTOR, DEFAULT };
+
+// 2 Dimensional geometrical coordinates
 class CORVID_R2 {
 public:
+	// X Coordinate (Horizontal)
 	double x;
+	// Y Coordinate (Vertical)
 	double y;
+	// Not particularly in use right now, but if/when I create a custom coordinate system
+	// With positive y values indicating up, then this is going to be used with custom methods
+	// To convert between said coordinate system, and the positive y down system of SDL
 	CORVID_COORDTYPE coordType;
+	// Empty Constructor
+	// @return Vector at (0, 0)
 	CORVID_R2() : x(0), y(0), coordType(DEFAULT) {};
+	// First Incomplete Constructor: Uses standard (X, Y) Coordinates with DEFAULT coordinate system
+	// @param x x-coordinate
+	// @param y y-coordinate
+	// @return the point (x, y) in the DEFAULT coordinate system
 	CORVID_R2(double x, double y) : x(x), y(y), coordType(DEFAULT) {};
+	// First Complete Constructor: Uses standard (X, Y) Coordinates with type coordinate system
+	// @param x x-coordinate
+	// @param y y-coordinate
+	// @param type Coordinate type to be used
+	// @return the point (x, y) in the DEFAULT coordinate system
 	CORVID_R2(double x, double y, CORVID_COORDTYPE type) : x(x), y(y), coordType(type) {};
+	// Overloaded Operator to Add R2's together using standard vector addition
+	// TODO This is the method that needs to be significantly altered in order to have the CORVID_COORDTYPE work
+	// @param num1 Vector to be added
+	// @return The sum of the 2 Vectors, located in the memory of the original vector
 	CORVID_R2& operator+(CORVID_R2& num1);
 };
-// If I was less of a chaos demon, I would make this a vector to keep track of location
-// But I am a risk taker, so I will just use one static variable
+// pushVector is a temporary variable that is reused every time the player needs displacement after
+// entering an object. Since only one of these can happen at a time, there is no risk of variable
+// reassignment befor its use is completed. However, I should take note of this, as if significant
+// changes to the algorithm are made, it could cause data corruption.
+// TODO delete this at the end to prevent memory leak
 static CORVID_R2* pushVector = new CORVID_R2();
+
+// Rectangle perpendicular to X-Y Plane
+// Data stored as a location and a size using CORVID_R2
 class CORVID_RECT {
 public:
-	// Upper Left Corner
+	// Upper Left Corner of Rectangle when the datatype is a Surface Datatype
+	// Bottom Left Corner of Rectangle when the datatype is a Engine Datatype
+	// If the datatype is one of the Vector types, there is a serious error
+	// And checking should be done to avoid that
+	// If datatype is DEFAULT, it means I'm being lazy, but I should try to avoid that
+	// But low priority
 	CORVID_R2 location;
+	// Corresponds to the size of the rectangle in length and width
+	// Should only be either Engine Vector or Surface Vector
+	// Or again, DEFAULT if i'm being lazy, but I will try to avoid that
+	// But low priority
 	CORVID_R2 size;
+	// Empty Constructor
+	// @return Rectangle at (0, 0) with width and height 0
 	CORVID_RECT() : location(CORVID_R2()), size(CORVID_R2()) {};
+	// First Complete Constructor: 4 Doubles
+	// TODO Deal with assigning CORVID_R2 datatypes instead of DEFAULT
+	// @param x1 Location X Value
+	// @param y1 Location Y Value
+	// @param x2 Size X Value
+	// @param y2 Size Y Value
+	// @return Rectangle with location (x1, y1) and size (x2, y2)
 	CORVID_RECT(double x1, double y1, double x2, double y2) : location(CORVID_R2(x1, y1)), size(CORVID_R2(x2, y2)) {};
+	// Second Complete Constructor: 2 CORVID_R2s
+	// @param location Location of Rectangle
+	// @param size Size of Rectangle
+	// @return Rectangle with location location and size size
 	CORVID_RECT(CORVID_R2 location, CORVID_R2 size) : location(location), size(size) {};
+	// Third Complete Constructor: Preexisting CORVID_RECT
+	// TODO Do I need 3 Constructors for CORVID_RECT?
+	// @param rectangle The Preexisting Rectangle
+	// @return A second rectangle with the same properties as rectangle
 	CORVID_RECT(CORVID_RECT* rectangle) : location(rectangle->location), size(rectangle->size) {};
-	//SDL_Rect* toRect(); // TODO may lead to memory leak but also get this working
+
+	// TODO may lead to memory leak but also get this working
+	//SDL_Rect* toRect();
+
+	// Finds if point is located inside of the Rectangle
+	// TODO Results assume DEFAULT datatype and I should change that
+	// @param x_val The x-coordinate
+	// @param y_val the y-coordinate
+	// @return True if the point is inside of the Rectangle, False otherwise
 	bool pointIsInside(double x_val, double y_val);
+	// Finds if point is located inside of the Rectangle
+	// TODO Results assume DEFAULT datatype and I should change that
+	// @param point The Point in Question
+	// @return True if the point is inside of the Rectangle, False otherwise
 	bool pointIsInside(CORVID_R2 point);
+	// Returns the Direction of the other Rectangle relative to this one as such
+	// 1- If they intersect in any way, it will return INSIDE
+	// 2- The outer quadrants will only return if the entirety of the other rectangle
+	// within that quadrant
+	// Defaults to Surface Coordinates
+	// TODO Need to fix that
+	// Each use of the function requires a maximum of 4 float additions and 4 float compares
+	// If I for some reason need galactic level efficiency and need to rewrite portions of this in assembly
+	// This method should probably be the one to start on.
+	// @param otherRect the Rectangle being compared
+	// @return The direction of otherRect relative to the current one
 	DIRECTION relativePosition(CORVID_RECT* otherRect);
+	// Returns the most suitible direction for toBeShoved to be moved in
+	// So that it no longer intersects with the current object
+	// Should only run immediately following the method relativePosition returning INSIDE
 	// TODO Definitely a memory leak
+	// @param toBeShoved The Rectangle to be shoved
+	// @return the Vector corresponding to the shoving direction
 	CORVID_R2* shoveDirection(CORVID_RECT* toBeShoved);
 };
+
+// Rectangle with the added property of Velocity
 class CORVID_BOUNDBOX : public CORVID_RECT{
 public:
+	// Velocity of the Rectangle: Should only have Vector Coordtype
+	// But probably has DEFAULT
+	// TODO Fix That
 	CORVID_R2 velocity;
+	// Empty Constructor
+	// @return Rectangle at location (0, 0) with size (0, 0) and velocity (0, 0)
 	CORVID_BOUNDBOX() : CORVID_RECT(), velocity(CORVID_R2()) {};
-	CORVID_BOUNDBOX(CORVID_RECT* rectangle, CORVID_R2 velocity) : CORVID_RECT(rectangle), velocity(velocity) {};
+	// First Incomplete Constructor: CORVID_RECT
+	// @param rectangle Rectangle of the BOUNDBOX
+	// @return BOUNDBOX consisting of rectangle with velocity (0, 0)
 	CORVID_BOUNDBOX(CORVID_RECT* rectangle) : CORVID_RECT(rectangle), velocity(CORVID_R2()) {};
+	// First Complete Constructor: CORVID_RECT and CORVID_R2
+	// TODO Should the velocity be a pointer?
+	// TODO Should velocity relate to CORVID_COORDTYPE?
+	// @param rectangle Rectangle of the BOUNDBOX
+	// @param velocity Velocity of the BOUNDBOX
+	// @return BOUNDBOX consisting of rectangle with the velocity of velocity
+	CORVID_BOUNDBOX(CORVID_RECT* rectangle, CORVID_R2 velocity) : CORVID_RECT(rectangle), velocity(velocity) {};
+	// First Complete Constructor: 6 Doubles
+	// TODO Deal with assigning CORVID_R2 datatypes instead of DEFAULT
+	// @param r1 Location x-value
+	// @param r2 Location y-value
+	// @param s1 Width
+	// @param s2 Height
+	// @param v1 Velocity x-value
+	// @param v2 Velocity y-value
+	// @return BOUNDBOX at location (r1, r2) with size (s1, s2) and velocity (v1, v2)
 	CORVID_BOUNDBOX(double r1, double r2, double s1, double s2, double v1, double v2) :
 		CORVID_RECT(CORVID_RECT(r1, r2, s1, s2)), velocity(CORVID_R2(v1, v2)) {};
+	// Second Incomplete Constructor: 2 Doubles
+	// TODO Maybe deprecate this or other constructors, and if I don't deprecate, make size based on UNIT or KUNIT from consts
+	// @param xval Location x-value
+	// @param yval Location y-value
+	// @return Rectangle at location (xval, yval) with size (32, 32) and velocity(0, 0)
 	CORVID_BOUNDBOX(double xval, double yval);
 };
-
+// The below comment will be uncommented when I add back Bezier Curves
 /*
-* Uncomment this when I add Bezier Curves Back in
 class CORVID_BEZIER {
 public:
 	CORVID_R2 points[4];

@@ -5,7 +5,7 @@ CORVID_EVENTHANDLER::CORVID_EVENTHANDLER() {
 	keyPressData = 0;
 	E = new SDL_Event;
 }
-int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
+int CORVID_EVENTHANDLER::poll(CORVID_LEVEL* world) {
 	SDL_PollEvent(E);
 	SDL_GetMouseState(&cursor_x, &cursor_y);
 	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x - (int)world->getcameraLocation()->x - (int)MINI_SCREEN_CORNER_WIDTH, cursor_y - (int)world->getcameraLocation()->y - (int)MINI_SCREEN_CORNER_HEIGHT);
@@ -99,7 +99,7 @@ int CORVID_EVENTHANDLER::poll(CORVID_WORLD* world) {
 	}
 	return 1;
 }
-void CORVID_EVENTHANDLER::updateWorld(CORVID_WORLD* world) { 
+void CORVID_EVENTHANDLER::updateWorld(CORVID_LEVEL* world) { 
 	if (BEnter) {
 		world->setLevel(1);
 	};

@@ -16,9 +16,7 @@ bool CORVID_RECT::pointIsInside(CORVID_R2 point) {
 CORVID_BOUNDBOX::CORVID_BOUNDBOX(double xval, double yval) : 
 	CORVID_RECT(CORVID_RECT(xval, yval, 32.0, 32.0)), velocity(CORVID_R2()) {};
 
-// Each use of the function requires a maximum of 4 float additions and 4 float compares
-// If I for some reason need galactic level efficiency and need to rewrite portions of this in assembly
-// This method should probably be the one to start on.
+
 DIRECTION CORVID_RECT::relativePosition(CORVID_RECT* otherRect) {
 	// Above
 	if (otherRect->location.y + otherRect->size.y < this->location.y) {

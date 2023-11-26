@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CORVID_EVENTHANDLER" Collapsed="true">
+    <Position X="17.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAIICCAQAAAAABAIIEAAAEABCIAAACAAAAgAAgAAIAA=</HashCode>
+      <FileName>CORVID_EVENT.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_R2" Collapsed="true">
+    <Position X="13.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAgAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>CORVID_GEOM.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_RECT" Collapsed="true">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAEAgAAAAAAIAAAAACAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>CORVID_GEOM.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_BOUNDBOX" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAQAAAAA=</HashCode>
+      <FileName>CORVID_GEOM.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_TEXTURE" Collapsed="true">
+    <Position X="3.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIQAAAAQAAAAAABAAgAAAAAAAABAAAgAAAAAQBCA=</HashCode>
+      <FileName>CORVID_TEXTURE.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_WINDOW" Collapsed="true">
+    <Position X="15.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CORVID_WINDOW.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_CAMERA" Collapsed="true">
+    <Position X="15.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAgAAAAAAAAAAAAACAAAAAAAEBAAAAAQAAAAA=</HashCode>
+      <FileName>CORVID_WORLD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_PHYSIC" Collapsed="true">
+    <Position X="8.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQgAAAABIAAIIAAAAIQEICEAEAAAAAABAAAAAAAAhEA=</HashCode>
+      <FileName>CORVID_WORLD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_RENDER" Collapsed="true">
+    <Position X="5.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQQAAAAAAAAQAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>CORVID_WORLD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_FRAME" Collapsed="true">
+    <Position X="11.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>CORVID_WORLD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_CONTIG" Collapsed="true">
+    <Position X="8.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAoAAAAAAAEEAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>CORVID_WORLD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_LEVEL" Collapsed="true">
+    <Position X="3" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQgAAAAAAAEAAAoQAAAAAAAAAgEAAAAAAAAAAAA=</HashCode>
+      <FileName>CORVID_WORLD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_FILE::CORVID_OBJFILE" Collapsed="true">
+    <Position X="8.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACACAAAAAAAAAAAAQAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>CORVID_FILE.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_FILE::CORVID_TEXTLIST" Collapsed="true">
+    <Position X="6" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAABAA=</HashCode>
+      <FileName>CORVID_FILE.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_SPRITE::CORVID_SPRITEDATATYPE" Collapsed="true">
+    <Position X="5.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIEAACAAAAAAAAAAAAAgAAIAAAIAAAgA=</HashCode>
+      <FileName>CORVID_SPRITES.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_SPRITE::CORVID_PLAYER" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGACAAAAAAAAAAAAAAAAAAAAAAgAAAAAgAGEAAAAA=</HashCode>
+      <FileName>CORVID_SPRITES.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_SPRITE::CORVID_BACKGROUND" Collapsed="true">
+    <Position X="13.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAgAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CORVID_SPRITES.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CORVID_SPRITE::CORVID_SCREENOBJECT" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAQABAAAAAAAAAAAAAggQAAA=</HashCode>
+      <FileName>CORVID_SPRITES.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="DIRECTION" Collapsed="true">
+    <Position X="15.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAgAAgAAAEAAAACAAAQAoAAAAAAAAAQA=</HashCode>
+      <FileName>CORVID_GEOM.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CORVID_COORDTYPE" Collapsed="true">
+    <Position X="13.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAGAAAABAoAgAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>CORVID_GEOM.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

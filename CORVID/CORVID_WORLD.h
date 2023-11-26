@@ -19,18 +19,12 @@
 #include "CORVID_FILE.h"
 
 #include <filesystem>
+// Explained in the Class Itself
+#include "CORVID_CLASS.h"
 
+#include "CORVID_STRUCTURE.h"
 using namespace std::filesystem;
 
-using namespace CORVID_SPRITE;
-
-using namespace CORVID_FILE;
-
-const std::string defaultFile = "titleScreen.png";
-
-const std::string defaultBackground = "sky.png";
-
-const int totalNumberLevels = 1;
 //Classes I'm tryna add
 // CORVID_FRAME for each rectangular segment
 // CORVID_CONTIG for sets of CORVID_FRAMEs that connect, and can have the camera scroll between them
@@ -52,178 +46,225 @@ const int totalNumberLevels = 1;
 // 1- Assume each camera is on a rectanglar CORVID_FRAME
 // 2- If the player is in the middle of the screen, center the player
 // 3- If the player is on the edge of the screen, don't scroll past the end of the screen
-class CORVID_CAMERA {
+// Also Note this class is a combination of the old CORVID_CAMERA class and the depracated CORVID_RENDER class
+// Which could cause some sort of issue 
+class CORVID_CAMERA : public CORVID_OBJFILE{
+public:
 	// The Current Location of the Camera
 	CORVID_R2* cameraLocation;
 	// The size of the frame the camera is on in the extended coordinate system
 	CORVID_RECT* frame;
 	// Is going to be needed for every method anyways so I might as well put it here
 	CORVID_PLAYER* player;
+	// Don't Use this constructor ever
+	CORVID_CAMERA();
 
+	CORVID_CAMERA(CORVID_RECT* frame, CORVID_PLAYER* player);
+
+	CORVID_CAMERA(path worldFile);
+
+	CORVID_CAMERA(std::vector<int>* input);
+	
+	virtual void updateCamera();
+
+	virtual void centerPlayer();
+
+	// std::vector<CORVID_BACKGROUND*>* backgrounds;
+
+	static SDL_Renderer* surface;
+
+	virtual void render();
+
+	void save(std::filesystem::path folder) override;
+
+	virtual CORVID_R2* getcameraLocation();
 
 };
+// Note to self
+// Scratch what I said earlier, initialize every class blank,
+// Add all of the objects later from one method in CORVID_LEVEL
 
+
+// Abstract class?
+// Not used for saving or loading data, CORVID_OBJFILE constructor is used to simplify
+// case of class created on startup with a lot of objects
+// For saving and loading initial data, use CORVID_FRAME class
+// Also not used for rendering data
+// Just used for physics interactions
 class CORVID_PHYSIC{
 
-	void createDataStructures(path fileName);
-
-	void createDataStructures();
 public:
-
-	const char* name;
-
-	CORVID_PLAYER* player;
-
-	CORVID_R2* cameraLocation;
-
-	CORVID_R2* cameraSpeed;
-
-	CORVID_SCREENOBJECT* activeCheckPoint;
-
-	CORVID_SCREENOBJECT* selectedObject;
-
-	CORVID_SCREENOBJECT* unselectedObject;
-
-	CORVID_OBJFILE* dataFile;
-
 	// TODO Create automatic sorting of objects added to these lists via overloaded methods
 	std::vector<CORVID_SCREENOBJECT*>* staticList; 
 
 	std::vector<CORVID_SCREENOBJECT*>* dynamicList;
 
-	std::vector<CORVID_SCREENOBJECT*>* checkPoints;
-
-	CORVID_SCREENOBJECT* background;
-
-	inline int totalStaticObjects() { return (int)staticList->size(); }
-
-	inline int totalDynamicObjects() { return (int)dynamicList->size(); }
-	
-	inline int totalCheckPoints() { return (int)checkPoints->size(); }
-	
-	CORVID_SCREENOBJECT* findByPosition(int x, int y);
-	
-	int totalCount() { return (int)(staticList->size() + dynamicList->size() + checkPoints->size()); };
-	
 	CORVID_PHYSIC();
+
+	virtual int totalStaticObjects();
+
+	virtual int totalDynamicObjects();
+	// Okay I might have to deal with NULL now
+	virtual CORVID_SCREENOBJECT* findByPosition(CORVID_R2* position);
 	
-	CORVID_PHYSIC(const char* name); 
+	virtual int totalObjectCount();
 	
-	CORVID_PHYSIC(path fileName, std::vector<CORVID_PHYSIC*>* world);
+	virtual void removeObject(CORVID_SCREENOBJECT* object);
+
+	virtual void addObject(CORVID_SCREENOBJECT* object);
+
+	virtual void updateStatics();
+
+	virtual void updateDynamics();
 	
-	CORVID_PHYSIC(std::vector<CORVID_PHYSIC*>* world, int levelNum); 
+	virtual void collisionDetect();
+
+	virtual void playerMoveLeft();
+
+	virtual void playerMoveRight();
+
+	virtual void playerJump();
+
+	virtual void stopJump();
 	
+	virtual void updatePlayer();
+
+	virtual void staticPlayerObjectCollision();
+};
+
+class CORVID_FRAME : public CORVID_PHYSIC, public CORVID_CAMERA{
+
+public:
+
+	CORVID_CONTIG* contig;
+
+	CORVID_BACKGROUND* background;
+	CORVID_FRAME* frameAbove;
+	CORVID_FRAME* frameBelow;
+	CORVID_FRAME* frameLeft;
+	CORVID_FRAME* frameRight;
+	int frameNum;
+	int contigNum;
+
+	CORVID_FRAME();
+
+	CORVID_FRAME(CORVID_CONTIG* contig);
+
+	CORVID_FRAME(CORVID_LEVEL* level, std::vector<int>* input);
+	int* dataDump();
 	void loadScreen();
-	
-	void saveLevel(path dataFile);
-	
-	void loadObject(char* data);
-	
-	void render(SDL_Renderer* surface);
-	
-	// TODO Move this to the CORVID_SPRITE file or something
-	void saveObject(CORVID_SCREENOBJECT* object, std::ofstream* binOut); 
-	
-	void removeObject(CORVID_SCREENOBJECT* object);
+	int totalStaticObjects() override;
+	int totalDynamicObjects() override;
+	CORVID_SCREENOBJECT* findByPosition(CORVID_R2* position) override;
+	int totalObjectCount() override;
+	void removeObject(CORVID_SCREENOBJECT* object) override;
+	void addObject(CORVID_SCREENOBJECT* object) override;
+	void updateStatics() override;
+	void updateDynamics() override;
+	void collisionDetect() override;
+	void playerMoveLeft() override;
+	void playerMoveRight() override;
+	void playerJump() override;
+	void stopJump() override;
+	void updatePlayer() override;
+	void staticPlayerObjectCollision() override;
+	void save(std::filesystem::path folder) override;
+	void render() override;
+	CORVID_R2* getcameraLocation() override;
 };
 
-class CORVID_FRAME {
+class CORVID_CONTIG : public CORVID_PHYSIC, public CORVID_CAMERA {
 
+public:
+	std::vector<CORVID_FRAME*>* frames;
+
+	CORVID_FRAME* activeFrame;
+
+	CORVID_LEVEL* level;
+
+	int contigNum;
+
+	CORVID_CONTIG();
+
+	CORVID_CONTIG(CORVID_LEVEL* level);
+
+	int totalFrames();
+	int contigNumber();
+	int totalStaticObjects() override;
+	int totalDynamicObjects() override;
+	CORVID_SCREENOBJECT* findByPosition(CORVID_R2* position) override;
+	int totalObjectCount() override;
+	void removeObject(CORVID_SCREENOBJECT* object) override;
+	void addObject(CORVID_SCREENOBJECT* object) override;
+	void updateStatics() override;
+	void updateDynamics() override;
+	void collisionDetect() override;
+	void playerMoveLeft() override;
+	void playerMoveRight() override;
+	void playerJump() override;
+	void stopJump() override;
+	void updatePlayer() override;
+	void staticPlayerObjectCollision() override;
+	void save(std::filesystem::path folder) override;
+	void render() override;
+	void add(CORVID_FRAME* frameToAdd);
+	CORVID_R2* getcameraLocation() override;
 };
 
-class CORVID_CONTIG {
+class CORVID_LEVEL: public CORVID_TEXTLIST, public CORVID_PHYSIC, public CORVID_CAMERA {
 
-};
-
-class CORVID_LEVEL: public CORVID_TEXTLIST{ // The inherited class is the title screen TODO what does the previous phrase mean
-	
-	int activeLevelData;
 public:
 	
-	std::vector<CORVID_PHYSIC*>* levels;
-	
-	int lastCheckPointLevel;
-	
-	int block_x;
-	
-	int block_y;
-	
+	std::vector<CORVID_CONTIG*>* contigs;
+	// TODO Don't know if a vector is the right one,
+	// but I need some sort of data structure of 
+	// FRAMEs for saving the game
+	// I'm using data structures instead
+	// std::vector<CORVID_FRAME*>* frames;
+
+	CORVID_CONTIG* activeContig;
+
+	CORVID_FRAME* activeFrame;
+
 	CORVID_SCREENOBJECT* selectedObject;
 	
 	CORVID_SCREENOBJECT* unselectedObject;
 	
-	inline void setLevel(int newLevel) { activeLevelData = newLevel; };
-	
-	//inline void setLevel(CORVID_SCREEN* newLevel) {} Need to make this eventually
-	
-	inline CORVID_PHYSIC* activeLevel() { return levels->at(activeLevelData); };// Needs edge case checking
-	
-	inline CORVID_PLAYER* player() { return activeLevel()->player; };
-	
-	inline CORVID_R2* getcameraLocation() { return activeLevel()->cameraLocation; };
-	
-	inline CORVID_R2* getcameraSpeed() { return activeLevel()->cameraSpeed; }
-	
-	inline CORVID_SPRITE::CORVID_SCREENOBJECT* activeCheckPoint() { return activeLevel()->activeCheckPoint; };
-	
-	inline std::vector<CORVID_SCREENOBJECT*>* staticList() { return activeLevel()->staticList; };
-	
-	inline std::vector<CORVID_SCREENOBJECT*>* dynamicList() { return activeLevel()->dynamicList; };
-	
-	inline CORVID_SCREENOBJECT* getbackground() { return activeLevel()->background; };
-	
-	inline std::vector<CORVID_SCREENOBJECT*>* checkPoints() { return activeLevel()->checkPoints; };
-	
-	inline CORVID_SCREENOBJECT* staticList(int index) { return activeLevel()->staticList->at(index); };
-	
-	inline CORVID_SCREENOBJECT* dynamicList(int index) { return activeLevel()->dynamicList->at(index); };
-	
-	inline CORVID_SCREENOBJECT* checkPoints(int index) { return activeLevel()->checkPoints->at(index); };
-	
-	inline int totalStaticObjects() { return (int)activeLevel()->staticList->size(); }
-	
-	inline int totalDynamicObjects() { return (int)activeLevel()->dynamicList->size(); }
-	
-	inline int totalCheckPoints() { return (int)activeLevel()->checkPoints->size(); }
-	
-	inline int totalCount() { return (int)activeLevel()->totalCount(); }
-	
-	inline CORVID_SCREENOBJECT* findByPosition(int x, int y) { return activeLevel()->findByPosition(x, y); };
-	
-	CORVID_LEVEL(); // Default Constructor, should be the main one
+	// Default Constructor, should be the main one
+	CORVID_LEVEL();
 	
 	CORVID_LEVEL(path worldFile, path textureFile, SDL_Renderer* renderer);
-	
-	void saveWorld();
-	
-	inline void render(SDL_Renderer* surface) { activeLevel()->render(surface); }
 	
 	void selectObject(CORVID_SCREENOBJECT* objectToSelect);
 	
 	void unselectObject();
-	
-	void deleteObject();
-	
-	void playerMoveLeft();
-	
-	void playerMoveRight();
-	
-	void playerJump();
-	
-	void stopJump();
-	
-	void updateStatics();
-	
-	void updateDynamics();
-	
-	void updatePlayer();
-	
-	void collisionDetect();
-	
-	void updateCamera();
-	
-	void centerPlayer();
-	
-	void staticPlayerObjectCollision();
+
+	int totalFrames();
+	// inline void setLevel(int newLevel) { activeLevelData = newLevel; };
+	void setFrame(CORVID_FRAME* newFrame);
+	// Note: This is more permenant than removeObject
+	void deleteObject(CORVID_SCREENOBJECT* object);
+	int totalStaticObjects() override;
+	int totalDynamicObjects() override;
+	CORVID_SCREENOBJECT* findByPosition(CORVID_R2* position) override;
+	int totalObjectCount() override;
+	void removeObject(CORVID_SCREENOBJECT* object) override;
+	void addObject(CORVID_SCREENOBJECT* object) override;
+	void updateStatics() override;
+	void updateDynamics() override;
+	void collisionDetect() override;
+	void playerMoveLeft() override;
+	void playerMoveRight() override;
+	void playerJump() override;
+	void stopJump() override;
+	void updatePlayer() override;
+	void staticPlayerObjectCollision() override;
+	void save(std::filesystem::path folder) override;
+	void render() override;
+	void add(std::vector<int>* input);
+	void add(CORVID_FRAME* frameToAdd);
+	void add(CORVID_CONTIG* contigToAdd);
+	CORVID_FRAME* getFrame(int frameNumber);
+	CORVID_R2* getcameraLocation() override;
 };
 #endif

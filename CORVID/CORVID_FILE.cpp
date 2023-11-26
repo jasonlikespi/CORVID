@@ -1,13 +1,17 @@
 #include "CORVID_FILE.h"
 
-CORVID_FILE::CORVID_OBJFILE::CORVID_OBJFILE() {
+CORVID_OBJFILE::CORVID_OBJFILE() {
 	objects = new std::vector<std::vector<int>*>();
+	name = "";
 };
-
-CORVID_FILE::CORVID_OBJFILE::CORVID_OBJFILE(std::filesystem::path fileName) {
+// Originally buffer was uninitialized, I changed that at the request of the compiler
+// Just putting this here in case for some reason that breaks something
+// Also, TODO That's definitely not what name should be initialized to
+CORVID_OBJFILE::CORVID_OBJFILE(std::filesystem::path fileName) {
+	name = "";
 	std::ifstream* fs = new std::ifstream(fileName, std::ios::binary);
 	int index = 0;
-	int buffer;
+	int buffer = 0;
 	objects = new std::vector<std::vector<int>*>();
 	while (!fs->eof()) {
 		fs->read(reinterpret_cast<char*>(&buffer), sizeof(buffer));
@@ -21,17 +25,17 @@ CORVID_FILE::CORVID_OBJFILE::CORVID_OBJFILE(std::filesystem::path fileName) {
 		index++;
 	}
 };
-
-CORVID_FILE::CORVID_TEXTLIST::CORVID_TEXTLIST() {
+void CORVID_OBJFILE::save(std::filesystem::path folder) {};
+CORVID_TEXTLIST::CORVID_TEXTLIST() {
 	imgfiles = new std::vector<std::filesystem::path>();
 };
 
-CORVID_FILE::CORVID_TEXTLIST::CORVID_TEXTLIST(std::filesystem::path masterFile) {
+CORVID_TEXTLIST::CORVID_TEXTLIST(std::filesystem::path masterFile) {
 	std::ifstream* fs = new std::ifstream(masterFile);
 	imgfiles = new std::vector<std::filesystem::path>();
 	std::string buffer;
-	while (!fs->eof()) {
+	while (fs->good()) {
 		std::getline(*fs, buffer);
-		imgfiles->push_back((std::filesystem::current_path() / buffer));
+		imgfiles->push_back((std::filesystem::path(std::filesystem::current_path()) / buffer));
 	}
 };

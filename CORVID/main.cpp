@@ -14,18 +14,17 @@
 #include <stdlib.h>
 #include <time.h>
 
-using namespace CORVID_CONSTS;
 using namespace std::filesystem;
 
 bool init();
 void close();
 int currentLevel = 0;
 SDL_Window* window = NULL;
-SDL_Renderer* screenSurface = NULL;
+SDL_Renderer* CORVID_CAMERA::surface = NULL;
 SDL_Texture* gameSurface = NULL;
 SDL_Rect windowHalver = SDL_Rect{ WINDOW_WIDTH - MINI_SCREEN_WIDTH, WINDOW_HEIGHT - MINI_SCREEN_HEIGHT, 0, 0 };
 SDL_Rect menuWindow = SDL_Rect{ 0, -164, WINDOW_WIDTH - MINI_SCREEN_WIDTH, WINDOW_HEIGHT - MINI_SCREEN_HEIGHT };
-std::vector<SDL_Texture*>* CORVID_TEXTURE::global_textureList = NULL;
+std::vector<SDL_Texture*>* CORVID_TEXTURE::textureList = NULL;
 
 bool init() {
 	bool success = true;
@@ -47,7 +46,7 @@ bool init() {
 			printf("Could not create window: %s\n", SDL_GetError());
 		}
 		else {
-			screenSurface = SDL_CreateRenderer(window, -1, 0);
+			CORVID_CAMERA::surface = SDL_CreateRenderer(window, -1, 0);
 		}
 	}
 	return success;
@@ -73,16 +72,32 @@ int main() {
 	time_t now;
 	time(&startTime);
 	time(&currentTime);
-	path worldFile = current_path() / "testo\\testo.bin";
-	path textureFile = current_path() / "testo\\textures.txt.txt";
-	CORVID_LEVEL* world = new CORVID_LEVEL(worldFile, textureFile, screenSurface);
 
+	// This is the part that is going to have the temporary(ish) text interface for level selection
+	// TODO Make it where it works for levels other than default
+	bool textMode = false;
+	std::string textIn = "";
+	std::string folder = "default";
+	while (textMode) {
+		std::cout << "Type a level to play, or press p to play default level.\n";
+		std::cin >> textIn;
+		if (textIn == "p") {
+			folder = "default";
+			textMode = false;
+		}
+	}
+	path mainPath = current_path();
+	path objPath = path(mainPath) / folder / objFile;
+	path texturePath = path(mainPath) / folder / textureFile;
+	// TODO I think the below method should simplify the constructor to remove CORVID_CAMERA::surface
+	CORVID_LEVEL* world = new CORVID_LEVEL(objPath, texturePath, CORVID_CAMERA::surface);
 	CORVID_EVENTHANDLER* E = new CORVID_EVENTHANDLER();
+	CORVID_TEXTURE::initializeTextures(world->imgfiles, CORVID_CAMERA::surface);
 	while (E->poll(world)) {
-		SDL_RenderClear(screenSurface);
+		SDL_RenderClear(CORVID_CAMERA::surface);
 		E->updateWorld(world);
-		world->render(screenSurface);
-		SDL_RenderPresent(screenSurface);
+		world->render();
+		SDL_RenderPresent(CORVID_CAMERA::surface);
 		SDL_Delay(10);
 		frame++;
 		time(&now);
@@ -94,7 +109,7 @@ int main() {
 			std::cout << "\n";
 		}
 	}
-	world->saveWorld();
+	world->save(current_path() / defaultFolder);
 	return 0;
 }
 

@@ -5,7 +5,8 @@
 #include <SDL.h>
 // I need the world class in order to interact with it
 #include "CORVID_WORLD.h"
-
+// Explained in the Class Itself
+#include "CORVID_CLASS.h"
 // Class for handling all keyboard interactions with the world
 // TODO Should I make the CORVID_WORLD a superclass or field?
 class CORVID_EVENTHANDLER{
@@ -40,12 +41,14 @@ class CORVID_EVENTHANDLER{
 	// TODO should this be just an extension or something?
 	// Or can you not extend unions? IDK.
 	SDL_Event* E;
+	
+	CORVID_R2* cursor;
 	// Cursors x coordinate
 	// TODO Rename to specify how it interacts with the miniscreen and possibly change to CORVID_R2 to use coordinate types
-	int cursor_x;
+	// int cursor_x;
 	// Cursors y coordinate
 	// TODO Rename to specify how it interacts with the miniscreen and possibly change to CORVID_R2 to use coordinate types
-	int cursor_y;
+	// int cursor_y;
 public:
 	// @return CORVID_EVENTHANDLER with cursor at (0, 0), keyPressData 0 and a new SDL_Event
 	CORVID_EVENTHANDLER();

@@ -1,2 +1,97 @@
-For ID
-For the moment (will definitely change this later) dynamic object will refer to the player
+I changed the settings to automatically suppress the warning of lack of a fallthrough in switch cases
+Because the Error list kept mistakenly giving me one for a error in std or sdl or something
+This is a big deal, and I should then be extremely wary of any unmarked switch cases with this error
+Maybe later I can find a better solution to this
+Note 11\14 I later removed this cause something broke
+
+Notes on Structure of File
+The byte with the largest place value in index 0 indicates which type of data it is
+There is then a limit on 2^24 frames per level, about 16 million; i'll be fine
+So the ordering of objects in the file is irrelevant except for
+1- An object can not be located in the file before its corresponding frame
+2- I'm going to do something similar if I add other data types for movement
+
+TODO when writing all of these methods there will be a lot of methods with
+Time O(n) I can probably optimize this
+
+
+
+
+Statement on Object Data Values- the int[8]s that make up all of the data
+0 - Header: Consists of two integers
+
+		a) The Datatype integer, an integer between 0 and 256 that indicates which type of data this is.
+		The key for this is
+				-1 -> error type
+				0 -> I'm not going to use this value
+				1 -> Object Data Structure
+				2 -> Frame Data Structure
+				More will be added as needed
+
+		b) The Frame/Contig Number. This value depends on whether the datatype is a frame or an object.
+		If it is an object, then it indicates the frame ID corresponding to the frame the object is in.
+		If it is a frame, then it indicates the contig Number that the frame is in.
+
+		c) Since there are two integers in the data spot for one integer, the data is rationed. The Datatype
+		integer corresponds to the 8 bits with the largest place value, and the Frame/Contig Number corresponds
+		to the 24 bits with the smallest place value. Note this means that there is a limit of 255 data types,
+		and roughly 16 million contigs in each level. If either of those limits are exceeded, something has
+		gone very wrong.
+
+1 - Location X Value
+2 - Location Y Value
+3 - Size X Value
+4 - Size Y Value
+		The last 4 Data values are ENGINE data types. Both Size Values are ENGINE_VECTOR, and the Locations are ENGINE_GLOBAL
+		These apply whether the Datatype is Object or Frame
+		TODO Consider Deprecating the ENGINE_LOCAL CORVID_COORDTYPE
+
+5 - Depends on DataType
+		
+		a) If the object is a FrameData, then this is just the number ID of the frame, for purposes of corresponding with objects
+		0 Is not to be used for any number ID.
+		
+		b) If the objects is an ObjectData, then this is its CORVID_PHYSICTYPE
+		TODO An enum class AND a regular class is cluttery, and makes the naming confusing, because this is also CORVID_SPRITEDATATYPE
+				0- ERROR
+				1- BACKGROUND
+				2- STATIC
+				3- PLAYER
+				4- DYNAMIC
+
+6 - Texture Value
+
+		There is not a one to one correspondance between texture and PNG files. The main purpose of the CORVID_TEXTURE class is
+		So that there is no interaction needed between the PNG files and the initializer data. So this is the textures. The
+		correspondance between each texture and its PNGs is in the CORVID_TEXTURE files.
+		Also, while the textures for ObjectData is obvious, it should be noted that for FrameData, the texture Value
+		indicates the background in the frame
+		TODO: These textures are impressively complicated, and I need to have a notes sheet indicating their use and complexity
+		In far more detail than this
+				0- BLANK
+				1- TITLE_SCREEN
+				2- SKY
+				3- PLAYER
+				4- BRICK
+				5- BLOCK
+				6- UNSELECTED_BLOCK
+
+7 - Depends on DataType
+
+		a) If the object is a FrameData, then this data is useless and does nothing
+
+		b) If the data is ObjectData, then this data refers to its movementValue
+		Since I have not added that class yet, that makes it useless as well
+
+
+
+
+I need to have a numbered list of the PNG's somewhere
+0-  brick.png
+1-  titleScreen.png
+2-  sky.png
+3-  brick-selected.png
+4-  PlayerSprite.png
+5-  SpriteSheetBlock.png
+6-  SpriteSheetBlockSelected.png
+7-  SpriteSheetBlockSeeThrough.png

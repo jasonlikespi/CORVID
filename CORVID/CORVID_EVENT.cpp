@@ -1,14 +1,17 @@
 #include "CORVID_EVENT.h"
 CORVID_EVENTHANDLER::CORVID_EVENTHANDLER() {
-	cursor_x = 0;
-	cursor_y = 0;
+	cursor = new CORVID_R2();
 	keyPressData = 0;
 	E = new SDL_Event;
 }
 int CORVID_EVENTHANDLER::poll(CORVID_LEVEL* world) {
 	SDL_PollEvent(E);
-	SDL_GetMouseState(&cursor_x, &cursor_y);
-	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x - (int)world->getcameraLocation()->x - (int)MINI_SCREEN_CORNER_WIDTH, cursor_y - (int)world->getcameraLocation()->y - (int)MINI_SCREEN_CORNER_HEIGHT);
+	int tempx, tempy;
+	SDL_GetMouseState( &tempx, &tempy);
+	cursor->x = tempx;
+	cursor->y = tempy;
+	// TODO objectUnderCursor has a memory leak
+	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(new CORVID_R2(cursor->x - (int)((world->getcameraLocation())->x) - (int)MINI_SCREEN_CORNER_WIDTH, cursor->y - (int)world->getcameraLocation()->y - (int)MINI_SCREEN_CORNER_HEIGHT));
 	// Shuts down the program if the window is exited out of
 	if ((*E).type == SDL_QUIT) { return 0; };
 	// What happens when a key is released- mostly just their respective variables resetting
@@ -29,13 +32,15 @@ int CORVID_EVENTHANDLER::poll(CORVID_LEVEL* world) {
 		case SDLK_RETURN:
 			BEnter = false;
 			break;
+		default:
+			break;
 		};
 	}
 	// What happens when a key is pressed down
 	if ((*E).type == SDL_KEYDOWN) {
 		switch ((*E).key.keysym.sym) {
 		case SDLK_p:
-			world->saveWorld();
+			world->save(defaultFolder);
 			break;
 		case SDLK_DOWN:
 			Bdown = true;
@@ -71,39 +76,40 @@ int CORVID_EVENTHANDLER::poll(CORVID_LEVEL* world) {
 			std::cout << "Huh?\n";
 			break;
 		case SDLK_DELETE:
-			world->deleteObject();
+			world->deleteObject(world->selectedObject);
 			break;
 		default:
 			break;
 		};
-		if (world->unselectedObject->size.x < 32) { world->unselectedObject->size.x = 32; }
-		if (world->unselectedObject->size.y < 32) { world->unselectedObject->size.y = 32; }
+		// if (world->unselectedObject->size.x < 32) { world->unselectedObject->size.x = 32; }
+		// if (world->unselectedObject->size.y < 32) { world->unselectedObject->size.y = 32; }
 	}
 	// The clicking portion of the program
 	if ((*E).type == SDL_MOUSEBUTTONDOWN) {
-		if (objectUnderCursor != world->getbackground()) {
+		if (objectUnderCursor != nullptr) {
 			world->selectObject(objectUnderCursor);
 		} else {
-			CORVID_SCREENOBJECT* newObject = new CORVID_SCREENOBJECT(0, 32 * ((cursor_x - (int)world->getcameraLocation()->x) / 32) - MINI_SCREEN_CORNER_WIDTH, 32 * ((cursor_y - (int)world->getcameraLocation()->y) / 32) - MINI_SCREEN_CORNER_HEIGHT, (int)world->unselectedObject->size.x, (int)world->unselectedObject->size.y, 0, 4, 0);
-			world->levels->at(1)->staticList->push_back(newObject);
-			world->selectObject(newObject);
+			// CORVID_SCREENOBJECT* newObject = new CORVID_SCREENOBJECT(0, 32 * ((cursor->x - (int)world->getcameraLocation()->x) / 32) - MINI_SCREEN_CORNER_WIDTH, 32 * ((cursor->y - (int)world->getcameraLocation()->y) / 32) - MINI_SCREEN_CORNER_HEIGHT, (int)world->unselectedObject->size.x, (int)world->unselectedObject->size.y, 0, 4, 0);
+			// world->addObject(newObject);
+			// world->selectObject(newObject);
 		}
 	}
 	// This runs whenever the mouse moves (It also runs when the mouse doesn't move but in that case it does nothing)
-	if (objectUnderCursor == world->getbackground()) {
-		world->unselectedObject->location.x = (cursor_x - (int)world->getcameraLocation()->x - ((cursor_x - (int)world->getcameraLocation()->x) % (int)KUNIT)) - MINI_SCREEN_CORNER_WIDTH;
-		world->unselectedObject->location.y = (cursor_y - (int)world->getcameraLocation()->y - ((cursor_y - (int)world->getcameraLocation()->y) % (int)KUNIT)) - MINI_SCREEN_CORNER_HEIGHT;
+	// TODO I probably broke this when I changed the methods
+	if (objectUnderCursor != nullptr) { // The nullptr was originally the background
+		world->unselectedObject->location.x = (cursor->x - (int)world->getcameraLocation()->x - ((int)cursor->x - (int)world->getcameraLocation()->x) % (int)KUNIT) - MINI_SCREEN_CORNER_WIDTH;
+		world->unselectedObject->location.y = (cursor->y - (int)world->getcameraLocation()->y - ((int)cursor->y - (int)world->getcameraLocation()->y) % (int)KUNIT) - MINI_SCREEN_CORNER_HEIGHT;
 	} else {
 		// The -2048 is completely arbitrary, it just makes it out of frame
-		world->unselectedObject->location.x = -2048;
+		// world->unselectedObject->location.x = -2048;
 	}
 	return 1;
 }
 void CORVID_EVENTHANDLER::updateWorld(CORVID_LEVEL* world) { 
 	if (BEnter) {
-		world->setLevel(1);
+		world->activeContig = world->contigs->at(1);
 	};
-	if (world->activeLevel()->player != nullptr) {
+	if (world->player != nullptr) {
 		if (Bleft) { world->playerMoveLeft(); }
 		if (Bright) { world->playerMoveRight(); }
 		if (Bup) { world->playerJump(); }

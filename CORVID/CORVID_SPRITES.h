@@ -1,6 +1,8 @@
 #pragma once
 #ifndef CORVID_SPRITES_H
 #define CORVID_SPRITES_H
+// Explained in the Class Itself
+#include "CORVID_CLASS.h"
 // Needed for CORVID_RECT and other classes
 #include "CORVID_GEOM.h"
 // Needed for the render method
@@ -10,27 +12,31 @@
 #include <vector>
 // Needed because CORVID_SCREENOBJECT extends this class
 #include "CORVID_TEXTURE.h"
-// I think this is for the KUNIT or UNIT
-using namespace CORVID_CONSTS;
 
-// I'm not sure if this should be its own namespace
-// TODO Check if I should just seperate the classes
-namespace CORVID_SPRITE {
 	// Effectively abstract class consists of an integer, which indicates the intrinsic physical properties of the Sprite object
-	// TODO Consider making class abstract or something 
+	// TODO Consider making class abstract or something
+	// Or just an enum class 
 	// TODO Consider if replacing with Bitwise Arithmetic would decrease the operation time from O(n) where n is the total number of data types
 	// To O(1), but limit the total number of methods to 32?
-	class CORVID_SPRITEDATATYPE {
+
+enum class CORVID_PHYSICTYPE {
+	ERROR,
+	BACKGROUND,
+	STATIC,
+	PLAYER,
+	DYNAMIC
+};
+class CORVID_SPRITEDATATYPE {
 	public:
-		// The integer containing the physical characteristics of the object
-		int id;
+		// The Physics Type
+		CORVID_PHYSICTYPE physicType;
 		// Empty Constructor
-		// @return CORVID_SPRITEDATATYPE with id number 0
-		CORVID_SPRITEDATATYPE() : id(0) {};
+		// @return CORVID_SPRITEDATATYPE with Error Type
+		CORVID_SPRITEDATATYPE() : physicType(CORVID_PHYSICTYPE::ERROR) {};
 		// First Complete Constructor
-		// @param id The Object id
-		// @return CORVID_SPRITEDATATYPE with id number id
-		CORVID_SPRITEDATATYPE(int id) : id(id) {};
+		// @param physicType
+		// @return CORVID_SPRITEDATATYPE with physicType physicType
+		CORVID_SPRITEDATATYPE(int physicType);
 		// @return true if the Object is affected by Gravity, false otherwise
 		bool isAffectedByGravity();
 		// TODO Write Method
@@ -47,15 +53,24 @@ namespace CORVID_SPRITE {
 		// TODO What am I doing with this
 		// @return true if the object is a levelswap, false otherwise
 		bool isLevelSwap();
-	};
-	// Base class for all objects that appear on screen, consisting of a CORVID_BOUNDBOX for location, size, and velocity data,
-	// a CORVID_TEXTURE for the texture of the object, and a CORVID_SPRITEDATATYPE for the objects interactions properties
-	class CORVID_SCREENOBJECT : public CORVID_BOUNDBOX, public CORVID_TEXTURE, public CORVID_SPRITEDATATYPE{
+		// TODO Write Method
+		// @return true if the object is dynamic, false otherwise
+		bool isDynamic();
+};
+// Base class for all objects that appear on screen, consisting of a CORVID_BOUNDBOX for location, size, and velocity data,
+// a CORVID_TEXTURE for the texture of the object, and a CORVID_SPRITEDATATYPE for the objects interactions properties
+class CORVID_SCREENOBJECT : public CORVID_BOUNDBOX, public CORVID_TEXTURE, public CORVID_SPRITEDATATYPE{
 	public:
 		// Field indicating if the object is selected
 		bool selected;
 		// Field inicating if the object is in freefall or to be physically precise, experiences any normal force to gravity
 		bool freeFall;
+		// I also need to include which frame it is referenced as a number
+		// TODO Consider removing and having this class feature perpetual usage of the initializer array
+		// as a parent class
+		int frameNum;
+		// Reference to the Frame it is a part of
+		CORVID_FRAME* frame;
 		// Empty Constructor
 		// Should not use
 		// @return CORVID_SCREENOBJECT located at (0, 0) with size (0, 0), velocity (0, 0), object id of 0, and texture iD of 3
@@ -70,7 +85,7 @@ namespace CORVID_SPRITE {
 		// @return CORVID_SCREENOBJECT located at (x, y) with size (32, 32), velocity (0, 0), object id 0, and texture of texture
 		// also selected is set to false and freefall is set to true
 		CORVID_SCREENOBJECT(double x, double y, CORVID_TEXTURE* texture) : 
-			CORVID_BOUNDBOX(x, y), CORVID_TEXTURE(*texture), selected(false), freeFall(true) {};
+			CORVID_BOUNDBOX(x, y), CORVID_TEXTURE(*texture), selected(false), freeFall(true), frame(nullptr) {};
 		// First Incomplete Constructor: Initialization Vector
 		// TODO Consider changing to initialization array
 		// Even though selected and freeFall are not set by the initialization array, it still counts as a complete constructor
@@ -78,19 +93,20 @@ namespace CORVID_SPRITE {
 		// And even if returned from a paused game or something, the values are still acceptable
 		// TODO As I write that I remembered the velocity is unwritten so when I add moving static objects, it will be incomplete
 		// TODO maybe freeFall could break if returning from a stopped game but that's a long ways off
+		// TODO frame should never initiate to null pointer, I just put it in to get rid of the warning
 		// @param data a vector of size 8 containing all of the objects data
 		// data(0) - Header Int
 		// data(1) - Location X Value
 		// data(2) - Location Y Value
 		// data(3) - Size X Value
 		// data(4) - Size Y Value
-		// data(5) - Object Type Value (0 is static, 1 is dynamic, 2 is background, 3 is checkpoint)
+		// data(5) - CORVID_SPRITEDATATYPE
 		// data(6) - Texture Value
 		// data(7) - Movement Behavior Value
 		// @return The CORVID_SCREENOBJECT with the properties given by the vector
 		CORVID_SCREENOBJECT(std::vector<int>* data) : 
 			CORVID_BOUNDBOX(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0),
-			CORVID_SPRITEDATATYPE(data->at(6)), CORVID_TEXTURE(data->at(6)), selected(false), freeFall(true){ };
+			CORVID_SPRITEDATATYPE(data->at(5)), CORVID_TEXTURE(data->at(6)), selected(false), freeFall(true), frame(nullptr), frameNum(data->at(0)){};
 		// Second Incomplete Constructor: 8 Doubles
 		// TODO Should probably remove irrelevant parameters 
 		// Even though selected and freeFall are not set by the initialization array, it still counts as a complete constructor
@@ -103,19 +119,19 @@ namespace CORVID_SPRITE {
 		// @param i2 - Location Y Value
 		// @param i3 - Size X Value
 		// @param i4 - Size Y Value
-		// @param i5 - Object Type Value (0 is static, 1 is dynamic, 2 is background, 3 is checkpoint)
+		// @param i5 - CORVID_SPRITEDATATYPE
 		// @param i6 - Texture Value
 		// @param i7 - Movement Behavior Value
-		// @return The CORVID_SCREENOBJECT located at (i1, i2), size(i3, i4), velocity(0, 0), objectId i6, textureValue i6
+		// @return The CORVID_SCREENOBJECT located at (i1, i2), size(i3, i4), velocity(0, 0), objectId i5, textureValue i6
 		CORVID_SCREENOBJECT(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7) : 
-			CORVID_BOUNDBOX((int)i1, (int)i2, (int)i3, (int)i4, 0, 0), CORVID_SPRITEDATATYPE((int)i6), CORVID_TEXTURE((int)i6), selected(false), freeFall(true) {};
+			CORVID_BOUNDBOX((int)i1, (int)i2, (int)i3, (int)i4, 0, 0), CORVID_SPRITEDATATYPE((int)i5), CORVID_TEXTURE((int)i6), selected(false), freeFall(true), frame(nullptr), frameNum((int)i0) {};
 		// Renders the CORVID_SCREENOBJECT to the screen described by surface, while viewed by cameraLocation
 		// TODO Consider reworking class to remove parameters for this method, leaving references to cameraLocation and surface as a part of the class
 		// Of note is that would require difficulty with classes referencing recursively, likely the main reason I haven't done this yet
 		// @param surface the surface to be rendered to
 		// @param cameraLocation the location of the camera
 		// @return void
-		void render(SDL_Renderer* surface, CORVID_R2* cameraLocation);
+		void render(SDL_Renderer* surface, CORVID_CAMERA* camera);
 		// Distills the physical properties of the object to an array of 8 integers
 		// This is definitely a memory leak, but considering how broken everything is already, I will fix it later
 		// Also it's not a super bad memory leak considering it only runs whenever the game saves
@@ -126,11 +142,14 @@ namespace CORVID_SPRITE {
 		// Once per Frame. Actually that's probably where the frame comes from but I should still change it
 		// @return void
 		void updateFrame();
-	};
-	// I made a class dedicated to just the player
-	// TODO Maybe make static or something?
-	// Contains several other player specific fields
-	class CORVID_PLAYER : public CORVID_SCREENOBJECT{
+
+		void save(std::filesystem::path binFile);
+};
+
+// I made a class dedicated to just the player
+// TODO Maybe make static or something?
+// Contains several other player specific fields
+class CORVID_PLAYER : public CORVID_SCREENOBJECT{
 	public:
 		// Reference to the object that the player is standing on top of
 		// Initializes to NULL
@@ -178,7 +197,7 @@ namespace CORVID_SPRITE {
 		// @param i5 - Object Type Value (0 is static, 1 is dynamic, 2 is background, 3 is checkpoint)
 		// @param i6 - Texture Value
 		// @param i7 - Movement Behavior Value
-		// @return The CORVID_PLAYER located at (i1, i2), size(i3, i4), velocity(0, 0), objectId i6, textureValue i6
+		// @return The CORVID_PLAYER located at (i1, i2), size(i3, i4), velocity(0, 0), objectId i5, textureValue i6
 		// freefall true, selected false, objectStandingOn, leftObject, and rightObject all NULL
 		CORVID_PLAYER(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7) :
 			CORVID_SCREENOBJECT(i0, i1, i2, i3, i4, i5, i6, i7), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL), jumpFrame(-1) {};
@@ -192,21 +211,31 @@ namespace CORVID_SPRITE {
 		// Until max jump length is reached
 		// @return void
 		void jump();
-	};
-	// I made a class dedicated to just the background
-	// TODO literally anything with this class
-	// Or remove the class
-	class CORVID_BACKGROUND { 
+};
+	
+// I made a class dedicated to just the background
+// TODO literally anything with this class
+// Or remove the class
+class CORVID_BACKGROUND : public CORVID_SCREENOBJECT{ 
 	public:
-		// Background Image
-		// TODO Should really be a reference, and possibly class extension
-		CORVID_SCREENOBJECT imageData;
-		// Integer to indicate if the object is a more complicated texture
-		// I should move this complexity to the CORVID_TEXTURE Class
-		int stationaryBackground;
 		// Empty Constructor
-		// @return An Empty CORVID_SCREENOBJECT and the number 0
-		CORVID_BACKGROUND() : imageData(CORVID_SCREENOBJECT()), stationaryBackground(0) {};
-	};
-}
+		// @return An Empty CORVID_SCREENOBJECT
+		CORVID_BACKGROUND() {};
+		// First Incomplete Constructor
+		// @param i0 - Header Int
+		// @param i1 - Location X Value
+		// @param i2 - Location Y Value
+		// @param i3 - Size X Value
+		// @param i4 - Size Y Value
+		// @param i5 - Object Type Value (0 is static, 1 is dynamic, 2 is background, 3 is checkpoint)
+		// @param i6 - Texture Value
+		// @param i7 - Movement Behavior Value
+		// @return The CORVID_BACKGROUND located at (i1, i2), size(i3, i4), velocity(0, 0), objectId i6, textureValue i6
+		// freefall true, selected false, objectStandingOn, leftObject, and rightObject all NULL
+		CORVID_BACKGROUND(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7) :
+			CORVID_SCREENOBJECT(i0, i1, i2, i3, i4, i5, i6, i7) {};
+		CORVID_BACKGROUND(std::vector<int>* data) :
+			CORVID_SCREENOBJECT(data) {};
+
+};
 #endif

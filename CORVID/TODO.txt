@@ -43,24 +43,24 @@ TODO Clarity and Efficiency
 	 which should reduce improve speed for more than 1 dynamic object. If performance continues to become an issue, I may be able to get the D term to DlogD using advanced data structures.
 
 TODO Seperating Documentation into its own issue
-DONE 1- CONSTS.h
-DONE 2- EVENT.h
-DONE 3- FILE.h
-DONE 4- GEOM.h
-DONE 5- SPRITES.h
-DONE 6- TEXT.h
-DONE 7- TEXTURE.h
-DONE 8- WINDOW.h
-	 9- WORLD.h
-	 10- EVENT.cpp
-	 11- FILE.cpp
-	 12- GEOM.cpp
-	 13- SPRITES.cpp
-	 14- TEXTURE.cpp
-	 15- WORLD.cpp
-	 16- main.cpp
+LIMBO 1- CONSTS.h
+LIMBO 2- EVENT.h
+EDIT  3- FILE.h
+LIMBO 4- GEOM.h
+LIMBO 5- SPRITES.h
+DONE  6- TEXT.h
+LIMBO 7- TEXTURE.h
+LIMBO 8- WINDOW.h
+LIMBO 9- WORLD.h
+	  10- EVENT.cpp
+	  11- FILE.cpp
+	  12- GEOM.cpp
+	  13- SPRITES.cpp
+	  14- TEXTURE.cpp
+	  15- WORLD.cpp
+	  16- main.cpp
 
-TODO Clean up Resource Files
+TODO Clean up Resource Files by adding foldering
 
 TODO Fix the Warnings about datatype conversion
 

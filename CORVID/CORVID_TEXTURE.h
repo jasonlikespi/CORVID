@@ -14,20 +14,31 @@
 // Mostly for the initializeTextures method
 // TODO see if it can be removed
 #include <filesystem>
-// Used so many times in the customblock methods
-using namespace CORVID_CONSTS;
+// Explained in the Class Itself
+#include "CORVID_CLASS.h"
+// Note since I reassigned the values, all current files are
+// Junk Data
+enum class CORVID_TEXTURETYPE {
+	BLANK,
+	TITLE_SCREEN,
+	SKY,
+	PLAYER,
+	BRICK,
+	BLOCK,
+	UNSELECTED_BLOCK
+};
+
 // Class with an integer corresponding to its texture data
 // Also has a static vector of SDL_Textures
 // TODO See if I should have a static SDL_Renderer to replace that parameter being in every method
 // And considering I already have SDL.h and SDL_Image.h it wouldn't require additional includes
 class CORVID_TEXTURE{
 public:
-	// Integer corresponding to the objects texture ID
-	// TODO maybe make this an enum class with a value for each texture ID
-	// That seems more in line with what the actual usage of the class is
-	int textureID;
-	// The global texture list instantiated with initializeTextures method
-	static std::vector<SDL_Texture*>* global_textureList;
+	// CORVID_TEXTURETYPE corresponding to the objects texture ID
+	CORVID_TEXTURETYPE textureType;
+	// The texture list instantiated with initializeTextures method
+	// Making this static so everything just references it
+	static std::vector<SDL_Texture*>* textureList;
 	// Empty Constructor
 	// @return CORVID_TEXTURE with ID 3 
 	CORVID_TEXTURE();
@@ -95,39 +106,3 @@ public:
 // 
 // Every object shouldn't contain actual texture data, but integers referring
 // to indexes. The static global_textureList contains all of the data
-// 
-// 
-// Notes on Structure of File
-// Object Data File follows the format ( One int for each)
-// 0- Header Int
-// 1- Location X Value
-// 2- Location Y Value
-// 3- Size X Value
-// 4- Size Y Value
-// 5- Object Type Value (0 is static, 1 is dynamic, 2 is background,
-//		 3 is checkpoint)
-// 6- Texture Value
-// 7- Movement Behavior Value
-
-//Texture List
-/*
- * 0 - Title Screen
- * 1 - Sky
- * 2 - Player
- * 3 - Brick- Selectable
- * 4 - Block- Selectable
- * 5 - Unselected Block
- *
- */
-
-// Literally the PNG List
-/*
- * 0  brick.png
- * 1  titleScreen.png
- * 2  sky.png
- * 3  brick-selected.png
- * 4  PlayerSprite.png
- * 5  SpriteSheetBlock.png
- * 6  SpriteSheetBlockSelected.png
- * 7  SpriteSheetBlockSeeThrough.png
- */

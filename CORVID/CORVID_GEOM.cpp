@@ -1,16 +1,50 @@
 #include "CORVID_GEOM.h"
 
 CORVID_R2& CORVID_R2::operator+(CORVID_R2& num1) {
+	if (this->coordType == DEFAULT || num1.coordType == DEFAULT) {
+		throw;
+	}
+	throw;
 	x += num1.x;
 	y += num1.y;
 	return *this;
+	throw;
 }
+SDL_Rect* toRect(CORVID_RECT* rectin) {
+	
+	return rect;
+};
+CORVID_RECT::CORVID_RECT(double x1, double y1, double x2, double y2, CORVID_COORDTYPE coordType) {
+	switch (coordType) {
+	case CORVID_COORDTYPE::ENGINE_LOCAL:
+		location = *(new CORVID_R2(x1, y1, ENGINE_LOCAL));
+		size = *(new CORVID_R2(x2, y2, ENGINE_VECTOR));
+		break;
+	case CORVID_COORDTYPE::ENGINE_GLOBAL:
+		location = *(new CORVID_R2(x1, y1, ENGINE_GLOBAL));
+		size = *(new CORVID_R2(x2, y2, ENGINE_VECTOR));
+		break;
+	case CORVID_COORDTYPE::SURFACE:
+		location = *(new CORVID_R2(x1, y1, SURFACE));
+		size = *(new CORVID_R2(x2, y2, SURFACE_VECTOR));
+		break;
+	case CORVID_COORDTYPE::STANDARD:
+		location = *(new CORVID_R2(x1, y1, STANDARD));
+		size = *(new CORVID_R2(x2, y2, STANDARD));
+		break;
+	default:
+		throw;
+	}
+};
+
+
+// TODO Probably deprecate since the R2 parameter version is better
 bool CORVID_RECT::pointIsInside(double x_val, double y_val) {
 	return(this->location.x <= x_val && this->location.x + this->size.x >= x_val && this->location.y <= y_val && this->location.y + this->size.y >= y_val);
 };
-
-bool CORVID_RECT::pointIsInside(CORVID_R2 point) {
-	return(this->location.x <= point.x && this->location.x + this->size.x >= point.x && this->location.y <= point.y && this->location.y + this->size.y >= point.y);
+// TODO maybe make this a & reference
+bool CORVID_RECT::pointIsInside(CORVID_R2* point) {
+	return(this->location.x <= point->x && this->location.x + this->size.x >= point->x && this->location.y <= point->y && this->location.y + this->size.y >= point->y);
 };
 
 CORVID_BOUNDBOX::CORVID_BOUNDBOX(double xval, double yval) : 
@@ -59,8 +93,8 @@ DIRECTION CORVID_RECT::relativePosition(CORVID_RECT* otherRect) {
 // Intentionally moved the center of the toBeShoved object to the bottom edge, potentially rendering this
 // Algorithm obsolete for non player objects.
 CORVID_R2* CORVID_RECT::shoveDirection(CORVID_RECT* toBeShoved) {
-	pushVector->x = 0;
-	pushVector->y = 0;
+	tempVector->x = 0;
+	tempVector->y = 0;
 	double center_x = toBeShoved->location.x + (toBeShoved->size.x * .5);
 	double center_y = toBeShoved->location.y + (toBeShoved->size.y);
 	double distanceUp = center_y - this->location.y;
@@ -69,21 +103,21 @@ CORVID_R2* CORVID_RECT::shoveDirection(CORVID_RECT* toBeShoved) {
 	double distanceRight = this->location.x + this->size.x - center_x;
 	// Above
 	if (distanceUp < distanceDown && distanceUp < distanceLeft && distanceUp < distanceRight) {
-		pushVector->y = location.y - toBeShoved->location.y - toBeShoved->size.y;
+		tempVector->y = location.y - toBeShoved->location.y - toBeShoved->size.y;
 	}
 	// Below
 	else if (distanceDown < distanceLeft && distanceDown < distanceRight) {
-		pushVector->y = location.y + size.y - toBeShoved->location.y;
+		tempVector->y = location.y + size.y - toBeShoved->location.y;
 	}
 	// Left
 	else if (distanceLeft < distanceRight) {
-		pushVector->x = location.x - toBeShoved->location.x - toBeShoved->size.x;
+		tempVector->x = location.x - toBeShoved->location.x - toBeShoved->size.x;
 	} 
 	// Right
 	else {
-		pushVector->x = location.x + size.x - toBeShoved->location.x;
+		tempVector->x = location.x + size.x - toBeShoved->location.x;
 	}
-	return pushVector;
+	return tempVector;
 };
 
 

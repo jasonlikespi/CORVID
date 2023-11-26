@@ -42,6 +42,9 @@
     <ClCompile Include="CORVID_TEXT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CORVID_STRUCTURE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CORVID_GEOM.h">
@@ -71,12 +74,21 @@
     <ClInclude Include="CORVID_TEXT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CORVID_CLASS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CORVID_STRUCTURE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Notes.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="default\textures.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
@@ -131,9 +143,12 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="default\obj.bin">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="testo\testo.bin">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

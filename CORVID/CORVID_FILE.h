@@ -11,17 +11,25 @@
 #include <string>
 // Needed to interact with folders
 #include <filesystem>
-
+// Needed for abstract classes
+#include "CORVID_SPRITES.h"
+// Explained in the Class Itself
+#include "CORVID_CLASS.h"
 // I'm not sure if this should be its own namespace
 // TODO Check if I should just seperate the classes
-namespace CORVID_FILE {
 	// Class that turns my custom made binary file into a vector of data for sprite creation
 	// Effectively an Abstract Class that is the superclass for CORVID_WORLD
 	class CORVID_OBJFILE {
 	public:
 		// Vector of object data to be turned into the level
+		// TODO Maybe make a vector of arrays
+		// The first section of them is going to be the frame data, and the second one is going to be objects
 		std::vector<std::vector<int>*>* objects;
+		// When overloaded for Frame and CONTIG, is just algorithmic description
+		// of the level. For Level, describes the save file
+		const char* name;
 		// Empty Constructor
+		// TODO Given this Objects use as a base class, the default constructor is going to need to be used
 		// Do not Use
 		// @return an object with an empty vector
 		CORVID_OBJFILE();
@@ -30,6 +38,9 @@ namespace CORVID_FILE {
 		// @param fileName A path to a file with the name of the level
 		// @return a CORVID_OBJFILE Consisting of a vector of int[8] data ready to be loaded into a level
 		CORVID_OBJFILE(std::filesystem::path fileName);
+
+		virtual void save(std::filesystem::path folder);
+
 	};
 	// Class that turns a text file into a vector of file paths for the games textures
 	// I only use it for one method making it effectively static
@@ -47,6 +58,5 @@ namespace CORVID_FILE {
 		// @return a CORVID_TEXTLIST object with a vector of paths corresponding to each line masterFile
 		CORVID_TEXTLIST(std::filesystem::path masterFile);
 	};
-}
 #endif
 

@@ -1,10 +1,16 @@
 #pragma once
 #ifndef CORVID_CONSTS_H
 #define CORVID_CONSTS_H
+// Explained in the Class Itself
+#include "CORVID_CLASS.h"
+// Used for Default Strings
+#include <string>
 // Used for SDL_Rect Structs
 #include "SDL.h"
-// Seperate Namespace so it is differentiated from local variables
-namespace CORVID_CONSTS {
+
+	const std::string defaultFolder = "default";
+	const std::string objFile = "obj.bin";
+	const std::string textureFile = "textures.txt";
 	// Used perhaps exclusively by the CORVID_TEXTURE::renderCustomBlock method to interface with the spriteSheet
 	const SDL_Rect spriteList[16] = {
 		 {  0,  0,  32,  32 },
@@ -78,7 +84,7 @@ namespace CORVID_CONSTS {
 	// The height of the non-game screen in miniature mode
 	const double MINI_SCREEN_CORNER_HEIGHT = WINDOW_HEIGHT - MINI_SCREEN_HEIGHT;
 	// The size of the base block adjusted for the miniature screen
-	const double KUNIT = (double)MINI_SCREEN_FACTOR * (double)UNIT;
+	const double KUNIT = MINI_SCREEN_FACTOR * UNIT;
 	// One Quarter of the screens width in pixels
 	// TODO I know it adjusts for different window sizes, but find if failure to adjust for miniature screen is causing error
 	const double LEFT_QUARTER_SCREEN = WINDOW_WIDTH * .25;
@@ -100,5 +106,4 @@ namespace CORVID_CONSTS {
 	// Maximum Y location allowable by player
 	// TODO Find out if they can be substituted with other constants
 	const double MAX_Y = 1080;
-}
 #endif

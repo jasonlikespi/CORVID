@@ -1,4 +1,6 @@
 #pragma once
+// Explained in the Class Itself
+#include "CORVID_CLASS.h"
 // Needed for Rendering Coordinates
 #include "CORVID_GEOM.h"
 // Needed for Rendering At all

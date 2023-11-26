@@ -111,6 +111,8 @@
       <ConformanceMode>true</ConformanceMode>
       <EnableModules>Yes</EnableModules>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +142,7 @@
     <ClCompile Include="CORVID_FILE.cpp" />
     <ClCompile Include="CORVID_GEOM.cpp" />
     <ClCompile Include="CORVID_SPRITES.cpp" />
+    <ClCompile Include="CORVID_STRUCTURE.cpp" />
     <ClCompile Include="CORVID_TEXT.cpp" />
     <ClCompile Include="CORVID_TEXTURE.cpp" />
     <ClCompile Include="CORVID_WINDOW.cpp" />
@@ -147,17 +150,20 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CORVID_CLASS.h" />
     <ClInclude Include="CORVID_CONSTS.h" />
     <ClInclude Include="CORVID_EVENT.h" />
     <ClInclude Include="CORVID_FILE.h" />
     <ClInclude Include="CORVID_GEOM.h" />
     <ClInclude Include="CORVID_SPRITES.h" />
+    <ClInclude Include="CORVID_STRUCTURE.h" />
     <ClInclude Include="CORVID_TEXT.h" />
     <ClInclude Include="CORVID_TEXTURE.h" />
     <ClInclude Include="CORVID_WINDOW.h" />
     <ClInclude Include="CORVID_WORLD.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="default\textures.txt" />
     <Text Include="Notes.txt" />
     <Text Include="TODO.txt" />
   </ItemGroup>
@@ -180,7 +186,8 @@
     <Image Include="titleScreen.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="default\obj.bin" />
     <None Include="testo\testo.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

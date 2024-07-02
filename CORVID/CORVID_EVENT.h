@@ -10,29 +10,29 @@
 // TODO Should I make the CORVID_WORLD a superclass or field?
 class CORVID_EVENTHANDLER{
 	// Is the left key pressed?
-	inline static bool Bleft = false;
+	inline static int Bleft = 0;
 	// Is the left key pressed?
-	inline static bool Bright = false;
+	inline static int Bright = 0;
 	// Is the left key pressed?
-	inline static bool Bdown = false;
+	inline static int Bdown = 0;
 	// Is the left key pressed?
-	inline static bool Bup = false;
+	inline static int Bup = 0;
 	// Is the left key pressed?
-	inline static bool B1 = false;
+	inline static int B1 = 0;
 	// Is the left key pressed?
-	inline static bool B2 = false;
+	inline static int B2 = 0;
 	// Is the left key pressed?
-	inline static bool BW = false;
+	inline static int BW = 0;
 	// Is the left key pressed?
-	inline static bool BA = false;
+	inline static int BA = 0;
 	// Is the left key pressed?
-	inline static bool BS = false;
+	inline static int BS = 0;
 	// Is the left key pressed?
-	inline static bool BD = false;
+	inline static int BD = 0;
 	// Is the left key pressed?
-	inline static bool BC = false;
+	inline static int BC = 0;
 	// Is the left key pressed?
-	inline static bool BEnter = false;
+	inline static int BEnter = 0;
 	// Don't really remember what keyPressData means, maybe I'll remember later
 	// TODO Figure out if I can just remove this
 	int keyPressData;

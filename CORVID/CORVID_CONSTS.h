@@ -46,26 +46,21 @@ namespace CORVID_CONSTS {
 	// Base size of block for creation of normal objects. I don't think I will ever have to change it at the moment
 	const double UNIT = 32.0;
 	// Constant tied to speed of downward acceleration
-	const double STRENGTH_OF_GRAVITY = 5;
+	const double STRENGTH_OF_GRAVITY = 1.5;
 	// Constant tied to amount of vertical friction: 1 is no friction, 0 means dynamic objects can't move up or down
-	const double FRICTION_CONSTANT_VERTICAL = .8;
+	const double FRICTION_CONSTANT_VERTICAL = .95;
 	// Constant tied to amount of horizontal friction: 1 is no friction, 0 means dynamic objects can't move left/right
-	const double FRICTION_CONSTANT_HORIZONTAL = .9;
-	// The specific added force given to player after holding jump for 1 frame 
-	const double PLAYER_JUMP_FORCE_1 = 20;
-	// The specific added force given to player after holding jump for 2 frames
-	const double PLAYER_JUMP_FORCE_2 = 20;
-	// The specific added force given to player after holding jump for 3 frames
-	const double PLAYER_JUMP_FORCE_3 = 20;
-	// The specific added force given to player after holding jump for 4 frames
-	const double PLAYER_JUMP_FORCE_4 = 20;
+	const double FRICTION_CONSTANT_HORIZONTAL = .95;
+	// The specific added force given to player after holding jump frame 
+	const double PLAYER_JUMP_FORCE = 6;
 	// The specific added force given to player after holding jump for 5 frames
 	// TODO find if the physics simulation running above 60 fps causes the PLAYER_JUMP_FORCE constants to not work as intended
-	const double PLAYER_JUMP_FORCE_5 = 20;
 	// Constant tied to the players default acceleration on pushing the arrow keys
-	const double ACCELERATION = 1;
+	const double ACCELERATION = .5;
 	// Constant tied to max player speed
-	const double SPEED_CAP = 20;
+	const double SPEED_CAP = 10;
+
+	const double SPEED_MIN = .5;
 	// Constant for relative size of the miniscreen to the entire screen: 1 is it takes up the entire screen, 0 means that it doesn't show anything
 	// .875 is what I want to use for edit mode
 	const double MINI_SCREEN_FACTOR = 1;

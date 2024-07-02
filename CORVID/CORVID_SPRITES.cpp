@@ -57,7 +57,7 @@ int* CORVID_SPRITE::CORVID_SCREENOBJECT::dataDump() {
 };
 
 void CORVID_SPRITE::CORVID_SCREENOBJECT::updateFrame() {
-	if (isAffectedByGravity() && freeFall) {
+	if (isAffectedByGravity() && freeFall != 0) {
 		velocity.y += STRENGTH_OF_GRAVITY;
 	}
 	velocity.x *= FRICTION_CONSTANT_HORIZONTAL;
@@ -71,44 +71,33 @@ void CORVID_SPRITE::CORVID_SCREENOBJECT::updateFrame() {
 	}
 };
 
-void CORVID_SPRITE::CORVID_PLAYER::moveLeft() {
-	if (velocity.x > -SPEED_CAP) {
+void CORVID_SPRITE::CORVID_PLAYER::moveLeft(int frameNum) {
+
+	if (velocity.x > -SPEED_MIN && velocity.x < SPEED_MIN && velocity.x > -SPEED_CAP && velocity.x < SPEED_CAP) {
+		velocity.x -= ACCELERATION * .5;
+		return;
+	}
+	if (velocity.x > -SPEED_CAP && velocity.x < SPEED_CAP) {
 		velocity.x -= ACCELERATION;
+		return;
 	}
 };
 
-void CORVID_SPRITE::CORVID_PLAYER::moveRight() {
-	if (velocity.x < SPEED_CAP) {
+void CORVID_SPRITE::CORVID_PLAYER::moveRight(int frameNum) {
+	if (velocity.x > -SPEED_MIN && velocity.x < SPEED_MIN && velocity.x > -SPEED_CAP && velocity.x < SPEED_CAP) {
+		velocity.x += ACCELERATION * .5;
+		return;
+	}
+	if (velocity.x > -SPEED_CAP && velocity.x < SPEED_CAP) {
 		velocity.x += ACCELERATION;
+		return;
 	}
 };
 
-void CORVID_SPRITE::CORVID_PLAYER::jump() {
-	switch(jumpFrame){
-		case(0):
-			this->velocity.y -= PLAYER_JUMP_FORCE_1;
-			break;
-		case(1):
-			this->velocity.y -= PLAYER_JUMP_FORCE_2;
-			break;
-		case(2):
-			this->velocity.y -= PLAYER_JUMP_FORCE_3;
-			break;
-		case(3):
-			this->velocity.y -= PLAYER_JUMP_FORCE_4;
-			break;
-		case(4):
-			this->velocity.y -= PLAYER_JUMP_FORCE_5;
-			break;
-		case(5):
-			jumpFrame = -1;
-			return;
-			break;
-		case(-1):
-			return;
-			break;
-		default:
-			break;
+void CORVID_SPRITE::CORVID_PLAYER::jump(int frameNum) {
+	if (jumpFrame >= 0 && frameNum < 6) {
+		this->velocity.y -= PLAYER_JUMP_FORCE;
+		jumpFrame++;
 	}
-	jumpFrame++;
+	
 };

@@ -11,23 +11,28 @@ int CORVID_EVENTHANDLER::poll(CORVID_LEVEL* world) {
 	CORVID_SCREENOBJECT* objectUnderCursor = world->findByPosition(cursor_x - (int)world->getcameraLocation()->x - (int)MINI_SCREEN_CORNER_WIDTH, cursor_y - (int)world->getcameraLocation()->y - (int)MINI_SCREEN_CORNER_HEIGHT);
 	// Shuts down the program if the window is exited out of
 	if ((*E).type == SDL_QUIT) { return 0; };
+	// Measures how many frames each of these keys have been held down
+	if (Bdown > 0) { Bdown++; }
+	if (Bup != 0) { Bup++; }
+	if (Bleft != 0) { Bleft++; }
+	if (Bright != 0) { Bright++; }
 	// What happens when a key is released- mostly just their respective variables resetting
 	if ((*E).type == SDL_KEYUP) {
 		switch ((*E).key.keysym.sym){
 		case SDLK_DOWN:
-			Bdown = false;
+			Bdown = 0;
 			break;
 		case SDLK_UP:
-			Bup = false;
+			Bup = 0;
 			break;
 		case SDLK_LEFT:
-			Bleft = false;
+			Bleft = 0;
 			break;
 		case SDLK_RIGHT:
-			Bright = false;
+			Bright = 0;
 			break;
 		case SDLK_RETURN:
-			BEnter = false;
+			BEnter = 0;
 			break;
 		};
 	}
@@ -38,16 +43,16 @@ int CORVID_EVENTHANDLER::poll(CORVID_LEVEL* world) {
 			world->saveWorld();
 			break;
 		case SDLK_DOWN:
-			Bdown = true;
+			Bdown++;
 			break;
 		case SDLK_UP:
-			Bup = true;
+			Bup++;
 			break;
 		case SDLK_LEFT:
-			Bleft = true;
+			Bleft++;
 			break;
 		case SDLK_RIGHT:
-			Bright = true;
+			Bright++;
 			break;
 		case SDLK_q:
 			return 0;
@@ -65,7 +70,7 @@ int CORVID_EVENTHANDLER::poll(CORVID_LEVEL* world) {
 			world->unselectedObject->size.x += 32;
 			break;
 		case SDLK_RETURN:
-			BEnter = true;
+			BEnter++;
 			break;
 		case SDLK_r:
 			std::cout << "Huh?\n";
@@ -104,10 +109,17 @@ void CORVID_EVENTHANDLER::updateWorld(CORVID_LEVEL* world) {
 		world->setLevel(1);
 	};
 	if (world->activeLevel()->player != nullptr) {
-		if (Bleft) { world->playerMoveLeft(); }
-		if (Bright) { world->playerMoveRight(); }
-		if (Bup) { world->playerJump(); }
-		if (!Bup) { world->stopJump(); }
+		/*
+		 * Try to reduce these lines; I think I can remove the if statements
+		 * if (Bleft) { world->playerMoveLeft(Bleft); }
+		 * if (Bright) { world->playerMoveRight(Bright); }
+		 * if (Bup) { world->playerJump(Bup); }
+		 * if (!Bup) { world->stopJump(); }
+		 */
+		if (Bleft) { world->playerMoveLeft(Bleft); }
+		if (Bright) { world->playerMoveRight(Bright); }
+		if (Bup > 0) { world->playerJump(Bup); }
+		if (Bup == 0 || Bup > 5) { world->stopJump(); }
 		world->updateStatics();
 		world->updateDynamics();
 		world->updatePlayer();

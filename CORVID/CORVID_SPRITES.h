@@ -12,7 +12,8 @@
 #include "CORVID_TEXTURE.h"
 // I think this is for the KUNIT or UNIT
 using namespace CORVID_CONSTS;
-
+// This is for the speedometer
+#include <iostream>
 // I'm not sure if this should be its own namespace
 // TODO Check if I should just seperate the classes
 namespace CORVID_SPRITE {
@@ -55,7 +56,7 @@ namespace CORVID_SPRITE {
 		// Field indicating if the object is selected
 		bool selected;
 		// Field inicating if the object is in freefall or to be physically precise, experiences any normal force to gravity
-		bool freeFall;
+		int freeFall;
 		// Empty Constructor
 		// Should not use
 		// @return CORVID_SCREENOBJECT located at (0, 0) with size (0, 0), velocity (0, 0), object id of 0, and texture iD of 3
@@ -70,7 +71,7 @@ namespace CORVID_SPRITE {
 		// @return CORVID_SCREENOBJECT located at (x, y) with size (32, 32), velocity (0, 0), object id 0, and texture of texture
 		// also selected is set to false and freefall is set to true
 		CORVID_SCREENOBJECT(double x, double y, CORVID_TEXTURE* texture) : 
-			CORVID_BOUNDBOX(x, y), CORVID_TEXTURE(*texture), selected(false), freeFall(true) {};
+			CORVID_BOUNDBOX(x, y), CORVID_TEXTURE(*texture), selected(false), freeFall(-1) {};
 		// First Incomplete Constructor: Initialization Vector
 		// TODO Consider changing to initialization array
 		// Even though selected and freeFall are not set by the initialization array, it still counts as a complete constructor
@@ -90,7 +91,7 @@ namespace CORVID_SPRITE {
 		// @return The CORVID_SCREENOBJECT with the properties given by the vector
 		CORVID_SCREENOBJECT(std::vector<int>* data) : 
 			CORVID_BOUNDBOX(data->at(1), data->at(2), data->at(3), data->at(4), 0, 0),
-			CORVID_SPRITEDATATYPE(data->at(6)), CORVID_TEXTURE(data->at(6)), selected(false), freeFall(true){ };
+			CORVID_SPRITEDATATYPE(data->at(6)), CORVID_TEXTURE(data->at(6)), selected(false), freeFall(-1){ };
 		// Second Incomplete Constructor: 8 Doubles
 		// TODO Should probably remove irrelevant parameters 
 		// Even though selected and freeFall are not set by the initialization array, it still counts as a complete constructor
@@ -108,7 +109,7 @@ namespace CORVID_SPRITE {
 		// @param i7 - Movement Behavior Value
 		// @return The CORVID_SCREENOBJECT located at (i1, i2), size(i3, i4), velocity(0, 0), objectId i6, textureValue i6
 		CORVID_SCREENOBJECT(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7) : 
-			CORVID_BOUNDBOX((int)i1, (int)i2, (int)i3, (int)i4, 0, 0), CORVID_SPRITEDATATYPE((int)i6), CORVID_TEXTURE((int)i6), selected(false), freeFall(true) {};
+			CORVID_BOUNDBOX((int)i1, (int)i2, (int)i3, (int)i4, 0, 0), CORVID_SPRITEDATATYPE((int)i6), CORVID_TEXTURE((int)i6), selected(false), freeFall(-1) {};
 		// Renders the CORVID_SCREENOBJECT to the screen described by surface, while viewed by cameraLocation
 		// TODO Consider reworking class to remove parameters for this method, leaving references to cameraLocation and surface as a part of the class
 		// Of note is that would require difficulty with classes referencing recursively, likely the main reason I haven't done this yet
@@ -184,14 +185,14 @@ namespace CORVID_SPRITE {
 			CORVID_SCREENOBJECT(i0, i1, i2, i3, i4, i5, i6, i7), objectStandingOn(NULL), leftObject(NULL), rightObject(NULL), jumpFrame(-1) {};
 		// Accelerates the player to the left if they're below the speed cap
 		// @return void
-		void moveLeft();
+		void moveLeft(int frameNum);
 		// Accelerates the player to the right if they're below the speed cap
 		// @return void
-		void moveRight();
+		void moveRight(int frameNum);
 		// If player is in freefall, does nothing, if player is on ground, starts accelerating a jump, if midjump, accelerates further
 		// Until max jump length is reached
 		// @return void
-		void jump();
+		void jump(int frameNum);
 	};
 	// I made a class dedicated to just the background
 	// TODO literally anything with this class

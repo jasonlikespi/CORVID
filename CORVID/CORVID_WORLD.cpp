@@ -188,17 +188,17 @@ void CORVID_LEVEL::deleteObject() {
 		this->activeLevel()->removeObject(this->selectedObject);
 	}
 };
-
-void CORVID_LEVEL::playerMoveLeft() {
-	player()->moveLeft();
+// TODO Move to header file
+void CORVID_LEVEL::playerMoveLeft(int frameNum) {
+	player()->moveLeft(frameNum);
 };
-
-void CORVID_LEVEL::playerMoveRight() {
-	player()->moveRight();
+// TODO Move to header file
+void CORVID_LEVEL::playerMoveRight(int frameNum) {
+	player()->moveRight(frameNum);
 };
-
-void CORVID_LEVEL::playerJump() {
-	player()->jump();
+// TODO Move to header file
+void CORVID_LEVEL::playerJump(int frameNum) {
+	player()->jump(frameNum);
 };
 
 void CORVID_LEVEL::stopJump() {

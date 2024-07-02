@@ -204,11 +204,11 @@ public:
 	
 	void deleteObject();
 	
-	void playerMoveLeft();
+	void playerMoveLeft(int frameNum);
 	
-	void playerMoveRight();
+	void playerMoveRight(int frameNum);
 	
-	void playerJump();
+	void playerJump(int frameNum);
 	
 	void stopJump();
 	

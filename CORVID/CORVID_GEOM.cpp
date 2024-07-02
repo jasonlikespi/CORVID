@@ -58,30 +58,33 @@ DIRECTION CORVID_RECT::relativePosition(CORVID_RECT* otherRect) {
 // Could be optimized, and similarly to relativePosition, is a galactic level function
 // Intentionally moved the center of the toBeShoved object to the bottom edge, potentially rendering this
 // Algorithm obsolete for non player objects.
+// Note 6/29 I am modifying this so this works exclusively for the player
 CORVID_R2* CORVID_RECT::shoveDirection(CORVID_RECT* toBeShoved) {
 	pushVector->x = 0;
 	pushVector->y = 0;
-	double center_x = toBeShoved->location.x + (toBeShoved->size.x * .5);
-	double center_y = toBeShoved->location.y + (toBeShoved->size.y);
-	double distanceUp = center_y - this->location.y;
-	double distanceDown = this->location.y + this->size.y - center_y;
-	double distanceLeft = center_x - this->location.x;
-	double distanceRight = this->location.x + this->size.x - center_x;
-	// Above
-	if (distanceUp < distanceDown && distanceUp < distanceLeft && distanceUp < distanceRight) {
+	// double center_x = toBeShoved->location.x + (toBeShoved->size.x * .5);
+	// double left_x = toBeShoved->location.x;
+	// double right_x = toBeShoved->location.x + toBeShoved->size.x;
+	// double center_y = toBeShoved->location.y + (toBeShoved->size.y);
+	double distanceToUpShove = toBeShoved->location.y + toBeShoved->size.y - this->location.y;
+	double distanceToDownShove = this->location.y + this->size.y - toBeShoved->location.y;
+	double distanceToLeftShove = toBeShoved->location.x + toBeShoved->size.y - this->location.x;
+	double distanceToRightShove = this->location.x + this->size.x - toBeShoved->location.x;
+	// Push Up
+	if (distanceToUpShove < distanceToDownShove && distanceToUpShove < distanceToLeftShove && distanceToUpShove < distanceToRightShove) {
 		pushVector->y = location.y - toBeShoved->location.y - toBeShoved->size.y;
 	}
-	// Below
-	else if (distanceDown < distanceLeft && distanceDown < distanceRight) {
+	// Push Down
+	else if (distanceToDownShove < distanceToLeftShove && distanceToDownShove < distanceToRightShove) {
 		pushVector->y = location.y + size.y - toBeShoved->location.y;
 	}
-	// Left
-	else if (distanceLeft < distanceRight) {
+	// Push Left
+	else if (distanceToLeftShove < distanceToRightShove) {
 		pushVector->x = location.x - toBeShoved->location.x - toBeShoved->size.x;
 	} 
-	// Right
-	else {
-		pushVector->x = location.x + size.x - toBeShoved->location.x;
+	// Push Right
+	else if (distanceToRightShove > 0) {
+	 	pushVector->x = location.x + size.x - toBeShoved->location.x;
 	}
 	return pushVector;
 };

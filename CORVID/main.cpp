@@ -68,6 +68,7 @@ int main() {
 	int fps = 0;
 	int frameOfLastSecond = 0;
 	int frame = 0;
+	int seconds = 0;
 	time_t startTime;
 	time_t currentTime;
 	time_t now;
@@ -88,10 +89,15 @@ int main() {
 		time(&now);
 		if (now != currentTime) {
 			currentTime++;
+			seconds++;
 			fps = frame - frameOfLastSecond;
 			frameOfLastSecond = frame;
 			std::cout << fps;
 			std::cout << "\n";
+			if (world->player() != nullptr) {
+				std::cout << "Player Speed is " << world->player()->velocity.x << "\n";
+				std::cout << "Time is: " << seconds << "\n";
+			}
 		}
 	}
 	world->saveWorld();

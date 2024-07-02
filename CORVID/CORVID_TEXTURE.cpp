@@ -80,11 +80,11 @@ void CORVID_TEXTURE::renderCustomVert(SDL_Renderer* surface, SDL_Rect* offset, i
 	// TODO topEdge is functionally identical to offset, but for some inexplicable reason, it keeps deleting the memory
 	SDL_Rect topEdge = { offset->x, offset->y, KUNIT, KUNIT };
 	SDL_Rect bottomEdge = { offset->x, offset->y + offset->h - KUNIT, KUNIT, KUNIT };
-	SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[14], offset);
+	SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[14], &topEdge);
 	SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[12], &bottomEdge);
 	for (int i = topEdge.y + KUNIT; i < bottomEdge.y; i+= KUNIT) {
 		SDL_Rect offset1 = { offset->x, i, KUNIT, KUNIT };
-		SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[9], &offset1);
+	 	SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[9], &offset1);
 	}
 };
 
@@ -92,7 +92,7 @@ void CORVID_TEXTURE::renderCustomHorz(SDL_Renderer* surface, SDL_Rect* offset, i
 	// TODO leftEdge is functionally identical to offset, but for some inexplicable reason, it keeps deleting the memory
 	SDL_Rect leftEdge = { offset->x, offset->y, KUNIT, KUNIT };
 	SDL_Rect rightEdge = { offset->x + offset->w - KUNIT, offset->y, KUNIT, KUNIT };
-	SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[15], offset);
+	SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[15], &leftEdge);
 	SDL_RenderCopy(surface, global_textureList->at(spriteSheet), &spriteList[13], &rightEdge);
 	for (int i = leftEdge.x + KUNIT; i < rightEdge.x; i+= KUNIT) {
 		SDL_Rect offset1 = { i, offset->y, KUNIT, KUNIT };

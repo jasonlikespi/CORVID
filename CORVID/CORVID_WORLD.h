@@ -127,14 +127,6 @@ public:
 	void removeObject(CORVID_SCREENOBJECT* object);
 };
 
-class CORVID_FRAME {
-
-};
-
-class CORVID_CONTIG {
-
-};
-
 class CORVID_LEVEL: public CORVID_TEXTLIST{ // The inherited class is the title screen TODO what does the previous phrase mean
 	
 	int activeLevelData;

@@ -226,6 +226,7 @@ void CORVID_LEVEL::updatePlayer() {
 // Handles all collision detection: At the moment it just calls staticPlayerObjectCollision
 // but the method will be made more complicated when dynamic objects are added 
 void CORVID_LEVEL::collisionDetect() {
+	player()->freeFall++;
 	staticPlayerObjectCollision();
 };
 
@@ -257,7 +258,8 @@ void CORVID_LEVEL::centerPlayer() {
 void CORVID_LEVEL::staticPlayerObjectCollision() {
 	for (CORVID_SCREENOBJECT* i : *staticList()) {
 		if (i->relativePosition(player()) == DIRECTION::INSIDE) {
-			if (i->shoveDirection(player())->y < 0) { player()->jumpFrame = 0; player()->velocity.y = 0; }
+			if (i->shoveDirection(player())->y < 0) { player()->jumpFrame = 0; player()->velocity.y = 0; player()->freeFall = 0; }
+			if (i->shoveDirection(player())->x != 0) { player()->velocity.x = 0; }
 			player()->location = player()->location + *i->shoveDirection(player());
 
 		}
